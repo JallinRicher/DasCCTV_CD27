@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DasCCTV.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DasCCTVCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DasCCTVPropPage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MainDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BitmapComboBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PtzControlButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayControlDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DasCCTV.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DasCCTVCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DasCCTVPropPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapComboBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PtzControlButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayControlDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalDefines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DasCCTV.def">
+      <Filter>源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DasCCTV.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="DasCCTV.idl">
+      <Filter>源文件</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="DasCCTVCtrl.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="DasCCTV.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_D_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_D_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_D_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_L_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_L_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_L_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_R_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_R_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_R_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_UP_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_UP_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Arrow_UP_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\base.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\bmp00001.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Camera.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Camera_Offline.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\DomeCamera.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\DomeCamera_Offline.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\GuardTourResource.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\LocalDomain.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\nvbmp.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\Preset.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\silence.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\sound.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\光圈_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\光圈_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\光圈_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\光圈2_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\光圈2_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\光圈2_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\焦距_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\焦距_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\焦距_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\焦距2_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\焦距2_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\res\焦距2_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

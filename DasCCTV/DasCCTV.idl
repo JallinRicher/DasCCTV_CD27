@@ -1,0 +1,51 @@
+﻿// DasCCTV.idl: ActiveX 控件项目的类型库源。
+
+// 此文件将由 MIDL 编译器工具处理以
+// 生成类型库(DasCCTV.tlb)，该类型库将成为
+// DasCCTV.ocx。
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(81eadac8-ccad-4861-b70a-a07caece9d20), version(1.0),
+  control ]
+library DasCCTVLib
+{
+	importlib(STDOLE_TLB);
+
+	//  DasCCTVCtrl 的主调度接口
+	[ 
+		uuid(fb680a1d-ccae-4810-86c3-242b8dae9a76)
+	]
+	dispinterface _DDasCCTV
+	{
+		properties:
+		methods:
+
+			[id(DISPID_ABOUTBOX)] void AboutBox();
+	};
+
+	//  DasCCTVCtrl 的事件调度接口
+
+	[ 
+		uuid(47e08345-8e44-4ff0-84d1-9779eb70cb83)
+	]
+	dispinterface _DDasCCTVEvents
+	{
+		properties:
+			//  事件接口没有任何属性
+
+		methods:
+	};
+
+	//  DasCCTVCtrl 的类信息
+	[
+		uuid(3f9c045b-43db-4280-b568-5275b0fe52a2)
+	]
+	coclass DasCCTV
+	{
+		[default] dispinterface _DDasCCTV;
+		[default, source] dispinterface _DDasCCTVEvents;
+	};
+
+};
