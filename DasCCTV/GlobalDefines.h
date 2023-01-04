@@ -94,3 +94,14 @@ typedef struct UserInfo
 	
 }UserInfo;
 
+
+void CharToWChar(const char* Source, wchar_t* Destination)
+{
+	int _tempLen = MultiByteToWideChar(CP_ACP, 0, Source, strlen(Source), nullptr, 0);
+	TCHAR* _tempWchar = new wchar_t[_tempLen + 1];
+	memset(_tempWchar, 0, 2 * _tempLen + 2);
+	MultiByteToWideChar(CP_ACP, 0, Source, strlen(Source), _tempWchar, _tempLen);
+	wcsncpy_s(Destination, sizeof(Destination), _tempWchar, sizeof(_tempWchar));
+
+	delete[] _tempWchar;
+}

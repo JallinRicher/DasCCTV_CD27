@@ -157,7 +157,7 @@ void BitmapComboBox::AddOneRow(const char* RowName)
 	{
 		return;
 	}
-
+	
 	int _tempLen = MultiByteToWideChar(CP_ACP, 0, RowName, strlen(RowName), nullptr, 0);
 	TCHAR* _tempName = new wchar_t[_tempLen + 1];
 	memset(_tempName, 0, 2 * _tempLen + 2);

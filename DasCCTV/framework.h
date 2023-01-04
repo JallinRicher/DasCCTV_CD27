@@ -38,4 +38,4 @@
 
 #include "CWALKSDKDefines.h"
 #include "CWALKSDKErrors.h"
-#include "common.h"
+#include "common/common.h"
