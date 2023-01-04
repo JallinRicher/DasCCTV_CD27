@@ -254,6 +254,7 @@ void MainDialog::OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
+	UNREFERENCED_PARAMETER(pNMCD);
 	*pResult = 0;
 }
 
@@ -278,12 +279,14 @@ void MainDialog::DelCurSelDisplayMode()
 void MainDialog::ModifyCurSelDisplayMode()
 {
 	int index = m_DisplayComboBox.GetCurSel();
+	UNREFERENCED_PARAMETER(index);
 }
 
 
 void MainDialog::StartCurSelDisplayMode()
 {
 	int index = m_DisplayComboBox.GetCurSel();
+	UNREFERENCED_PARAMETER(index);
 }
 
 

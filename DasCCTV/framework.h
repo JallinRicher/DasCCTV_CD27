@@ -35,3 +35,7 @@
 #endif // _WIN64
 
 #include "GlobalDefines.h"
+
+#include "CWALKSDKDefines.h"
+#include "CWALKSDKErrors.h"
+#include "common.h"

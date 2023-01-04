@@ -42,6 +42,9 @@
     <ClCompile Include="DisplayDialog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="JSDCCTV.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DasCCTV.h">
@@ -81,6 +84,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="GlobalDefines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="JSDCCTV.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
