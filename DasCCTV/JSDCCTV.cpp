@@ -1510,3 +1510,36 @@ void JSDCCTV::PtzAuxControl(const TCHAR* AvPath, int Num, BOOL Control)
 		// LOG
 	}
 }
+
+
+void JSDCCTV::GetCameraGis(const TCHAR* AvPath, void* Buf, int BufLen, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_GetCameraGis(m_LoginHandle, AvPath, Buf, BufLen, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::CancelGisInfoSubscription()
+{
+	ErrorNum ret = CWALK_NET_CancelGisInfoSubscription(m_LoginHandle);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SubscribeGisInfo(CallBack_OnGisInfoUpload FnOnUpload, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_SubscribeGisInfo(m_LoginHandle, FnOnUpload, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}

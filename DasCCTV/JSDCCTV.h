@@ -256,7 +256,10 @@ public:		/************************************* CCTV 网络模块 ******************
 	void PtzLock(const TCHAR* AvPath, int LockTime);														// PTZ 控制锁定
 	void PtzAuxControl(const TCHAR* AvPath, int Num, BOOL Control);											// 云台辅助开关控制
 
-
+	// GIS 功能接口
+	void GetCameraGis(const TCHAR* AvPath, void* Buf, int BufLen, int* RealLen);							// 获取 GIS 信息
+	void CancelGisInfoSubscription();																		// 退订 GIS 信息
+	bool SubscribeGisInfo(CallBack_OnGisInfoUpload FnOnUpload, void* UserParam);							// 订阅 GIS 信息
 
 
 
