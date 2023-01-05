@@ -5,6 +5,8 @@
 #include "PtzControlButton.h"
 #include "DisplayControlDialog.h"
 
+#include "JSDCCTV.h"
+
 // MainDialog 对话框
 
 class MainDialog : public CDialog
@@ -107,11 +109,13 @@ public:
 
 private:
 	DisplayControlDialog* m_DisplayControl;
-	bool IsLogged;
+	bool m_IsLogged;
 #ifdef MULTI_SUBWAY_ROUTE
 	std::vector<UserInfo> m_UserInfo;
 #else
 	UserInfo m_UserInfo;
 #endif
+
+	JSDCCTV* m_JsdCCTV;
 
 };

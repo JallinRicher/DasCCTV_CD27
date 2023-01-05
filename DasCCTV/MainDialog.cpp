@@ -15,12 +15,17 @@ MainDialog::MainDialog(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_MAINDIALOG, pParent)
 {
 	m_DisplayControl = nullptr;
-	IsLogged = false;
+	m_IsLogged = false;
+	m_JsdCCTV = nullptr;
 }
 
 
 MainDialog::~MainDialog()
 {
+	if (m_JsdCCTV)
+	{
+		delete m_JsdCCTV;
+	}
 }
 
 
@@ -331,7 +336,7 @@ void MainDialog::Login()
 		}
 
 		// TODO: 登录代码
-		// 登录成功后 IsLogged = true
+		m_IsLogged = true;
 	}
 
 	return;
@@ -343,7 +348,7 @@ void MainDialog::Login()
 	}
 
 	// TODO: 登录代码
-	// 登录成功后 IsLogged = true
+	m_IsLogged = true;
 #endif
 }
 
@@ -506,7 +511,7 @@ void MainDialog::OnBnClickedButtonStartswitchmode()
 void MainDialog::OnTimer(UINT_PTR nIDEvent)
 {
 	KillTimer(1);
-	if (!IsLogged)
+	if (!m_IsLogged)
 	{
 		Login();
 	}

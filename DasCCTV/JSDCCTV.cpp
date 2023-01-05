@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "JSDCCTV.h"
 
-JSDCCTV::JSDCCTV(UserInfo userInfo) : m_UserInfo(userInfo)
+JSDCCTV::JSDCCTV(UserInfo userInfo) : m_DCSUserInfo(userInfo)
 {
 	m_IsInitPlay = false;
 	m_IsInitFile = false;
@@ -104,11 +104,11 @@ bool JSDCCTV::Login()
 	TCHAR IPAddress[IPADDR_LEN] = { 0 };
 	TCHAR UserName[NAME_LEN] = { 0 };
 	TCHAR Password[PASSWORD_LEN] = { 0 };
-	CharToWChar(m_UserInfo.IPAddress, IPAddress);
-	CharToWChar(m_UserInfo.UserName, UserName);
-	CharToWChar(m_UserInfo.Password, Password);
+	CharToWChar(m_DCSUserInfo.IPAddress, IPAddress);
+	CharToWChar(m_DCSUserInfo.UserName, UserName);
+	CharToWChar(m_DCSUserInfo.Password, Password);
 
-	ErrorNum ret = CWALK_NET_Login(&m_LoginHandle, IPAddress, m_UserInfo.Port, UserName, Password);
+	ErrorNum ret = CWALK_NET_Login(&m_LoginHandle, IPAddress, m_DCSUserInfo.Port, UserName, Password);
 	if (ret != CWALKSDK_OK || m_LoginHandle == nullptr)
 	{
 		// LOG
@@ -333,6 +333,376 @@ void JSDCCTV::CloseWritableFile(CWALK_FILE_HD WriteHD)
 bool JSDCCTV::CapturePicture(CWALK_PLAY_HD PlayHD, const TCHAR* FileName)
 {
 	ErrorNum ret = CWALK_PLAY_CapturePicture(PlayHD, FileName);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::OpenReadableFile(const TCHAR* FileName, CWALK_FILE_HD* ReadHD)
+{
+	ErrorNum ret = CWALK_FILE_OpenReadableFile(FileName, ReadHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::CloseReadableFile(CWALK_FILE_HD ReadHD)
+{
+	ErrorNum ret = CWALK_FILE_CloseReadableFile(ReadHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::FreeFile(void* Ptr)
+{
+	CWALK_FILE_Free(Ptr);
+}
+
+
+bool JSDCCTV::SetPlayMode(CWALK_FILE_HD ReadHD, int Mode)
+{
+	ErrorNum ret = CWALK_FILE_SetPlayMode(ReadHD, Mode);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::GetPlayMode(CWALK_FILE_HD ReadHD, int* Mode)
+{
+	ErrorNum ret = CWALK_FILE_GetPlayMode(ReadHD, Mode);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::WriteData(CWALK_FILE_HD WriteHD, const void* data, int Len)
+{
+	ErrorNum ret = CWALK_FILE_WriteData(WriteHD, data, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::ReadSlice(CWALK_FILE_HD ReadHD, void** Data, int* Len)
+{
+	ErrorNum ret = CWALK_FILE_ReadSlice(ReadHD, Data, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		if (ret == CWALKSDK_ERR_END_OF_FILE)
+		{
+			// LOG —— 读到文件末尾
+		}
+		else
+		{
+			// LOG
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetFileDuration(CWALK_FILE_HD ReadHD, DWORD* Len)
+{
+	ErrorNum ret = CWALK_FILE_GetDuration(ReadHD, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetFilePos(CWALK_FILE_HD ReadHD, DWORD* Len)
+{
+	ErrorNum ret = CWALK_FILE_GetPos(ReadHD, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetFilePos(CWALK_FILE_HD ReadHD, DWORD Len)
+{
+	ErrorNum ret = CWALK_FILE_SetPos(ReadHD, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetBaseTime(CWALK_FILE_HD ReadHD, INT64* Time)
+{
+	ErrorNum ret = CWALK_FILE_GetBaseTime(ReadHD, Time);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetStringBaseTime(CWALK_FILE_HD ReadHD, TCHAR* Buf, int BufLen, int* RealLen)
+{
+	ErrorNum ret = CWALK_FILE_GetStringBaseTime(ReadHD, Buf, BufLen, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetVideoInfo(CWALK_FILE_HD ReadHD, int* Width, int* Height, float* Rate, int* StreamType)
+{
+	ErrorNum ret = CWALK_FILE_GetVideoInfo(ReadHD, Width, Height, Rate, StreamType);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::CreateExtrator(const void* Data, int Size, CWALK_FILE_HD* ExtratorHD)
+{
+	ErrorNum ret = CWALK_FILE_CreateExtrator(Data, Size, ExtratorHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::InputData(CWALK_FILE_HD ExtratorHD, const void* Data, int Size)
+{
+	ErrorNum ret = CWALK_FILE_InputData(ExtratorHD, Data, Size);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::NextFrame(CWALK_FILE_HD ExtratorHD, void* pStream, int* Len)
+{
+	ErrorNum ret = CWALK_FILE_NextFrame(ExtratorHD, pStream, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		if (ret == CWALKSDK_ERR_NOT_ENOUGH_MEM)
+		{
+			// LOG —— pStream 空间不够，Len 返回数据实际需要的空间，用此值再分配空间重新调用一次
+		}
+		// LOG
+	}
+}
+
+
+void JSDCCTV::ReleaseExtractor(CWALK_FILE_HD ExtratorHD)
+{
+	ErrorNum ret = CWALK_FILE_ReleaseExtractor(ExtratorHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::OpenOfflineFile(const TCHAR* Protocol, CWALK_FILE_HD* ReadHD, const TCHAR* IP, const WORD Port, const TCHAR* Pool, const TCHAR* FilePath)
+{
+	TCHAR UserName[NAME_LEN] = { 0 };
+	TCHAR Password[PASSWORD_LEN] = { 0 };
+	CharToWChar(m_DCRUserInfo.UserName, UserName);
+	CharToWChar(m_DCRUserInfo.Password, Password);
+
+	ErrorNum ret = CWALK_FILE_OpenOfflineFile(Protocol, ReadHD, IP, Port, Pool, FilePath, UserName, Password);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::CloseOfflineFile(CWALK_FILE_HD ReadHD)
+{
+	ErrorNum ret = CWALK_FILE_CloseOfflineFile(ReadHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::StartOfflineFileStream(CWALK_FILE_HD ReadHD, const int BeginTime, const int EndTime, Callback_File_OnStreamData FnData, CallBack_File_OnStreamMsg FnMsg, void* UserParam)
+{
+	ErrorNum ret = CWALK_FILE_StartOfflineFileStream(ReadHD, BeginTime, EndTime, FnData, FnMsg, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::StopOfflineFileStream(CWALK_FILE_HD ReadHD)
+{
+	ErrorNum ret = CWALK_FILE_StopOfflineFileStream(ReadHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetOfflineFileInfo(CWALK_FILE_HD ReadHD, INT64* Size, INT64* Duration, int* FPS, int* Width, int* Height, int* VCodec, int* ACodec)
+{
+	ErrorNum ret = CWALK_FILE_GetOfflineFileInfo(ReadHD, Size, Duration, FPS, Width, Height, VCodec, ACodec);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetOfflineFileStreamPos(CWALK_FILE_HD ReadHD, INT64* Pos)
+{
+	ErrorNum ret = CWALK_FILE_GetOfflineFileStreamPos(ReadHD, Pos);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetOfflineFileStreamPos(CWALK_FILE_HD ReadHD, INT64 Pos)
+{
+	ErrorNum ret = CWALK_FILE_SetOfflineFileStreamPos(ReadHD, Pos);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetOfflineFileStreamSpeed(CWALK_FILE_HD ReadHD, double Speed)
+{
+	ErrorNum ret = CWALK_FILE_SetOfflineFileStreamSpeed(ReadHD, Speed);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetOfflineFilePlayBackMode(CWALK_FILE_HD ReadHD, INT32 Mode)
+{
+	ErrorNum ret = CWALK_FILE_SetOfflineFilePlaybackMode(ReadHD, Mode);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::DetectDecSupports(char* pDecoderTypes, INT_PTR* Len)
+{
+	ErrorNum ret = CWALK_PLAY_DetectDecSupports(pDecoderTypes, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::CreatePlayerEx(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, int DecodeMode, int HwType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam)
+{
+	ErrorNum ret = CWALK_PLAY_CreatePlayerEx(PlayHD, Hwnd, StreamType, DecodeMode, HwType, FnOnDecoder, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::CreateHwPlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam)
+{
+	ErrorNum ret = CWALK_PLAY_CreateHWPlayer(PlayHD, Hwnd, StreamType, FnOnDecoder, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::CheckHwSupport(int* Support)
+{
+	ErrorNum ret = CWALK_PLAY_CheckHwSupport(Support);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetHwDecType(CWALKPLayHWDecodeType Type, int* IsSupport)
+{
+	ErrorNum ret = CWALK_PLAY_SetHwDecType(Type, IsSupport);
 	if (ret != CWALKSDK_OK)
 	{
 		// LOG
