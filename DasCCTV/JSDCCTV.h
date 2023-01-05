@@ -35,21 +35,18 @@ public:
 	bool StartPlayBackStream(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, 
 						     const TCHAR* EndTime, Callback_OnStreamData FnData, CallBack_OnStreamRobbed FnRobbed, 
 							 CallBack_OnStreamMsg FnMsg, void* UserParam);												// 点播录像
-	bool PlayerControl(CWALK_PLAY_HD PlayHD, CWALKPLayControl Cmd, const void* InParam, void* OutParam);				// 播放控制
+	
 
 	// 录像下载模块
 	bool GetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64* Pos);														// 获取录像下载进度
 	
-	// 实时流抓图模块
-	bool CapturePicture(CWALK_PLAY_HD PlayHD, const TCHAR* FileName);													// 实时流抓图
-
 
 public:
-	void CWALK_SDK_CALLBACK OnRealDecodeState(CWALK_PLAY_HD PlayHD, const CWALKPLayStatInfo* FInfo, void* UserParam)
+	static void CWALK_SDK_CALLBACK OnRealDecodeState(CWALK_PLAY_HD PlayHD, const CWALKPLayStatInfo* FInfo, void* UserParam)
 	{  }
 
 	// 视频解码回调函数
-	void CWALK_SDK_CALLBACK OnRealDecodeData(CWALK_PLAY_HD PlayHD, const void* Buf, int Len, const CWALKPLayFrameInfo* FInfo, void* UserParam)
+	static void CWALK_SDK_CALLBACK OnRealDecodeData(CWALK_PLAY_HD PlayHD, const void* Buf, int Len, const CWALKPLayFrameInfo* FInfo, void* UserParam)
 	{  }
 
 
@@ -115,10 +112,32 @@ public:		/************************************* CCTV 媒体播放模块 **************
 	static void ReleasePlayer(CWALK_PLAY_HD PlayHD);																	// 释放播放器
 	static bool CreateHwPlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, 
 							   Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);								// 创建硬解播放器
-	static void CheckHwSupport(int *Support);																			// 检测设备是否支持硬解
+	static void CheckHwSupport(int *Support);																			// 检测设备是否支持硬解（暂时不能使用）
 	static bool SetHwDecType(CWALKPLayHWDecodeType Type, int* IsSupport);												// 设置硬解码类型
 	static void GetDecodeMode(CWALK_PLAY_HD PlayHD, int* Type, int* HwType);											// 获取当前解码类型
+
+	// 媒体数据输入
+	static bool InputData(CWALK_PLAY_HD PlayHD, const void* Data, int Len);												// 为播放器提供Slice数据
+
+	// 播放控制
+	static bool PlayerControl(CWALK_PLAY_HD PlayHD, CWALKPLayControl Cmd, const void* InParam, void* OutParam);			// 播放控制
+	static bool SetPane(CWALK_PLAY_HD PlayHD, const CWALKPLayRect* Rect, bool Ratio);									// 设置显示区域
+	static void ClearPlayBuffer(CWALK_PLAY_HD PlayHD);																	// 清除播放缓冲区中的数据
+
+	// 抓图
+	static bool CapturePicture(CWALK_PLAY_HD PlayHD, const TCHAR* FileName);											// 实时流抓图
 	
+	// 声音控制
+	static void SoundEnable(CWALK_PLAY_HD PlayHD, bool Enable);															// 允许/禁止声音播放，初始化为允许
+	static void SoundIsEnable(CWALK_PLAY_HD PlayHD, BOOL* Enable);														// 获取声音控制状态s
+	static void GetMasterVolume(int* Volume);																			// 获取系统主音量
+	static bool SetMasterVolume(int Volume);																			// 设置系统主音量
+	static void GetMasterVolumeMute(int* Mute);																			// 获取系统主音量静音
+	static bool SetMasterVolumeMute(int* Mute);																			// 设置系统主音量静音
+	static bool SetAudioCallback(CWALK_PLAY_HD PlayHD, Callback_OnAudioDecodeData FnOnAudio, void* UserParam);			// 设置音频回调函数
+
+
+
 private:
 	void InitPlaySDK();
 	bool InitFileSDK();

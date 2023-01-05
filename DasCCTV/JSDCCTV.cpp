@@ -692,7 +692,7 @@ bool JSDCCTV::CreateHwPlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamTy
 
 void JSDCCTV::CheckHwSupport(int* Support)
 {
-	ErrorNum ret = CWALK_PLAY_CheckHwSupport(Support);
+	ErrorNum ret = 0; //CWALK_PLAY_CheckHwSupport(Support);
 	if (ret != CWALKSDK_OK)
 	{
 		// LOG
@@ -703,6 +703,128 @@ void JSDCCTV::CheckHwSupport(int* Support)
 bool JSDCCTV::SetHwDecType(CWALKPLayHWDecodeType Type, int* IsSupport)
 {
 	ErrorNum ret = CWALK_PLAY_SetHwDecType(Type, IsSupport);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::InputData(CWALK_PLAY_HD PlayHD, const void* Data, int Len)
+{
+	ErrorNum ret = CWALK_PLAY_InputData(PlayHD, Data, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		if (ret == CWALKSDK_ERR_PLAY_FULL_SILCES)
+		{
+			// LOG ¡ª¡ª ²¥·Å»º³åÇøÒÑÂú
+		}
+		else
+		{
+			// LOG
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetPane(CWALK_PLAY_HD PlayHD, const CWALKPLayRect* Rect, bool Ratio)
+{
+	ErrorNum ret = CWALK_PLAY_SetPane(PlayHD, Rect, Ratio);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::ClearPlayBuffer(CWALK_PLAY_HD PlayHD)
+{
+	ErrorNum ret = CWALK_PLAY_ClearPlayBuffer(PlayHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::SoundEnable(CWALK_PLAY_HD PlayHD, bool Enable)
+{
+	ErrorNum ret = CWALK_PLAY_SoundEnable(PlayHD, Enable);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::SoundIsEnable(CWALK_PLAY_HD PlayHD, BOOL* Enable)
+{
+	ErrorNum ret = CWALK_PLAY_SoundIsEnable(PlayHD, Enable);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetMasterVolume(int* Volume)
+{
+	ErrorNum ret = CWALK_PLAY_GetMasterVolume(Volume);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetMasterVolume(int Volume)
+{
+	ErrorNum ret = CWALK_PLAY_SetMasterVolume(Volume);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetMasterVolumeMute(int* Mute)
+{
+	ErrorNum ret = CWALK_PLAY_GetMasterVolumeMute(Mute);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetMasterVolumeMute(int* Mute)
+{
+	ErrorNum ret = CWALK_PLAY_GetMasterVolumeMute(Mute);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetAudioCallback(CWALK_PLAY_HD PlayHD, Callback_OnAudioDecodeData FnOnAudio, void* UserParam)
+{
+	ErrorNum ret = CWALK_PLAY_SetAudioCallback(PlayHD, FnOnAudio, UserParam);
 	if (ret != CWALKSDK_OK)
 	{
 		// LOG
