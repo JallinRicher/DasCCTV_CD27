@@ -170,19 +170,6 @@ bool JSDCCTV::SetDecodeStateCallBack(CWALK_PLAY_HD PlayHD, Callback_OnDecodeStat
 }
 
 
-bool JSDCCTV::SetAudioCallBack(CWALK_PLAY_HD PlayHD, Callback_OnAudioDecodeData FnOnAudio, void* UserParam)
-{
-	ErrorNum ret = CWALK_PLAY_SetAudioCallback(PlayHD, FnOnAudio, UserParam);
-	if (ret != CWALKSDK_OK)
-	{
-		// LOG
-		return false;
-	}
-
-	return true;
-}
-
-
 bool JSDCCTV::SetTransferRobbedCallBack(CallBack_OnTransferRobbed FnRobbed, void* UserParam)
 {
 	ErrorNum ret = CWALK_NET_SetTransferRobbedCallBack(m_LoginHandle, FnRobbed, UserParam);
@@ -219,7 +206,7 @@ void JSDCCTV::ReleasePlayer(CWALK_PLAY_HD PlayHD)
 }
 
 
-bool JSDCCTV::StartVideoStream(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, Callback_OnStreamData FnData, CallBack_OnStreamRobbed FnRobbed, void* UserParam)
+bool JSDCCTV::StartStream(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, Callback_OnStreamData FnData, CallBack_OnStreamRobbed FnRobbed, void* UserParam)
 {
 	ErrorNum ret = CWALK_NET_StartStream(m_LoginHandle, StreamHD, AvPath, FnData, FnRobbed, UserParam);
 	if (ret != CWALKSDK_OK)
@@ -245,7 +232,7 @@ bool JSDCCTV::StreamRequestIFrame(CWALK_NET_HD StreamHD)
 }
 
 
-void JSDCCTV::StopVideoStream(CWALK_NET_HD StreamHD)
+void JSDCCTV::StopStream(CWALK_NET_HD StreamHD)
 {
 	ErrorNum ret = CWALK_NET_StopStream(StreamHD);
 	if (ret != CWALKSDK_OK)
@@ -832,4 +819,694 @@ bool JSDCCTV::SetAudioCallback(CWALK_PLAY_HD PlayHD, Callback_OnAudioDecodeData 
 	}
 
 	return true;
+}
+
+
+void JSDCCTV::GetColor(CWALK_PLAY_HD PlayHD, int* Brightness, int* Contrast, int* Saturation, int* Hue)
+{
+	ErrorNum ret = CWALK_PLAY_GetColor(PlayHD, Brightness, Contrast, Saturation, Hue);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetColor(CWALK_PLAY_HD PlayHD, int Brightness, int Contrast, int Saturation, int Hue)
+{
+	ErrorNum ret = CWALK_PLAY_SetColor(PlayHD, Brightness, Contrast, Saturation, Hue);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::CreateZoomRect(CWALK_PLAY_HD PlayHD, CWALK_PLAY_HD* ZoomHD, const CWALKPLayOSDRect* Rect, HWND Hwnd)
+{
+	ErrorNum ret = CWALK_PLAY_CreateZoomRect(PlayHD, ZoomHD, Rect, Hwnd);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetZoomRect(CWALK_PLAY_HD ZoomHD, CWALKPLayOSDRect* Rect)
+{
+	ErrorNum ret = CWALK_PLAY_GetZoomRect(ZoomHD, Rect);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetZoomRect(CWALK_PLAY_HD ZoomHD, const CWALKPLayOSDRect* Rect)
+{
+	ErrorNum ret = CWALK_PLAY_SetZoomRect(ZoomHD, Rect);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::ReleaseZoomRect(CWALK_PLAY_HD ZoomHD)
+{
+	ErrorNum ret = CWALK_PLAY_ReleaseZoomRect(ZoomHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::CreateOSD(CWALK_PLAY_HD PlayHD, CWALK_PLAY_HD* osdHD, CWALKPLayOSDType Type, const void* osdInfo)
+{
+	ErrorNum ret = CWALK_PLAY_CreateOSD(PlayHD, osdHD, Type, osdInfo);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetOSD(CWALK_PLAY_HD osdHD, CWALKPLayOSDType Type, void* osdInfo)
+{
+	ErrorNum ret = CWALK_PLAY_GetOSD(osdHD, Type, osdInfo);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetOSD(CWALK_PLAY_HD osdHD, CWALKPLayOSDType Type, const void* osdInfo)
+{
+	ErrorNum ret = CWALK_PLAY_SetOSD(osdHD, Type, osdInfo);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::ReleaseOSD(CWALK_PLAY_HD osdHD)
+{
+	ErrorNum ret = CWALK_PLAY_ReleaseOSD(osdHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetIllumination(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth, int MaskHeight, double Factor)
+{
+	ErrorNum ret = CWALK_PLAY_SetIllumination(PlayHD, Rect, MaskWidth, MaskHeight, Factor);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetScaleImageRange(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int Min, int Max)
+{
+	ErrorNum ret = CWALK_PLAY_SetScaleImageRange(PlayHD, Rect, Min, Max);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetEmphasize(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth, int MaskHeight, double Factor)
+{
+	ErrorNum ret = CWALK_PLAY_SetEmphasize(PlayHD, Rect, MaskWidth, MaskHeight, Factor);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetSmooth(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth, int MaskHeight, double Factor)
+{
+	ErrorNum ret = CWALK_PLAY_SetSmooth(PlayHD, Rect, MaskWidth, MaskHeight, Factor);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetDehaze(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, double TransMin)
+{
+	ErrorNum ret = CWALK_PLAY_SetDehaze(PlayHD, Rect, TransMin);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetRetina(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect)
+{
+	ErrorNum ret = CWALK_PLAY_SetRetina(PlayHD, Rect);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetRestoration(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int Blurring, double Angle, int Type)
+{
+	ErrorNum ret = CWALK_PLAY_SetRestoration(PlayHD, Rect, Blurring, Angle, Type);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::DelEnhance(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int EnhanceType)
+{
+	ErrorNum ret = CWALK_PLAY_DelEnhance(PlayHD, Rect, EnhanceType);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetNetServerVersion(void* InfoBuf, int Len, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_GetServerVersion(m_LoginHandle, InfoBuf, Len, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetTicket(BYTE* InfoBuf, int Len, int* RealLen)
+{
+	TCHAR IP[IPADDR_LEN] = { 0 };
+	TCHAR UserName[NAME_LEN] = { 0 };
+	TCHAR Password[PASSWORD_LEN] = { 0 };
+
+	CharToWChar(m_DCSUserInfo.UserName, UserName);
+	CharToWChar(m_DCSUserInfo.IPAddress, IP);
+	CharToWChar(m_DCSUserInfo.Password, Password);
+
+	ErrorNum ret = CWALK_NET_GetTicket(IP, m_DCSUserInfo.Port, UserName, Password, InfoBuf, Len, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::LoginByTicket(BYTE* Ticket, int Len)
+{
+	TCHAR IP[IPADDR_LEN] = { 0 };
+
+	CharToWChar(m_DCSUserInfo.IPAddress, IP);
+
+	ErrorNum ret = CWALK_NET_LoginByTicket(&m_LoginHandle, IP, m_DCSUserInfo.Port, Ticket, Len);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetServerTime(TCHAR* DateTime, int Len, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_GetServerTime(m_LoginHandle, DateTime, Len, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetServerTime(TCHAR* DateTime)
+{
+	ErrorNum ret = CWALK_NET_SetServerTime(m_LoginHandle, DateTime);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SyncDeviceTime(const TCHAR* SerName, const TCHAR* HostName)
+{
+	ErrorNum ret = CWALK_NET_SyncDeviceTime(m_LoginHandle, SerName, HostName);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetUserDescription(void* Buf, int* BufLen, int* DateLen)
+{
+	ErrorNum ret = CWALK_NET_GetUserDescription(m_LoginHandle, Buf, BufLen, DateLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetUserData(void* Buf, int BufLen, int* DataLen)
+{
+	ErrorNum ret = CWALK_NET_GetUserData(m_LoginHandle, Buf, BufLen, DataLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetUserData(void* Data, int DataLen)
+{
+	ErrorNum ret = CWALK_NET_SetUserData(m_LoginHandle, Data, DataLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetUserPassword(const TCHAR* OldPassword, const TCHAR* NewPassword)
+{
+	ErrorNum ret = CWALK_NET_SetUserPasswd(m_LoginHandle, OldPassword, NewPassword);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::IsConnected(BOOL* Connect)
+{
+	ErrorNum ret = CWALK_NET_IsConnected(m_LoginHandle, Connect);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetObjectStatus(CWALKNetObjectType ObjType, const TCHAR* ObjName, int* Status)
+{
+	ErrorNum ret = CWALK_NET_GetObjectStatus(m_LoginHandle, ObjType, ObjName, Status);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetVodStatus(int* Status)
+{
+	ErrorNum ret = CWALK_NET_GetVodStatus(m_LoginHandle, Status);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetPtzStatus(const TCHAR* CamName, void* StatusBuf, int BufLen, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_GetPtzStatus(m_LoginHandle, CamName, StatusBuf, BufLen, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetCameraStatus(const TCHAR* ObjName, void* Buf, int BufLen, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_GetCameraStatus(m_LoginHandle, ObjName, Buf, BufLen, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetServiceStatus(CWALKNetServiceType ServiceType, void* InfoBuf, int Len, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_GetServiceStatus(m_LoginHandle, ServiceType, InfoBuf, Len, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::ListObjects(CWALKNetObjectType ObjType, const TCHAR* SerName, int* Count, CallBack_OnListObj FnOnListObj, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_ListObjects(m_LoginHandle, ObjType, SerName, Count, FnOnListObj, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::ListObjectsEx(CWALKNetObjectType ObjType, const TCHAR* SerName, int* Count, CallBack_OnListObj FnOnListObj, void* UserParam, const TCHAR* GroupID, bool IsGetAllCamera)
+{
+	ErrorNum ret = CWALK_NET_ListObjectsEX(m_LoginHandle, ObjType, SerName, Count, FnOnListObj, UserParam, GroupID, IsGetAllCamera);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::QueryProtectionRecord(const TCHAR* AvPath, CallBack_OnListSegments FnOnListSegment, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_QueryProtectionRecord(m_LoginHandle, AvPath, FnOnListSegment, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetOnlineUsers(const TCHAR* SerName, CallBack_OnGetOnlineUsers FnOnUsers, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_GetOnlineUsers(m_LoginHandle, SerName, FnOnUsers, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetTransferStatus(const TCHAR* SerName, CallBack_OnGetTransferStatus FnOnStatus, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_GetTransferStatus(m_LoginHandle, SerName, FnOnStatus, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::ProtectRecord(const TCHAR* AvPath, const TCHAR* BeginTime, const TCHAR* EndTime)
+{
+	ErrorNum ret = CWALK_NET_ProtectRecord(m_LoginHandle, AvPath, BeginTime, EndTime);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::UnprotectRecord(const TCHAR* AvPath, const TCHAR* BeginTime, const TCHAR* EndTime)
+{
+	ErrorNum ret = CWALK_NET_UnprotectRecord(m_LoginHandle, AvPath, BeginTime, EndTime);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::AddObject(CWALKNetObjectType ObjType, const TCHAR* Parent, const TCHAR* ObjInfo)
+{
+	ErrorNum ret = CWALK_NET_AddObject(m_LoginHandle, ObjType, Parent, ObjInfo);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::DelObject(CWALKNetObjectType ObjType, const TCHAR* ObjName)
+{
+	ErrorNum ret = CWALK_NET_DelObject(m_LoginHandle, ObjType, ObjName);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetOrganization(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount)
+{
+	ErrorNum ret = CWALK_NET_GetOrganization(m_LoginHandle, Buf, BufLen, DataLen, OrgCount, DCSCount);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetOrganizationEx(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount, BOOL bUseUserID)
+{
+	ErrorNum ret = CWALK_NET_GetOrganizationEX(m_LoginHandle, Buf, BufLen, DataLen, OrgCount, DCSCount, bUseUserID);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::ParseOrganizationInfo(const TCHAR* Info, int Type, int Index, const TCHAR* Key, void* ValueBuf, int Len, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_ParseOrganizationInfo(Info, Type, Index, Key, ValueBuf, Len, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::GetServerTitle(const TCHAR* ServerName, void* InfoBuf, int Len, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_GetServerTitle(m_LoginHandle, ServerName, InfoBuf, Len, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::StartTransfer(const TCHAR* Source, const TCHAR* Target)
+{
+	ErrorNum ret = CWALK_NET_StartTransfer(m_LoginHandle, Source, Target);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::StopTransfer(const TCHAR* Target)
+{
+	ErrorNum ret = CWALK_NET_StopTransfer(m_LoginHandle, Target);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::StartStreamByAsync(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, Callback_OnStreamData FnData, CallBack_OnStreamRobbed FnRobbed, CallBack_OnStartRealStreamMsg FnMsg, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_StartStreamByAsync(m_LoginHandle, StreamHD, AvPath, FnData, FnRobbed, FnMsg, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::StartRecord(const TCHAR* AvPath)
+{
+	ErrorNum ret = CWALK_NET_StartRecord(m_LoginHandle, AvPath);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::StopRecord(const TCHAR* AvPath)
+{
+	ErrorNum ret = CWALK_NET_StopRecord(m_LoginHandle, AvPath);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::CapCameraPicture(const TCHAR* AvPath, TCHAR* PicResolution, TCHAR* PicFormat, TCHAR* PicBuff, int BuffLen, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_CapCameraPicture(m_LoginHandle, AvPath, PicResolution, PicFormat, PicBuff, BuffLen, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::PtzControl(const TCHAR* AvPath, CWALKNetPTZCommand Cmd, int Param)
+{
+	ErrorNum ret = CWALK_NET_PtzControl(m_LoginHandle, AvPath, Cmd, Param);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	ret = CWALK_NET_PtzControl(m_LoginHandle, AvPath, Cmd, 0);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::PtzControlEx(const TCHAR* AvPath, CWALKNetPTZCommand Cmd, const TCHAR* Param)
+{
+	ErrorNum ret = CWALK_NET_PtzControlEx(m_LoginHandle, AvPath, Cmd, Param);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	ret = CWALK_NET_PtzControlEx(m_LoginHandle, AvPath, Cmd, 0);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::PtzControl3D(const TCHAR* AvPath, int Direct, float x, float y, float w, float h)
+{
+	if (x < 0 || x > 1 || y < 0 || y > 1 || w < 0 || w > 1 || h < 0 || h > 1)
+	{
+		// LOG ¡ª¡ª ²ÎÊý´íÎó
+		return false;
+	}
+
+	ErrorNum ret = CWALK_NET_PtzControl3D(m_LoginHandle, AvPath, Direct, x, y, w, h);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::PtzLock(const TCHAR* AvPath, int LockTime)
+{
+	ErrorNum ret = CWALK_NET_PtzLock(m_LoginHandle, AvPath, LockTime);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::PtzAuxControl(const TCHAR* AvPath, int Num, BOOL Control)
+{
+	ErrorNum ret = CWALK_NET_PtzAuxControl(m_LoginHandle, AvPath, Num, Control);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
 }
