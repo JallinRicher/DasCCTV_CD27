@@ -12,19 +12,30 @@ typedef CWALKSDKError ErrorNum;
 
 class JSDCCTV
 {
+private:
+	typedef enum
+	{
+		FATAL = 0,
+		WARN,
+		DEBUG,
+		INFO,
+		BLANK
+	}CCTVLOGLEVEL;								// CCTV 日志等级
+
 public:
 	JSDCCTV(UserInfo userInfo);
+	static void InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...);
+	static void CharToWChar(const char* Source, wchar_t* Destination);
 
 	bool InitSDK();																										// 初始化SDK
 	bool Login();																										// 登录服务器
 	void Logout();																										// 登出服务器
-	void ReleaseSDK();																									// 释放SDK	
-	bool SetDecodeStateCallBack(CWALK_PLAY_HD PlayHD, Callback_OnDecodeState FnDecodeState, void* UserParam);
+	void ReleaseSDK();																									// 释放SDK
+	bool IsInit();
+	bool IsLogin();
+	bool SetLogFile(const char* LogPath);
+
 	
-	// 录像回放模块
-	bool QueryRecordInfo(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime, 
-						 CallBack_OnListSegmentsInfo FnOnListSegment, void* UserParam);									// 录像查询
-	static void CharToWChar(const char* Source, wchar_t* Destination);
 
 
 public:		/************************************* CCTV 文件操作模块 *************************************/
@@ -38,7 +49,7 @@ public:		/************************************* CCTV 文件操作模块 **************
 	static bool ReadSlice(CWALK_FILE_HD ReadHD, void** Data, int* Len);							// 从可读文件中读取数据，必须用FreeFile释放数据；读出后的数据为一个完整的slice
 	static void FreeFile(void* Ptr);															// 释放内存
 	static bool SetPlayMode(CWALK_FILE_HD ReadHD, int Mode);									// 设置播放模式
-	static bool GetPlayMode(CWALK_FILE_HD ReadHD, int* Mode);									// 获得播放模式
+	static void GetPlayMode(CWALK_FILE_HD ReadHD, int* Mode);									// 获得播放模式
 
 	// 媒体文件写操作
 	static bool OpenWritableFile(const TCHAR* FileName, CWALK_FILE_HD* WriteHD);				// 打开可写文件
@@ -94,6 +105,7 @@ public:		/************************************* CCTV 媒体播放模块 **************
 	static void CheckHwSupport(int *Support);																			// 检测设备是否支持硬解（暂时不能使用）
 	static bool SetHwDecType(CWALKPLayHWDecodeType Type, int* IsSupport);												// 设置硬解码类型
 	static void GetDecodeMode(CWALK_PLAY_HD PlayHD, int* Type, int* HwType);											// 获取当前解码类型
+	static void SetDecodeStateCallBack(CWALK_PLAY_HD PlayHD, Callback_OnDecodeState FnDecodeState, void* UserParam);	// 设置解码状态回调函数
 
 	// 媒体数据输入
 	static bool InputData(CWALK_PLAY_HD PlayHD, const void* Data, int Len);												// 为播放器提供Slice数据
@@ -112,7 +124,7 @@ public:		/************************************* CCTV 媒体播放模块 **************
 	static void GetMasterVolume(int* Volume);																			// 获取系统主音量
 	static bool SetMasterVolume(int Volume);																			// 设置系统主音量
 	static void GetMasterVolumeMute(int* Mute);																			// 获取系统主音量静音
-	static bool SetMasterVolumeMute(int* Mute);																			// 设置系统主音量静音
+	static bool SetMasterVolumeMute(int Mute);																			// 设置系统主音量静音
 	static bool SetAudioCallback(CWALK_PLAY_HD PlayHD, Callback_OnAudioDecodeData FnOnAudio, void* UserParam);			// 设置音频回调函数
 
 	// 颜色控制
@@ -215,7 +227,7 @@ public:		/************************************* CCTV 网络模块 ******************
 	// 显示至监视器
 	bool StartTransfer(const TCHAR* Source, const TCHAR* Target);									// 发起摄像机到监视器的传输
 	void StopTransfer(const TCHAR* Target);															// 停止到某个监视器的传输
-	bool SetTransferRobbedCallBack(CallBack_OnTransferRobbed FnRobbed, void* UserParam);			// 设置切换抢占通知回调
+	void SetTransferRobbedCallBack(CallBack_OnTransferRobbed FnRobbed, void* UserParam);			// 设置切换抢占通知回调
 
 	// 实时预览
 	bool StartStream(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, Callback_OnStreamData FnData,
@@ -252,6 +264,8 @@ public:		/************************************* CCTV 网络模块 ******************
 	// 远程录像
 	void QueryRecord(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime,
 					 CallBack_OnListSegments FnOnListSegment, void* UserParam);								// 查询录像，非法录像时间段会被过滤掉，错误信息记录到日志中
+	void QueryRecordInfo(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime,
+						 CallBack_OnListSegmentsInfo FnOnListSegment, void* UserParam);						// 录像查询
 	bool StartPlayBackStream(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime,
 						     const TCHAR* EndTime, Callback_OnStreamData FnData, CallBack_OnStreamRobbed FnRobbed,
 							 CallBack_OnStreamMsg FnMsg, void* UserParam);									// 点播录像
@@ -298,7 +312,7 @@ private:
 	bool m_IsInitFile;
 	bool m_IsInitNet;
 	bool m_IsLogin;
-	std::fstream m_LogFile;
+	std::ofstream m_LogFile;
 
 	CWALK_NET_HD m_LoginHandle;
 	UserInfo m_DCSUserInfo;

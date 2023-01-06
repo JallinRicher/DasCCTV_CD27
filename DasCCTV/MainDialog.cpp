@@ -527,5 +527,5 @@ void MainDialog::OnTimer(UINT_PTR nIDEvent)
 
 void MainDialog::InitCCTV()
 {
-	// TODO: CCTV 初始化代码
+	m_JsdCCTV->InitSDK();
 }
