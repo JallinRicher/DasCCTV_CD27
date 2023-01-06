@@ -175,7 +175,25 @@ void JSDCCTV::InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...)
 	char* buffer = new char[len * sizeof(char)];
 	vsnprintf(buffer, len * sizeof(char), _Format, args);
 
-
+	CString str;
+	CString strHead;
+	CTime curTime = CTime::GetCurrentTime();
+	str.Format(L"[ %04d-%02d-%02d %02d:%02d:%02d ] %s", curTime.GetYear(), curTime.GetMonth(), curTime.GetDay(), curTime.GetHour(), curTime.GetMinute(), curTime.GetSecond(), buffer);
+	
+	switch (Level)
+	{
+	case FATAL: strHead	= L"[ FATAL ] "	;	break;
+	case WARN:	strHead	= L"[ WARN ]  "	;	break;
+	case DEBUG: strHead = L"[ DEBUG ] "	;	break;
+	case INFO:	strHead	= L"[ INFO ]  "	;	break;
+	case BLANK: strHead = L"[ BLANK ] "	;	break;
+	default: break;
+	}
+	CString str = strHead + str;
+	m_LogFile << str.GetBuffer(0);
+	
+	delete[] buffer;
+	va_end(args);
 }
 
 
