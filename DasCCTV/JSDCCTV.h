@@ -22,18 +22,12 @@ public:
 	bool SetDecodeStateCallBack(CWALK_PLAY_HD PlayHD, Callback_OnDecodeState FnDecodeState, void* UserParam);
 	
 	// 录像回放模块
-	bool QueryRecord(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime, 
-		             CallBack_OnListSegmentsInfo FnOnListSegment, void* UserParam);										// 录像查询
-	bool StartPlayBackStream(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, 
-						     const TCHAR* EndTime, Callback_OnStreamData FnData, CallBack_OnStreamRobbed FnRobbed, 
-							 CallBack_OnStreamMsg FnMsg, void* UserParam);												// 点播录像
-	
+	bool QueryRecordInfo(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime, 
+						 CallBack_OnListSegmentsInfo FnOnListSegment, void* UserParam);									// 录像查询
 
-	// 录像下载模块
-	bool GetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64* Pos);														// 获取录像下载进度
-	
 
-public:
+public:		/*************************************** CCTV 回调函数 ***************************************/
+
 	static void CWALK_SDK_CALLBACK OnRealDecodeState(CWALK_PLAY_HD PlayHD, const CWALKPLayStatInfo* FInfo, void* UserParam)
 	{  }
 
@@ -260,6 +254,57 @@ public:		/************************************* CCTV 网络模块 ******************
 	void GetCameraGis(const TCHAR* AvPath, void* Buf, int BufLen, int* RealLen);							// 获取 GIS 信息
 	void CancelGisInfoSubscription();																		// 退订 GIS 信息
 	bool SubscribeGisInfo(CallBack_OnGisInfoUpload FnOnUpload, void* UserParam);							// 订阅 GIS 信息
+
+	// 设置摄像机级别
+	bool SetCameraLevel(const TCHAR* AvPath, int Level);													// 设置摄像机级别
+
+	// 摄像机信息获取
+	bool SetCamerasChangedNotify(CallBack_OnCamerasChangedNotify FnOnCamerasChangedNotify, void* UserParam);// 设置摄像机变化回调函数
+	void GetCamerasChangedVersion(INT64* ChangedVersion);													// 获取摄像机变化版本信息
+
+	// 远程录像
+	void QueryRecord(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime,
+					 CallBack_OnListSegments FnOnListSegment, void* UserParam);								// 查询录像，非法录像时间段会被过滤掉，错误信息记录到日志中
+	bool StartPlayBackStream(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime,
+						     const TCHAR* EndTime, Callback_OnStreamData FnData, CallBack_OnStreamRobbed FnRobbed,
+							 CallBack_OnStreamMsg FnMsg, void* UserParam);									// 点播录像
+	static void StopPlayBackStream(CWALK_NET_HD PlayBackHD);												// 停止录像回放，PlayBackHD 由 StartPlayBackStream 得到
+	bool StartDownloadStreamEx(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, 
+							   const TCHAR* EndTime, INT64 BeginThisPackage, INT64 BeginNextPackage,
+							   Callback_OnStreamDataEx FnData, CallBack_OnStreamRobbed FnRobbed,
+							   CallBack_OnStreamMsg FnMsg, void* UserParam);								// 录像下载（支持断点续传）
+	static void StopDownloadStream(CWALK_NET_HD StreamHD);													// 停止录像下载
+	static bool GetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64* Pos);									// 获取录像下载进度
+	static bool SetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64 Pos);										// 设置录像播放位置
+	static bool SetPlayBackSpeed(CWALK_NET_HD StreamHD, double Speed);										// 设置录像回放给流速度
+	static bool SetPlayBackMode(CWALK_NET_HD StreamHD, INT32 Mode);											// 设置 VOD 播放模式
+
+	// 帧标记
+	bool AddTag(const TCHAR* TagName, const TCHAR* TagTime, const TCHAR* ChannelName, 
+				const TCHAR* Description, int TagType, int Level);											// 添加帧标记
+	void GetTagNames(int* NameCount, CallBack_OnGetTagNames FnOnNames, void* UserParam);					// 获取所有标记名称
+	void QueryTag(const TCHAR* Condition, int* RecordCount, BOOL* IsEnd, CallBack_OnQueryTag FnOnQueryTag,
+				  void* UserParam);																			// 获取所有标记名称
+	bool ModifyTagName(const TCHAR* OldTagName, const TCHAR* NewTagName);									// 修改标记名称
+	bool ModifyTag(INT64 TagID, const TCHAR* TagName, const TCHAR* Description, int Level);					// 修改帧标记
+	void DeleteTags(INT64 TagIdArray[], int ArrayLen);														// 删除帧标记
+
+	// 事件订阅
+	bool SubscribeEvent(CallBack_OnEvent FnOnEvent, void* UserParam);										// 事件订阅
+	void CancelEventSubscription();																			// 取消订阅
+
+	// 执行脚本
+	bool ExecuteScript(const TCHAR* ScriptType, const TCHAR* Script);										// 执行脚本
+
+	// 帮助函数
+	static void InfoParseKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, void* ValueBuf,
+								  int Len, int* RealLen);													// 对象解析帮助函数，用于获取 ListObjects 函数中，objInfo 参数中的对象属性信息
+	static void InfoParseIntKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, int* Value);					// 对象解析帮助函数，用于解析 Key-Value 格式 JSON 字符串
+	static bool InfoHelperCreate(CWALK_HELP_HD* HelpHD);													// 创建 Key-Value 格式辅助函数，创建一个 Key-Value 格式 JSON 字符串生成器；用完之后，必须使用 InfoHelperRelease 释放 
+	static void InfoHelperAddKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, const TCHAR* Value);			// 对象信息生成帮助函数，添加 key-value 到对象信息
+	static void InfoHelperAddIntKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, int Value);				// 对象信息生成帮助函数，添加 key-value 到对象信息
+	static void InfoHelperGetData(CWALK_HELP_HD HelpHD, LPCTSTR* Buf, int* BufLen);							// 对象信息生成帮助函数，得到缓存区中的数据
+	static void InfoHelperRelease(CWALK_HELP_HD HelpHD);													// 对象信息生成帮助函数,释放资源
 
 
 

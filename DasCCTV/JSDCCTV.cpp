@@ -242,7 +242,7 @@ void JSDCCTV::StopStream(CWALK_NET_HD StreamHD)
 }
 
 
-bool JSDCCTV::QueryRecord(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime, CallBack_OnListSegmentsInfo FnOnListSegment, void* UserParam)
+bool JSDCCTV::QueryRecordInfo(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime, CallBack_OnListSegmentsInfo FnOnListSegment, void* UserParam)
 {
 	ErrorNum ret = CWALK_NET_QueryRecordInfo(m_LoginHandle, AvPath, VodType, BeginTime, EndTime, FnOnListSegment, UserParam);
 	if (ret != CWALKSDK_OK)
@@ -1542,4 +1542,319 @@ bool JSDCCTV::SubscribeGisInfo(CallBack_OnGisInfoUpload FnOnUpload, void* UserPa
 	}
 
 	return true;
+}
+
+
+bool JSDCCTV::SetCameraLevel(const TCHAR* AvPath, int Level)
+{
+	ErrorNum ret = CWALK_NET_SetCameraLevel(m_LoginHandle, AvPath, Level);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetCamerasChangedNotify(CallBack_OnCamerasChangedNotify FnOnCamerasChangedNotify, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_SetCamerasChangedNotify(m_LoginHandle, FnOnCamerasChangedNotify, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetCamerasChangedVersion(INT64* ChangedVersion)
+{
+	ErrorNum ret = CWALK_NET_GetCamerasChangedVersion(m_LoginHandle, ChangedVersion);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::QueryRecord(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime, CallBack_OnListSegments FnOnListSegment, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_QueryRecord(m_LoginHandle, AvPath, VodType, BeginTime, EndTime, FnOnListSegment, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::StopPlayBackStream(CWALK_NET_HD PlayBackHD)
+{
+	ErrorNum ret = CWALK_NET_StopPlaybackStream(PlayBackHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::StartDownloadStreamEx(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime, INT64 BeginThisPackage, INT64 BeginNextPackage, Callback_OnStreamDataEx FnData, CallBack_OnStreamRobbed FnRobbed, CallBack_OnStreamMsg FnMsg, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_StartDownloadStreamEx(m_LoginHandle, StreamHD, AvPath, VodType, BeginTime, EndTime, BeginThisPackage, BeginNextPackage, FnData, FnRobbed, FnMsg, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::StopDownloadStream(CWALK_NET_HD StreamHD)
+{
+	ErrorNum ret = CWALK_NET_StopDownloadStream(StreamHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64 Pos)
+{
+	ErrorNum ret = CWALK_NET_SetPlaybackStreamPos(StreamHD, Pos);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetPlayBackSpeed(CWALK_NET_HD StreamHD, double Speed)
+{
+	ErrorNum ret = CWALK_NET_SetPlaybackSpeed(StreamHD, Speed);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::SetPlayBackMode(CWALK_NET_HD StreamHD, INT32 Mode)
+{
+	ErrorNum ret = CWALK_NET_SetPlaybackMode(StreamHD, Mode);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::AddTag(const TCHAR* TagName, const TCHAR* TagTime, const TCHAR* ChannelName, const TCHAR* Description, int TagType, int Level)
+{
+	ErrorNum ret = CWALK_NET_AddTag(m_LoginHandle, TagName, TagTime, ChannelName, Description, TagType, Level);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::GetTagNames(int* NameCount, CallBack_OnGetTagNames FnOnNames, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_GetTagNames(m_LoginHandle, NameCount, FnOnNames, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::QueryTag(const TCHAR* Condition, int* RecordCount, BOOL* IsEnd, CallBack_OnQueryTag FnOnQueryTag, void* UserParam)
+{
+/// Condition	查询条件,JSON格式字符串，可由CWALK_NET_InfoHelperXXX系列函数帮助生成
+///
+///		查询条件为如下一种或多种的组合：
+///			maxCount		[INT]	 返回数据的最大条数，默认值：1000，最大值：2000
+///			startPos		[INT]	 数据返回起始位置，默认值：0
+///			tagNames		[string] 标记名称，必须是CWALK_NET_GetTagNames()得到的名称，支持多个，多个用“;”隔开，如："打架标记;车祸标记;报警标记"
+///			channelNames	[string] 通道名称，支持多个，支持模糊查询，多个用“;”隔开，如："av/dcam/1;av/dcam/2;av/dcam/3"
+///			beginTagTime	[string] 开始标记时间，格式："2012-01-01 13:20:00.000" 或 "20120101132000000"
+///			endTagTime		[string] 结束标记时间（不含）
+///			beginCreateTime [string] 开始创建时间，格式："2012-01-01 13:20:00.000" 或 "20120101132000000"
+///			endCreateTime	[string] 结束创建时间（不含）
+///			beginModifyTime [string] 开始修改时间，格式："2012-01-01 13:20:00.000" 或 "20120101132000000"
+///			endModifyTime	[string] 结束修改时间（不含）
+///			tagType			[INT]	 标记类型 0 - 自动;1 - 手动;其它 - 未使用
+///			level			[INT]	 标记级别,取值[1-5],1-不重要;2-不太重要;3-一般;4-重要;5-很重要
+///			createUser		[string] 创建用户，注：不支持模糊查询
+///			modifyUser		[string] 最后一次修改用户，注：不支持模糊查询
+///			description		[string] 描述信息，支持关键字模糊查询
+/// 
+	ErrorNum ret = CWALK_NET_QueryTag(m_LoginHandle, Condition, RecordCount, IsEnd, FnOnQueryTag, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::ModifyTagName(const TCHAR* OldTagName, const TCHAR* NewTagName)
+{
+	ErrorNum ret = CWALK_NET_ModifyTagName(m_LoginHandle, OldTagName, NewTagName);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+bool JSDCCTV::ModifyTag(INT64 TagID, const TCHAR* TagName, const TCHAR* Description, int Level)
+{
+	ErrorNum ret = CWALK_NET_ModifyTag(m_LoginHandle, TagID, TagName, Description, Level);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::DeleteTags(INT64 TagIdArray[], int ArrayLen)
+{
+	ErrorNum ret = CWALK_NET_DeleteTags(m_LoginHandle, TagIdArray, ArrayLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::SubscribeEvent(CallBack_OnEvent FnOnEvent, void* UserParam)
+{
+	ErrorNum ret = CWALK_NET_SubscribeEvent(m_LoginHandle, FnOnEvent, UserParam);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::CancelEventSubscription()
+{
+	ErrorNum ret = CWALK_NET_CancelEventSubscription(m_LoginHandle);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::ExecuteScript(const TCHAR* ScriptType, const TCHAR* Script)
+{
+	ErrorNum ret = CWALK_NET_ExecuteScript(m_LoginHandle, ScriptType, Script);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::InfoParseKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, void* ValueBuf, int Len, int* RealLen)
+{
+	ErrorNum ret = CWALK_NET_InfoParseKeyValue(ObjInfo, Key, ValueBuf, Len, RealLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::InfoParseIntKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, int* Value)
+{
+	ErrorNum ret = CWALK_NET_InfoParseIntKeyValue(ObjInfo, Key, Value);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+bool JSDCCTV::InfoHelperCreate(CWALK_HELP_HD* HelpHD)
+{
+	ErrorNum ret = CWALK_NET_InfoHelperCreate(HelpHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+		return false;
+	}
+
+	return true;
+}
+
+
+void JSDCCTV::InfoHelperAddKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, const TCHAR* Value)
+{
+	ErrorNum ret = CWALK_NET_InfoHelperAddKeyValue(HelpHD, Key, Value);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::InfoHelperAddIntKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, int Value)
+{
+	ErrorNum ret = CWALK_NET_InfoHelperAddIntKeyValue(HelpHD, Key, Value);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::InfoHelperGetData(CWALK_HELP_HD HelpHD, LPCTSTR* Buf, int* BufLen)
+{
+	ErrorNum ret = CWALK_NET_InfoHelperGetData(HelpHD, Buf, BufLen);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
+}
+
+
+void JSDCCTV::InfoHelperRelease(CWALK_HELP_HD HelpHD)
+{
+	ErrorNum ret = CWALK_NET_InfoHelperRelease(HelpHD);
+	if (ret != CWALKSDK_OK)
+	{
+		// LOG
+	}
 }
