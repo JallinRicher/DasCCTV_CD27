@@ -24,19 +24,6 @@ public:
 	// 录像回放模块
 	bool QueryRecordInfo(const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, const TCHAR* EndTime, 
 						 CallBack_OnListSegmentsInfo FnOnListSegment, void* UserParam);									// 录像查询
-
-
-public:		/*************************************** CCTV 回调函数 ***************************************/
-
-	static void CWALK_SDK_CALLBACK OnRealDecodeState(CWALK_PLAY_HD PlayHD, const CWALKPLayStatInfo* FInfo, void* UserParam)
-	{  }
-
-	// 视频解码回调函数
-	static void CWALK_SDK_CALLBACK OnRealDecodeData(CWALK_PLAY_HD PlayHD, const void* Buf, int Len, const CWALKPLayFrameInfo* FInfo, void* UserParam)
-	{  }
-
-
-public:
 	static void CharToWChar(const char* Source, wchar_t* Destination);
 
 
@@ -305,8 +292,6 @@ public:		/************************************* CCTV 网络模块 ******************
 	static void InfoHelperAddIntKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, int Value);				// 对象信息生成帮助函数，添加 key-value 到对象信息
 	static void InfoHelperGetData(CWALK_HELP_HD HelpHD, LPCTSTR* Buf, int* BufLen);							// 对象信息生成帮助函数，得到缓存区中的数据
 	static void InfoHelperRelease(CWALK_HELP_HD HelpHD);													// 对象信息生成帮助函数,释放资源
-
-
 
 private:
 	bool m_IsInitPlay;
