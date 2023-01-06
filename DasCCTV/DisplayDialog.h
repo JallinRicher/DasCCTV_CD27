@@ -18,32 +18,26 @@ public:
 	void InitVariable();
 
 	void SetDisplayState(int State);
-	void SetDeviceResCode(const char* DeviceResCode);
-	void SetDeviceName(const char* DeviceName);
+	void SetDeviceResCode(const wchar_t* DeviceResCode);
+	void SetDeviceName(const wchar_t* DeviceName);
 	void SetDeviceID(long DeviceID);
 	void SetDeviceType(int DeviceType);
 	void SetDeviceSubType(int DeviceSubType);
 	void SetDeviceStatus(int DeviceStatus);
 	void SetRegionID(long RegionID);
-	void SetRegionResCode(const char* RegionResCode);
-#ifdef MULTI_SUBWAY_ROUTE
-	void SetRoute(int Route);
-#endif
+	void SetRegionResCode(const wchar_t* RegionResCode);
 
 	DisplayDeviceInfo GetDisplayInfo() const;
 	int GetDisplayState() const;
 	int GetSoundChannel() const;
-	void GetDeviceResCode(char* Retval) const;
-	void GetDeviceName(char* Retval) const;
+	void GetDeviceResCode(wchar_t* Retval) const;
+	void GetDeviceName(wchar_t* Retval) const;
 	long GetDeviceID() const;
 	int GetDeviceType() const;
 	int GetDeviceSubType() const;
 	int GetDeviceStatus() const;
 	long GetRegionID() const;
-	void GetRegionResCode(char* Retval) const;
-#ifdef MULTI_SUBWAY_ROUTE
-	int GetRoute() const;
-#endif
+	void GetRegionResCode(wchar_t* Retval) const;
 
 	void OpenSound(int SoundChannel);
 	bool IsOpenSound() const;
@@ -69,17 +63,14 @@ public:
 
 private:
 	DisplayControlDialog* m_ParentDialog;
-	char m_DeviceResCode[RES_CODE_LEN];
-	char m_DeviceName[NAME_LEN];
+	wchar_t m_DeviceResCode[RES_CODE_LEN];
+	wchar_t m_DeviceName[NAME_LEN];
 	long m_DeviceID;
 	int m_DeviceType;
 	int m_DeviceSubType;
 	int m_DeviceStatus;
 	long m_RegionID;
-	char m_RegionResCode[RES_CODE_LEN];
-#ifdef MULTI_SUBWAY_ROUTE
-	int m_Route;
-#endif
+	wchar_t m_RegionResCode[RES_CODE_LEN];
 
 	int m_DisplayState;						// 窗口的播放状态
 	bool m_IsOpenSound;						// 是否打开声音

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "JSDCCTV.h"
 
-JSDCCTV::JSDCCTV(UserInfo userInfo) : m_DCSUserInfo(userInfo)
+JSDCCTV::JSDCCTV(UserInfo DCSUserInfo) : m_DCSUserInfo(DCSUserInfo)
 {
 	m_IsInitPlay = false;
 	m_IsInitFile = false;
@@ -101,14 +101,7 @@ bool JSDCCTV::InitSDK()
 
 bool JSDCCTV::Login()
 {
-	TCHAR IPAddress[IPADDR_LEN] = { 0 };
-	TCHAR UserName[NAME_LEN] = { 0 };
-	TCHAR Password[PASSWORD_LEN] = { 0 };
-	CharToWChar(m_DCSUserInfo.IPAddress, IPAddress);
-	CharToWChar(m_DCSUserInfo.UserName, UserName);
-	CharToWChar(m_DCSUserInfo.Password, Password);
-
-	ErrorNum ret = CWALK_NET_Login(&m_LoginHandle, IPAddress, m_DCSUserInfo.Port, UserName, Password);
+	ErrorNum ret = CWALK_NET_Login(&m_LoginHandle, m_DCSUserInfo.IPAddress, m_DCSUserInfo.Port, m_DCSUserInfo.UserName, m_DCSUserInfo.Password);
 	if (ret != CWALKSDK_OK || m_LoginHandle == nullptr)
 	{
 		InsertLog(FATAL, "CWALK_NET_Login failed. Error number is %d\n", ret);
@@ -162,7 +155,7 @@ bool JSDCCTV::IsLogin()
 }
 
 
-void JSDCCTV::InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...)
+void JSDCCTV::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 {
 	if (!m_LogFile.is_open())
 	{
@@ -174,6 +167,7 @@ void JSDCCTV::InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...)
 	int len = _vscprintf(_Format, args) + 1;
 	char* buffer = new char[len * sizeof(char)];
 	vsnprintf(buffer, len * sizeof(char), _Format, args);
+	va_end(args);
 
 	CString str;
 	CString strHead;
@@ -189,11 +183,11 @@ void JSDCCTV::InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...)
 	case BLANK: strHead = L"[ BLANK ] "	;	break;
 	default: break;
 	}
-	CString str = strHead + str;
+	
+	str = strHead + str;
 	m_LogFile << str.GetBuffer(0);
 	
 	delete[] buffer;
-	va_end(args);
 }
 
 
@@ -586,12 +580,7 @@ void JSDCCTV::ReleaseExtractor(CWALK_FILE_HD ExtratorHD)
 
 bool JSDCCTV::OpenOfflineFile(const TCHAR* Protocol, CWALK_FILE_HD* ReadHD, const TCHAR* IP, const WORD Port, const TCHAR* Pool, const TCHAR* FilePath)
 {
-	TCHAR UserName[NAME_LEN] = { 0 };
-	TCHAR Password[PASSWORD_LEN] = { 0 };
-	CharToWChar(m_DCRUserInfo.UserName, UserName);
-	CharToWChar(m_DCRUserInfo.Password, Password);
-
-	ErrorNum ret = CWALK_FILE_OpenOfflineFile(Protocol, ReadHD, IP, Port, Pool, FilePath, UserName, Password);
+	ErrorNum ret = CWALK_FILE_OpenOfflineFile(Protocol, ReadHD, IP, Port, Pool, FilePath, m_DCRUserInfo.UserName, m_DCRUserInfo.Password);
 	if (ret != CWALKSDK_OK)
 	{
 		InsertLog(FATAL, "CWALK_FILE_OpenOfflineFile failed. Error number is %d\n", ret);
@@ -1103,15 +1092,7 @@ void JSDCCTV::GetNetServerVersion(void* InfoBuf, int Len, int* RealLen)
 
 void JSDCCTV::GetTicket(BYTE* InfoBuf, int Len, int* RealLen)
 {
-	TCHAR IP[IPADDR_LEN] = { 0 };
-	TCHAR UserName[NAME_LEN] = { 0 };
-	TCHAR Password[PASSWORD_LEN] = { 0 };
-
-	CharToWChar(m_DCSUserInfo.UserName, UserName);
-	CharToWChar(m_DCSUserInfo.IPAddress, IP);
-	CharToWChar(m_DCSUserInfo.Password, Password);
-
-	ErrorNum ret = CWALK_NET_GetTicket(IP, m_DCSUserInfo.Port, UserName, Password, InfoBuf, Len, RealLen);
+	ErrorNum ret = CWALK_NET_GetTicket(m_DCSUserInfo.IPAddress, m_DCSUserInfo.Port, m_DCSUserInfo.UserName, m_DCSUserInfo.Password, InfoBuf, Len, RealLen);
 	if (ret != CWALKSDK_OK)
 	{
 		InsertLog(WARN, "CWALK_NET_GetTicket failed. Error number is %d\n", ret);
@@ -1121,11 +1102,7 @@ void JSDCCTV::GetTicket(BYTE* InfoBuf, int Len, int* RealLen)
 
 bool JSDCCTV::LoginByTicket(BYTE* Ticket, int Len)
 {
-	TCHAR IP[IPADDR_LEN] = { 0 };
-
-	CharToWChar(m_DCSUserInfo.IPAddress, IP);
-
-	ErrorNum ret = CWALK_NET_LoginByTicket(&m_LoginHandle, IP, m_DCSUserInfo.Port, Ticket, Len);
+	ErrorNum ret = CWALK_NET_LoginByTicket(&m_LoginHandle, m_DCSUserInfo.IPAddress, m_DCSUserInfo.Port, Ticket, Len);
 	if (ret != CWALKSDK_OK)
 	{
 		InsertLog(FATAL, "CWALK_NET_LoginByTicket failed. Error number is %d\n", ret);

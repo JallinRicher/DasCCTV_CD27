@@ -15,8 +15,13 @@ MainDialog::MainDialog(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_MAINDIALOG, pParent)
 {
 	m_DisplayControl = nullptr;
-	m_IsLogged = false;
+	m_IsLogin = false;
 	m_JsdCCTV = nullptr;
+
+	memset(m_AppWorkPath, 0, sizeof(m_AppWorkPath));
+	memset(m_LogFilePath, 0, sizeof(m_LogFilePath));
+	memset(m_ConfigFilePath, 0, sizeof(m_ConfigFilePath));
+	memset(m_DownloadPath, 0, sizeof(m_DownloadPath));
 }
 
 
@@ -26,6 +31,79 @@ MainDialog::~MainDialog()
 	{
 		delete m_JsdCCTV;
 	}
+}
+
+
+void MainDialog::ReadConfigFile()
+{
+	/* 获取 DCS 用户信息 */
+	GetPrivateProfileString(SECTION_DCSUSERINFO, CONFIG_KEY_USERNAME, DEFAULT_STR, m_DCSUserInfo.UserName, sizeof(m_DCSUserInfo.UserName), m_ConfigFilePath);
+	GetPrivateProfileString(SECTION_DCSUSERINFO, CONFIG_KEY_PASSWORD, DEFAULT_STR, m_DCSUserInfo.Password, sizeof(m_DCSUserInfo.Password), m_ConfigFilePath);
+	GetPrivateProfileString(SECTION_DCSUSERINFO, CONFIG_KEY_SERVERIP, DEFAULT_STR, m_DCSUserInfo.IPAddress, sizeof(m_DCSUserInfo.IPAddress), m_ConfigFilePath);
+	m_DCSUserInfo.Port = GetPrivateProfileInt(SECTION_DCSUSERINFO, CONFIG_KEY_SERVERPORT, DEFAULT_INT, m_ConfigFilePath);
+
+	/* 获取 DCR 用户信息 */
+	GetPrivateProfileString(SECTION_DCRUSERINFO, CONFIG_KEY_USERNAME, DEFAULT_STR, m_DCRUserInfo.UserName, sizeof(m_DCRUserInfo.UserName), m_ConfigFilePath);
+	GetPrivateProfileString(SECTION_DCRUSERINFO, CONFIG_KEY_PASSWORD, DEFAULT_STR, m_DCRUserInfo.Password, sizeof(m_DCRUserInfo.Password), m_ConfigFilePath);
+	GetPrivateProfileString(SECTION_DCRUSERINFO, CONFIG_KEY_SERVERIP, DEFAULT_STR, m_DCRUserInfo.IPAddress, sizeof(m_DCRUserInfo.IPAddress), m_ConfigFilePath);
+	m_DCRUserInfo.Port = GetPrivateProfileInt(SECTION_DCRUSERINFO, CONFIG_KEY_SERVERPORT, DEFAULT_INT, m_ConfigFilePath);
+
+	/* 获取默认布局 */
+	m_CurrentLayout = GetPrivateProfileInt(SECTION_GLOBAL, CONFIG_KEY_DEFAULT_LAYOUT, DEFAULT_INT, m_ConfigFilePath);
+
+	/* 获取下载路径 */
+	GetPrivateProfileString(SECTION_STORAGE, CONFIG_KEY_DOWNLOADPATH, DEFAULT_STR, m_DownloadPath, sizeof(m_DownloadPath), m_ConfigFilePath);
+
+	/* 获取显示模式 */
+	m_DisplayMode.ModeCount = GetPrivateProfileInt(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, DEFAULT_INT, m_ConfigFilePath);
+	unsigned int _modeCount = m_DisplayMode.ModeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : m_DisplayMode.ModeCount;
+	for (unsigned int i = 0; i < _modeCount; ++i)
+	{
+		CString tempKeyName, tempKeyCamera;
+		wchar_t tempCamera[DEFAULT_STR_LEN] = { 0 };
+		tempKeyName.Format(L"%s%ud", CONFIG_KEY_MODENAME_PREFIX, i);
+		tempKeyCamera.Format(L"%s%ud", CONFIG_KEY_MODECAMERA_PREFIX, i);
+
+		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCamera, DEFAULT_STR, tempCamera, sizeof(tempCamera), m_ConfigFilePath);
+		// 分割字符串
+	}
+
+}
+
+
+void MainDialog::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
+{
+	if (!m_LogFile.is_open())
+	{
+		return;
+	}
+
+	va_list args;
+	va_start(args, _Format);
+	int len = _vscprintf(_Format, args) + 1;
+	char* buffer = new char[len * sizeof(char)];
+	vsnprintf(buffer, len * sizeof(char), _Format, args);
+	va_end(args);
+
+	CString str;
+	CString strHead;
+	CTime curTime = CTime::GetCurrentTime();
+	str.Format(L"[ %04d-%02d-%02d %02d:%02d:%02d ] %s", curTime.GetYear(), curTime.GetMonth(), curTime.GetDay(), curTime.GetHour(), curTime.GetMinute(), curTime.GetSecond(), buffer);
+
+	switch (Level)
+	{
+	case FATAL: strHead = L"[ FATAL ] ";	break;
+	case WARN:	strHead = L"[ WARN ]  ";	break;
+	case DEBUG: strHead = L"[ DEBUG ] ";	break;
+	case INFO:	strHead = L"[ INFO ]  ";	break;
+	case BLANK: strHead = L"[ BLANK ] ";	break;
+	default: break;
+	}
+
+	str = strHead + str;
+	m_LogFile << str.GetBuffer(0);
+
+	delete[] buffer;
 }
 
 
@@ -120,11 +198,6 @@ void MainDialog::OnCbnSelchangeComboStation()
 	m_CameraComboBox.ClearAllContent();
 	ShowCurAreaList();
 	ShowCurCameraList();
-
-#ifdef MULTI_SUBWAY_ROUTE
-	m_SwitchComboBox.ClearAllContent();
-	ShowCurSwitchList();
-#endif
 }
 
 
@@ -187,6 +260,7 @@ BOOL MainDialog::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化
 	InitUIFrame();
+	InitFilePath();
 	InitCCTV();
 
 	m_DisplayControl = new DisplayControlDialog(this);
@@ -327,84 +401,7 @@ void MainDialog::ShowCurSwitchList()
 
 void MainDialog::Login()
 {
-#ifdef MULTI_SUBWAY_ROUTE
-	for (UserInfo _user : m_UserInfo)
-	{
-		if (strlen(_user.IPAddress) == 0)
-		{
-			continue;
-		}
 
-		// TODO: 登录代码
-		m_IsLogged = true;
-	}
-
-	return;
-
-#else
-	if (strlen(m_UserInfo.IPAddress) == 0)
-	{
-		return;
-	}
-
-	// TODO: 登录代码
-	m_IsLogged = true;
-#endif
-}
-
-
-void MainDialog::SetUserInfo(UserInfo& info)
-{
-#ifdef MULTI_SUBWAY_ROUTE
-	m_UserInfo.push_back(info);
-#else
-	m_UserInfo = info;
-#endif
-}
-
-
-#ifdef MULTI_SUBWAY_ROUTE
-void MainDialog::AddOneStation(const char* StationName, const char* StationResCode, int Route)
-{
-
-}
-
-
-void MainDialog::AddOneArea(const char* AreaName, const char* AreaResCode, int Route)
-{
-
-}
-
-
-void MainDialog::AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus, int Route)
-{
-
-}
-
-
-void MainDialog::AddOneSwitch(int SwitchID, int Route)
-{
-
-}
-
-
-void MainDialog::DelCurSelSwitch(int Route)
-{
-
-}
-
-
-std::vector<UserInfo> MainDialog::GetUserInfo() const
-{
-	return m_UserInfo;
-}
-
-#else
-
-
-UserInfo MainDialog::GetUserInfo() const
-{
-	return m_UserInfo;
 }
 
 
@@ -452,7 +449,6 @@ void MainDialog::DelCurSelSwitch()
 	m_SwitchComboBox.DeleteCurSelRow();
 }
 
-#endif
 
 void MainDialog::OnBnClickedButtonAdddspmode()
 {
@@ -511,7 +507,7 @@ void MainDialog::OnBnClickedButtonStartswitchmode()
 void MainDialog::OnTimer(UINT_PTR nIDEvent)
 {
 	KillTimer(1);
-	if (!m_IsLogged)
+	if (!m_IsLogin)
 	{
 		Login();
 	}
@@ -527,5 +523,18 @@ void MainDialog::OnTimer(UINT_PTR nIDEvent)
 
 void MainDialog::InitCCTV()
 {
-	m_JsdCCTV->InitSDK();
+	//m_JsdCCTV->InitSDK();
+}
+
+
+void MainDialog::InitFilePath()
+{
+	GetModuleFileName(AfxGetInstanceHandle(), m_AppWorkPath, FILE_PATH_LEN);
+	PathRemoveFileSpec(m_AppWorkPath);
+
+	CString tempWorkPath = m_AppWorkPath;
+	CString tempLogPath = tempWorkPath + _T("\\Log");
+	CString tempConfigPath = tempWorkPath + L"\\" + CONFIG_FILE;
+	wcsncpy_s(m_LogFilePath, sizeof(m_LogFilePath), tempLogPath, sizeof(m_LogFilePath));
+	wcsncpy_s(m_ConfigFilePath, sizeof(m_ConfigFilePath), tempConfigPath, sizeof(m_ConfigFilePath));
 }

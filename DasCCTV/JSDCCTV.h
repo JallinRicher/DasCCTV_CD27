@@ -12,19 +12,9 @@ typedef CWALKSDKError ErrorNum;
 
 class JSDCCTV
 {
-private:
-	typedef enum
-	{
-		FATAL = 0,
-		WARN,
-		DEBUG,
-		INFO,
-		BLANK
-	}CCTVLOGLEVEL;								// CCTV 日志等级
-
 public:
-	JSDCCTV(UserInfo userInfo);
-	void InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...);
+	JSDCCTV(UserInfo DCSUserInfo);
+	void InsertLog(LOGLEVEL Level, const char* const _Format, ...);
 	static void CharToWChar(const char* Source, wchar_t* Destination);
 
 	bool InitSDK();																										// 初始化SDK
@@ -34,9 +24,6 @@ public:
 	bool IsInit();
 	bool IsLogin();
 	bool SetLogFile(const char* LogPath);
-
-	
-
 
 public:		/************************************* CCTV 文件操作模块 *************************************/
 	

@@ -81,18 +81,14 @@ int DisplayDialog::GetDisplayState() const
 DisplayDeviceInfo DisplayDialog::GetDisplayInfo() const
 {
 	DisplayDeviceInfo Retval;
-
-	strcpy_s(Retval.DeviceResCode, RES_CODE_LEN, m_DeviceResCode);
-	strcpy_s(Retval.DeviceName, NAME_LEN, m_DeviceName);
+	wcsncpy_s(Retval.DeviceResCode, sizeof(Retval.DeviceResCode), m_DeviceResCode, sizeof(Retval.DeviceResCode));
+	wcsncpy_s(Retval.DeviceName, sizeof(Retval.DeviceName), m_DeviceName, sizeof(Retval.DeviceName));
 	Retval.DeviceID = m_DeviceID;
 	Retval.DeviceType = m_DeviceType;
 	Retval.DeviceSubType = m_DeviceSubType;
 	Retval.DeviceStatus = m_DeviceStatus;
 	Retval.RegionID = m_RegionID;
-	strcpy_s(Retval.RegionResCode, RES_CODE_LEN, m_RegionResCode);
-#ifdef MULTI_SUBWAY_ROUTE
-	Retval.Route = m_Route;
-#endif
+	wcsncpy_s(Retval.RegionResCode, sizeof(Retval.RegionResCode), m_RegionResCode, sizeof(Retval.RegionResCode));
 
 	return Retval;
 }
@@ -177,23 +173,23 @@ BOOL DisplayDialog::OnInitDialog()
 }
 
 
-void DisplayDialog::SetDeviceResCode(const char* DeviceResCode)
+void DisplayDialog::SetDeviceResCode(const wchar_t* DeviceResCode)
 {
 	if (DeviceResCode == nullptr)
 	{
 		return;
 	}
-	strcpy_s(m_DeviceResCode, RES_CODE_LEN, DeviceResCode);
+	wcsncpy_s(m_DeviceResCode, sizeof(m_DeviceResCode), DeviceResCode, sizeof(m_DeviceResCode));
 }
 
 
-void DisplayDialog::SetDeviceName(const char* DeviceName)
+void DisplayDialog::SetDeviceName(const wchar_t* DeviceName)
 {
 	if (DeviceName == nullptr)
 	{
 		return;
 	}
-	strcpy_s(m_DeviceName, NAME_LEN, DeviceName);
+	wcsncpy_s(m_DeviceName, sizeof(m_DeviceName), DeviceName, sizeof(m_DeviceName));
 }
 
 
@@ -227,22 +223,14 @@ void DisplayDialog::SetRegionID(long RegionID)
 }
 
 
-void DisplayDialog::SetRegionResCode(const char* RegionResCode)
+void DisplayDialog::SetRegionResCode(const wchar_t* RegionResCode)
 {
 	if (RegionResCode == nullptr)
 	{
 		return;
 	}
-	strcpy_s(m_RegionResCode, RES_CODE_LEN, RegionResCode);
+	wcsncpy_s(m_RegionResCode, sizeof(m_RegionResCode), RegionResCode, sizeof(m_RegionResCode));
 }
-
-
-#ifdef MULTI_SUBWAY_ROUTE
-void DisplayDialog::SetRoute(int Route)
-{
-	m_Route = Route;
-}
-#endif
 
 
 int DisplayDialog::GetSoundChannel() const
@@ -251,15 +239,15 @@ int DisplayDialog::GetSoundChannel() const
 }
 
 
-void DisplayDialog::GetDeviceResCode(char* Retval) const
+void DisplayDialog::GetDeviceResCode(wchar_t* Retval) const
 {
-	strcpy_s(Retval, RES_CODE_LEN, m_DeviceResCode);
+	wcsncpy_s(Retval, sizeof(Retval), m_DeviceResCode, sizeof(Retval));
 }
 
 
-void DisplayDialog::GetDeviceName(char* Retval) const
+void DisplayDialog::GetDeviceName(wchar_t* Retval) const
 {
-	strcpy_s(Retval, NAME_LEN, m_DeviceName);
+	wcsncpy_s(Retval, sizeof(Retval), m_DeviceName, sizeof(Retval));
 }
 
 
@@ -293,9 +281,9 @@ long DisplayDialog::GetRegionID() const
 }
 
 
-void DisplayDialog::GetRegionResCode(char* Retval) const
+void DisplayDialog::GetRegionResCode(wchar_t* Retval) const
 {
-	strcpy_s(Retval, RES_CODE_LEN, m_RegionResCode);
+	wcsncpy_s(Retval, sizeof(Retval), m_RegionResCode, sizeof(Retval));
 }
 
 

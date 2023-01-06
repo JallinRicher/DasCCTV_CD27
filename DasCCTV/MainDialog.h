@@ -14,20 +14,17 @@ class MainDialog : public CDialog
 	DECLARE_DYNAMIC(MainDialog)
 
 public:
+	void ReadConfigFile();
+	void InsertLog(LOGLEVEL Level, const char* const _Format, ...);
+
+
+public:
 	enum { IDD = IDD_MAINDIALOG };
 	MainDialog(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~MainDialog();
 	
 	void Login();
-	void InitCCTV();
-	void SetUserInfo(UserInfo& info);
-
-#ifdef MULTI_SUBWAY_ROUTE
-	std::vector<UserInfo> GetUserInfo() const;
-#else
-	UserInfo GetUserInfo() const;
-#endif
-
+	
 	void AddOneDisplayMode(const char* ModeName);
 	void DelCurSelDisplayMode();
 	void ModifyCurSelDisplayMode();
@@ -40,6 +37,8 @@ public:
 	void ShowCurSwitchList();
 
 private:
+	void InitCCTV();
+	void InitFilePath();
 	void InitUIFrame();
 	void InitBitmap();
 	void InitAllComboBox();
@@ -47,19 +46,11 @@ private:
 	void InitPtzControlButton();
 	void InitChildWindow();	
 
-#ifdef MULTI_SUBWAY_ROUTE
-	void AddOneStation(const char* StationName, const char* StationResCode, int Route);
-	void AddOneArea(const char* AreaName, const char* AreaResCode, int Route);
-	void AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus, int Route);
-	void AddOneSwitch(const char* SwitchName, const char* SwitchCode, int Route);
-	void DelCurSelSwitch(int Route);
-#else
 	void AddOneStation(const char* StationName, const char* StationResCode);
 	void AddOneArea(const char* AreaName, const char* AreaResCode);
 	void AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus);
 	void AddOneSwitch(const char* SwitchName, const char* SwitchCode);
 	void DelCurSelSwitch();
-#endif
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
@@ -108,14 +99,19 @@ public:
 	virtual BOOL OnInitDialog();
 
 private:
+	bool m_IsLogin;
+	unsigned int m_CurrentLayout;
+
+	wchar_t m_AppWorkPath[FILE_PATH_LEN];
+	wchar_t m_LogFilePath[FILE_PATH_LEN];
+	wchar_t m_ConfigFilePath[FILE_PATH_LEN];
+	wchar_t m_DownloadPath[FILE_PATH_LEN];
+
+	std::ofstream m_LogFile;
+	UserInfo m_DCSUserInfo;
+	UserInfo m_DCRUserInfo;
+	DisplayMode m_DisplayMode;
 	DisplayControlDialog* m_DisplayControl;
-	bool m_IsLogged;
-#ifdef MULTI_SUBWAY_ROUTE
-	std::vector<UserInfo> m_UserInfo;
-#else
-	UserInfo m_UserInfo;
-#endif
-
+	
 	JSDCCTV* m_JsdCCTV;
-
 };
