@@ -24,7 +24,7 @@ private:
 
 public:
 	JSDCCTV(UserInfo userInfo);
-	static void InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...);
+	void InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...);
 	static void CharToWChar(const char* Source, wchar_t* Destination);
 
 	bool InitSDK();																										// 初始化SDK
@@ -44,48 +44,48 @@ public:		/************************************* CCTV 文件操作模块 **************
 	bool InitFileSDK();
 
 	// 媒体文件读操作
-	static bool OpenReadableFile(const TCHAR* FileName, CWALK_FILE_HD* ReadHD);					// 打开可读文件
-	static void CloseReadableFile(CWALK_FILE_HD ReadHD);										// 关闭可读文件
-	static bool ReadSlice(CWALK_FILE_HD ReadHD, void** Data, int* Len);							// 从可读文件中读取数据，必须用FreeFile释放数据；读出后的数据为一个完整的slice
-	static void FreeFile(void* Ptr);															// 释放内存
-	static bool SetPlayMode(CWALK_FILE_HD ReadHD, int Mode);									// 设置播放模式
-	static void GetPlayMode(CWALK_FILE_HD ReadHD, int* Mode);									// 获得播放模式
+	bool OpenReadableFile(const TCHAR* FileName, CWALK_FILE_HD* ReadHD);				// 打开可读文件
+	void CloseReadableFile(CWALK_FILE_HD ReadHD);										// 关闭可读文件
+	bool ReadSlice(CWALK_FILE_HD ReadHD, void** Data, int* Len);						// 从可读文件中读取数据，必须用FreeFile释放数据；读出后的数据为一个完整的slice
+	void FreeFile(void* Ptr);															// 释放内存
+	bool SetPlayMode(CWALK_FILE_HD ReadHD, int Mode);									// 设置播放模式
+	void GetPlayMode(CWALK_FILE_HD ReadHD, int* Mode);									// 获得播放模式
 
 	// 媒体文件写操作
-	static bool OpenWritableFile(const TCHAR* FileName, CWALK_FILE_HD* WriteHD);				// 打开可写文件
-	static void CloseWritableFile(CWALK_FILE_HD WriteHD);										// 关闭写文件操作
-	static bool WriteData(CWALK_FILE_HD WriteHD, const void* data, int Len);					// 数据写入文件，参数data必须为一个完整的slice，可由流传输的回调函数获得
+	bool OpenWritableFile(const TCHAR* FileName, CWALK_FILE_HD* WriteHD);				// 打开可写文件
+	void CloseWritableFile(CWALK_FILE_HD WriteHD);										// 关闭写文件操作
+	bool WriteData(CWALK_FILE_HD WriteHD, const void* data, int Len);					// 数据写入文件，参数data必须为一个完整的slice，可由流传输的回调函数获得
 
 	// 媒体文件位置控制
-	static void GetFileDuration(CWALK_FILE_HD ReadHD, DWORD* Len);								// 获得文件产长度
-	static void GetFilePos(CWALK_FILE_HD ReadHD, DWORD* Len);									// 获得文件读取位置
-	static bool SetFilePos(CWALK_FILE_HD ReadHD, DWORD Len);									// 设置文件读取位置
+	void GetFileDuration(CWALK_FILE_HD ReadHD, DWORD* Len);								// 获得文件产长度
+	void GetFilePos(CWALK_FILE_HD ReadHD, DWORD* Len);									// 获得文件读取位置
+	bool SetFilePos(CWALK_FILE_HD ReadHD, DWORD Len);									// 设置文件读取位置
 
 	// 得到录像文件第一帧的生成时间
-	static void GetBaseTime(CWALK_FILE_HD ReadHD, INT64* Time);									// 获得录像第一帧的生成时间，相对于格林威治标准时间的毫秒数
-	static void GetStringBaseTime(CWALK_FILE_HD ReadHD, TCHAR* Buf, int BufLen, int* RealLen);	// 获得录像第一帧的生成时间，返回标准格式的时间字符串，内存由调用者分配
+	void GetBaseTime(CWALK_FILE_HD ReadHD, INT64* Time);								// 获得录像第一帧的生成时间，相对于格林威治标准时间的毫秒数
+	void GetStringBaseTime(CWALK_FILE_HD ReadHD, TCHAR* Buf, int BufLen, int* RealLen);	// 获得录像第一帧的生成时间，返回标准格式的时间字符串，内存由调用者分配
 
 	// 数据格式转化
-	static void GetVideoInfo(CWALK_FILE_HD ReadHD, int* Width, int* Height, float* Rate, int* StreamType);		// 获取图像信息
-	static bool CreateExtrator(const void* Data, int Size, CWALK_FILE_HD* ExtratorHD);							// 创建数据格式转换器
-	static bool InputData(CWALK_FILE_HD ExtratorHD, const void* Data, int Size);								// 输入数据
-	static void NextFrame(CWALK_FILE_HD ExtratorHD, void* pStream, int* Len);									// 获取数据（可获得数据类型）
-	static void ReleaseExtractor(CWALK_FILE_HD ExtratorHD);														// 释放数据格式转化器
+	void GetVideoInfo(CWALK_FILE_HD ReadHD, int* Width, int* Height, float* Rate, int* StreamType);		// 获取图像信息
+	bool CreateExtrator(const void* Data, int Size, CWALK_FILE_HD* ExtratorHD);							// 创建数据格式转换器
+	bool InputData(CWALK_FILE_HD ExtratorHD, const void* Data, int Size);								// 输入数据
+	void NextFrame(CWALK_FILE_HD ExtratorHD, void* pStream, int* Len);									// 获取数据（可获得数据类型）
+	void ReleaseExtractor(CWALK_FILE_HD ExtratorHD);													// 释放数据格式转化器
 
 	// 离线文件操作
 	bool OpenOfflineFile(const TCHAR* Protocol, CWALK_FILE_HD* ReadHD, const TCHAR* IP, const WORD Port, 
-						 const TCHAR* Pool, const TCHAR* FilePath);												// 打开离线文件
-	static void CloseOfflineFile(CWALK_FILE_HD ReadHD);															// 关闭离线文件
-	static bool StartOfflineFileStream(CWALK_FILE_HD ReadHD, const int BeginTime, const int EndTime, 
-									   Callback_File_OnStreamData FnData, CallBack_File_OnStreamMsg FnMsg, 
-									   void* UserParam);														// 开启离线文件传输
-	static void StopOfflineFileStream(CWALK_FILE_HD ReadHD);													// 停止离线回放
-	static void GetOfflineFileInfo(CWALK_FILE_HD ReadHD, INT64* Size, INT64* Duration, int* FPS, 
-								   int* Width, int* Height, int* VCodec, int* ACodec);							// 获取离线文件的详细信息
-	static void GetOfflineFileStreamPos(CWALK_FILE_HD ReadHD, INT64* Pos);										// 获取离线文件播放进度
-	static bool SetOfflineFileStreamPos(CWALK_FILE_HD ReadHD, INT64 Pos);										// 设置离线文件播放进度
-	static bool SetOfflineFileStreamSpeed(CWALK_FILE_HD ReadHD, double Speed);									// 设置播放速度
-	static bool SetOfflineFilePlayBackMode(CWALK_FILE_HD ReadHD, INT32 Mode);									// 设置离线文件播放模式
+						 const TCHAR* Pool, const TCHAR* FilePath);										// 打开离线文件
+	void CloseOfflineFile(CWALK_FILE_HD ReadHD);														// 关闭离线文件
+	bool StartOfflineFileStream(CWALK_FILE_HD ReadHD, const int BeginTime, const int EndTime, 
+								Callback_File_OnStreamData FnData, CallBack_File_OnStreamMsg FnMsg, 
+								void* UserParam);														// 开启离线文件传输
+	void StopOfflineFileStream(CWALK_FILE_HD ReadHD);													// 停止离线回放
+	void GetOfflineFileInfo(CWALK_FILE_HD ReadHD, INT64* Size, INT64* Duration, int* FPS, 
+							int* Width, int* Height, int* VCodec, int* ACodec);							// 获取离线文件的详细信息
+	void GetOfflineFileStreamPos(CWALK_FILE_HD ReadHD, INT64* Pos);										// 获取离线文件播放进度
+	bool SetOfflineFileStreamPos(CWALK_FILE_HD ReadHD, INT64 Pos);										// 设置离线文件播放进度
+	bool SetOfflineFileStreamSpeed(CWALK_FILE_HD ReadHD, double Speed);									// 设置播放速度
+	bool SetOfflineFilePlayBackMode(CWALK_FILE_HD ReadHD, INT32 Mode);									// 设置离线文件播放模式
 
 
 public:		/************************************* CCTV 媒体播放模块 *************************************/
@@ -94,67 +94,67 @@ public:		/************************************* CCTV 媒体播放模块 **************
 	void InitPlaySDK();
 
 	// 播放器创建和释放
-	static void DetectDecSupports(char* pDecoderTypes, INT_PTR* Len);													// 枚举支持硬解类型接口
-	static bool CreatePlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType,
-					         int DecodeMode, int HwType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);		// 创建播放器
-	static bool CreatePlayerEx(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, 
-		                       int DecodeMode, int HwType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);	// 创建播放器（同CreatePlayer）
-	static void ReleasePlayer(CWALK_PLAY_HD PlayHD);																	// 释放播放器
-	static bool CreateHwPlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, 
-							   Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);								// 创建硬解播放器
-	static void CheckHwSupport(int *Support);																			// 检测设备是否支持硬解（暂时不能使用）
-	static bool SetHwDecType(CWALKPLayHWDecodeType Type, int* IsSupport);												// 设置硬解码类型
-	static void GetDecodeMode(CWALK_PLAY_HD PlayHD, int* Type, int* HwType);											// 获取当前解码类型
-	static void SetDecodeStateCallBack(CWALK_PLAY_HD PlayHD, Callback_OnDecodeState FnDecodeState, void* UserParam);	// 设置解码状态回调函数
+	void DetectDecSupports(char* pDecoderTypes, INT_PTR* Len);													// 枚举支持硬解类型接口
+	bool CreatePlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType,
+					  int DecodeMode, int HwType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);		// 创建播放器
+	bool CreatePlayerEx(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, 
+		                int DecodeMode, int HwType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);	// 创建播放器（同CreatePlayer）
+	void ReleasePlayer(CWALK_PLAY_HD PlayHD);																	// 释放播放器
+	bool CreateHwPlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, 
+						Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);								// 创建硬解播放器
+	void CheckHwSupport(int *Support);																			// 检测设备是否支持硬解（暂时不能使用）
+	bool SetHwDecType(CWALKPLayHWDecodeType Type, int* IsSupport);												// 设置硬解码类型
+	void GetDecodeMode(CWALK_PLAY_HD PlayHD, int* Type, int* HwType);											// 获取当前解码类型
+	void SetDecodeStateCallBack(CWALK_PLAY_HD PlayHD, Callback_OnDecodeState FnDecodeState, void* UserParam);	// 设置解码状态回调函数
 
 	// 媒体数据输入
-	static bool InputData(CWALK_PLAY_HD PlayHD, const void* Data, int Len);												// 为播放器提供Slice数据
+	bool InputData(CWALK_PLAY_HD PlayHD, const void* Data, int Len);											// 为播放器提供Slice数据
 
 	// 播放控制
-	static bool PlayerControl(CWALK_PLAY_HD PlayHD, CWALKPLayControl Cmd, const void* InParam, void* OutParam);			// 播放控制
-	static bool SetPane(CWALK_PLAY_HD PlayHD, const CWALKPLayRect* Rect, bool Ratio);									// 设置显示区域
-	static void ClearPlayBuffer(CWALK_PLAY_HD PlayHD);																	// 清除播放缓冲区中的数据
+	bool PlayerControl(CWALK_PLAY_HD PlayHD, CWALKPLayControl Cmd, const void* InParam, void* OutParam);		// 播放控制
+	bool SetPane(CWALK_PLAY_HD PlayHD, const CWALKPLayRect* Rect, bool Ratio);									// 设置显示区域
+	void ClearPlayBuffer(CWALK_PLAY_HD PlayHD);																	// 清除播放缓冲区中的数据
 
 	// 抓图
-	static bool CapturePicture(CWALK_PLAY_HD PlayHD, const TCHAR* FileName);											// 实时流抓图
+	bool CapturePicture(CWALK_PLAY_HD PlayHD, const TCHAR* FileName);											// 实时流抓图
 	
 	// 声音控制
-	static void SoundEnable(CWALK_PLAY_HD PlayHD, bool Enable);															// 允许/禁止声音播放，初始化为允许
-	static void SoundIsEnable(CWALK_PLAY_HD PlayHD, BOOL* Enable);														// 获取声音控制状态s
-	static void GetMasterVolume(int* Volume);																			// 获取系统主音量
-	static bool SetMasterVolume(int Volume);																			// 设置系统主音量
-	static void GetMasterVolumeMute(int* Mute);																			// 获取系统主音量静音
-	static bool SetMasterVolumeMute(int Mute);																			// 设置系统主音量静音
-	static bool SetAudioCallback(CWALK_PLAY_HD PlayHD, Callback_OnAudioDecodeData FnOnAudio, void* UserParam);			// 设置音频回调函数
+	void SoundEnable(CWALK_PLAY_HD PlayHD, bool Enable);														// 允许/禁止声音播放，初始化为允许
+	void SoundIsEnable(CWALK_PLAY_HD PlayHD, BOOL* Enable);														// 获取声音控制状态s
+	void GetMasterVolume(int* Volume);																			// 获取系统主音量
+	bool SetMasterVolume(int Volume);																			// 设置系统主音量
+	void GetMasterVolumeMute(int* Mute);																		// 获取系统主音量静音
+	bool SetMasterVolumeMute(int Mute);																			// 设置系统主音量静音
+	bool SetAudioCallback(CWALK_PLAY_HD PlayHD, Callback_OnAudioDecodeData FnOnAudio, void* UserParam);			// 设置音频回调函数
 
 	// 颜色控制
-	static void GetColor(CWALK_PLAY_HD PlayHD, int* Brightness, int* Contrast, int* Saturation, int* Hue);				// 获取色彩值
-	static bool SetColor(CWALK_PLAY_HD PlayHD, int Brightness, int Contrast, int Saturation, int Hue);					// 设置色彩值
+	void GetColor(CWALK_PLAY_HD PlayHD, int* Brightness, int* Contrast, int* Saturation, int* Hue);				// 获取色彩值
+	bool SetColor(CWALK_PLAY_HD PlayHD, int Brightness, int Contrast, int Saturation, int Hue);					// 设置色彩值
 
 	// 数字放大
-	static bool CreateZoomRect(CWALK_PLAY_HD PlayHD, CWALK_PLAY_HD* ZoomHD, const CWALKPLayOSDRect* Rect, HWND Hwnd);	// 创建数字放大区域
-	static void GetZoomRect(CWALK_PLAY_HD ZoomHD, CWALKPLayOSDRect* Rect);												// 获取数字放大区域信息
-	static bool SetZoomRect(CWALK_PLAY_HD ZoomHD, const CWALKPLayOSDRect* Rect);										// 设置数字放大区域信息
-	static void ReleaseZoomRect(CWALK_PLAY_HD ZoomHD);																	// 释放数字放大区域
+	bool CreateZoomRect(CWALK_PLAY_HD PlayHD, CWALK_PLAY_HD* ZoomHD, const CWALKPLayOSDRect* Rect, HWND Hwnd);	// 创建数字放大区域
+	void GetZoomRect(CWALK_PLAY_HD ZoomHD, CWALKPLayOSDRect* Rect);												// 获取数字放大区域信息
+	bool SetZoomRect(CWALK_PLAY_HD ZoomHD, const CWALKPLayOSDRect* Rect);										// 设置数字放大区域信息
+	void ReleaseZoomRect(CWALK_PLAY_HD ZoomHD);																	// 释放数字放大区域
 
 	// OSD 部分
-	static bool CreateOSD(CWALK_PLAY_HD PlayHD, CWALK_PLAY_HD* osdHD, CWALKPLayOSDType Type, const void* osdInfo);		// 创建 OSD
-	static void GetOSD(CWALK_PLAY_HD osdHD, CWALKPLayOSDType Type, void* osdInfo);										// 获取 OSD 信息
-	static bool SetOSD(CWALK_PLAY_HD osdHD, CWALKPLayOSDType Type, const void* osdInfo);								// 设置 OSD 信息
-	static void ReleaseOSD(CWALK_PLAY_HD osdHD);																		// 释放 OSD
+	bool CreateOSD(CWALK_PLAY_HD PlayHD, CWALK_PLAY_HD* osdHD, CWALKPLayOSDType Type, const void* osdInfo);		// 创建 OSD
+	void GetOSD(CWALK_PLAY_HD osdHD, CWALKPLayOSDType Type, void* osdInfo);										// 获取 OSD 信息
+	bool SetOSD(CWALK_PLAY_HD osdHD, CWALKPLayOSDType Type, const void* osdInfo);								// 设置 OSD 信息
+	void ReleaseOSD(CWALK_PLAY_HD osdHD);																		// 释放 OSD
 
 	// 图像处理
-	static bool SetIllumination(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth = 101, 
-								int MaskHeight = 101, double Factor = 0.7);												// 亮度归一化函数，用于场景内明暗差异过大的图像
-	static bool SetScaleImageRange(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int Min = 30, int Max = 240);		// 对比度拉升函数，用于对比度较小的图像
-	static bool SetEmphasize(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth = 101,
-							 int MaskHeight = 101, double Factor = 0.7);												// 清晰化函数，用户模糊的图像
-	static bool SetSmooth(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth,
-						  int MaskHeight, double Factor);																// 去噪声函数，用于噪点较大的图像
-	static bool SetDehaze(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, double TransMin = 0.6);						// 去雾函数，用于有雾，有沙尘的图像
-	static bool SetRetina(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect);												// 视网膜算法函数，用于严重逆光
-	static bool SetRestoration(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int Blurring, double Angle, int Type);	// 图像复原算法，用于离焦，运动模糊
-	static void DelEnhance(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int EnhanceType);							// 取消图像增强
+	bool SetIllumination(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth = 101, 
+						 int MaskHeight = 101, double Factor = 0.7);											// 亮度归一化函数，用于场景内明暗差异过大的图像
+	bool SetScaleImageRange(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int Min = 30, int Max = 240);		// 对比度拉升函数，用于对比度较小的图像
+	bool SetEmphasize(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth = 101,
+					  int MaskHeight = 101, double Factor = 0.7);												// 清晰化函数，用户模糊的图像
+	bool SetSmooth(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int MaskWidth,
+				   int MaskHeight, double Factor);																// 去噪声函数，用于噪点较大的图像
+	bool SetDehaze(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, double TransMin = 0.6);						// 去雾函数，用于有雾，有沙尘的图像
+	bool SetRetina(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect);											// 视网膜算法函数，用于严重逆光
+	bool SetRestoration(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int Blurring, double Angle, int Type);	// 图像复原算法，用于离焦，运动模糊
+	void DelEnhance(CWALK_PLAY_HD PlayHD, CWALKPLayEnhanceRect Rect, int EnhanceType);							// 取消图像增强
 
 
 public:		/************************************* CCTV 网络模块 *************************************/
@@ -218,7 +218,7 @@ public:		/************************************* CCTV 网络模块 ******************
 	void GetOrganization(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount);		// 获取组织结构信息
 	void GetOrganizationEx(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount,		// 得到分组结构信息，获取全部分组信息，不通过用户ID获取，需要上层应用过滤
 						   BOOL bUseUserID);														
-	static void ParseOrganizationInfo(const TCHAR* Info, int Type, int Index, const TCHAR* Key,		// 解析组织结构信息
+	void ParseOrganizationInfo(const TCHAR* Info, int Type, int Index, const TCHAR* Key,			// 解析组织结构信息
 							   void* ValueBuf, int Len, int* RealLen);								// 对象解析帮助函数,用于解析 CWALK_NET_GetOrganization() 返回的组织结构信息
 	
 	// 获取登录服务器的标题
@@ -269,16 +269,16 @@ public:		/************************************* CCTV 网络模块 ******************
 	bool StartPlayBackStream(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime,
 						     const TCHAR* EndTime, Callback_OnStreamData FnData, CallBack_OnStreamRobbed FnRobbed,
 							 CallBack_OnStreamMsg FnMsg, void* UserParam);									// 点播录像
-	static void StopPlayBackStream(CWALK_NET_HD PlayBackHD);												// 停止录像回放，PlayBackHD 由 StartPlayBackStream 得到
+	void StopPlayBackStream(CWALK_NET_HD PlayBackHD);														// 停止录像回放，PlayBackHD 由 StartPlayBackStream 得到
 	bool StartDownloadStreamEx(CWALK_NET_HD* StreamHD, const TCHAR* AvPath, INT16 VodType, const TCHAR* BeginTime, 
 							   const TCHAR* EndTime, INT64 BeginThisPackage, INT64 BeginNextPackage,
 							   Callback_OnStreamDataEx FnData, CallBack_OnStreamRobbed FnRobbed,
 							   CallBack_OnStreamMsg FnMsg, void* UserParam);								// 录像下载（支持断点续传）
-	static void StopDownloadStream(CWALK_NET_HD StreamHD);													// 停止录像下载
-	static bool GetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64* Pos);									// 获取录像下载进度
-	static bool SetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64 Pos);										// 设置录像播放位置
-	static bool SetPlayBackSpeed(CWALK_NET_HD StreamHD, double Speed);										// 设置录像回放给流速度
-	static bool SetPlayBackMode(CWALK_NET_HD StreamHD, INT32 Mode);											// 设置 VOD 播放模式
+	void StopDownloadStream(CWALK_NET_HD StreamHD);															// 停止录像下载
+	bool GetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64* Pos);											// 获取录像下载进度
+	bool SetPlayBackStreamPos(CWALK_NET_HD StreamHD, INT64 Pos);											// 设置录像播放位置
+	bool SetPlayBackSpeed(CWALK_NET_HD StreamHD, double Speed);												// 设置录像回放给流速度
+	bool SetPlayBackMode(CWALK_NET_HD StreamHD, INT32 Mode);												// 设置 VOD 播放模式
 
 	// 帧标记
 	bool AddTag(const TCHAR* TagName, const TCHAR* TagTime, const TCHAR* ChannelName, 
@@ -298,14 +298,14 @@ public:		/************************************* CCTV 网络模块 ******************
 	bool ExecuteScript(const TCHAR* ScriptType, const TCHAR* Script);										// 执行脚本
 
 	// 帮助函数
-	static void InfoParseKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, void* ValueBuf,
-								  int Len, int* RealLen);													// 对象解析帮助函数，用于获取 ListObjects 函数中，objInfo 参数中的对象属性信息
-	static void InfoParseIntKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, int* Value);					// 对象解析帮助函数，用于解析 Key-Value 格式 JSON 字符串
-	static bool InfoHelperCreate(CWALK_HELP_HD* HelpHD);													// 创建 Key-Value 格式辅助函数，创建一个 Key-Value 格式 JSON 字符串生成器；用完之后，必须使用 InfoHelperRelease 释放 
-	static void InfoHelperAddKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, const TCHAR* Value);			// 对象信息生成帮助函数，添加 key-value 到对象信息
-	static void InfoHelperAddIntKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, int Value);				// 对象信息生成帮助函数，添加 key-value 到对象信息
-	static void InfoHelperGetData(CWALK_HELP_HD HelpHD, LPCTSTR* Buf, int* BufLen);							// 对象信息生成帮助函数，得到缓存区中的数据
-	static void InfoHelperRelease(CWALK_HELP_HD HelpHD);													// 对象信息生成帮助函数,释放资源
+	void InfoParseKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, void* ValueBuf,
+						   int Len, int* RealLen);															// 对象解析帮助函数，用于获取 ListObjects 函数中，objInfo 参数中的对象属性信息
+	void InfoParseIntKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, int* Value);							// 对象解析帮助函数，用于解析 Key-Value 格式 JSON 字符串
+	bool InfoHelperCreate(CWALK_HELP_HD* HelpHD);															// 创建 Key-Value 格式辅助函数，创建一个 Key-Value 格式 JSON 字符串生成器；用完之后，必须使用 InfoHelperRelease 释放 
+	void InfoHelperAddKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, const TCHAR* Value);					// 对象信息生成帮助函数，添加 key-value 到对象信息
+	void InfoHelperAddIntKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, int Value);						// 对象信息生成帮助函数，添加 key-value 到对象信息
+	void InfoHelperGetData(CWALK_HELP_HD HelpHD, LPCTSTR* Buf, int* BufLen);								// 对象信息生成帮助函数，得到缓存区中的数据
+	void InfoHelperRelease(CWALK_HELP_HD HelpHD);															// 对象信息生成帮助函数,释放资源
 
 private:
 	bool m_IsInitPlay;

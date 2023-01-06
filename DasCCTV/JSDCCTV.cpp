@@ -164,6 +164,17 @@ bool JSDCCTV::IsLogin()
 
 void JSDCCTV::InsertLog(CCTVLOGLEVEL Level, const char* const _Format, ...)
 {
+	if (!m_LogFile.is_open())
+	{
+		return;
+	}
+
+	va_list args;
+	va_start(args, _Format);
+	int len = _vscprintf(_Format, args) + 1;
+	char* buffer = new char[len * sizeof(char)];
+	vsnprintf(buffer, len * sizeof(char), _Format, args);
+
 
 }
 
