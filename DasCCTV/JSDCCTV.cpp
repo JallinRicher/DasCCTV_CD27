@@ -1825,21 +1825,13 @@ bool JSDCCTV::ExecuteScript(const TCHAR* ScriptType, const TCHAR* Script)
 
 void JSDCCTV::InfoParseKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, void* ValueBuf, int Len, int* RealLen)
 {
-	ErrorNum ret = CWALK_NET_InfoParseKeyValue(ObjInfo, Key, ValueBuf, Len, RealLen);
-	if (ret != CWALKSDK_OK)
-	{
-		InsertLog(WARN, "CWALK_NET_InfoParseKeyValue failed. Error number is %d\n", ret);
-	}
+	CWALK_NET_InfoParseKeyValue(ObjInfo, Key, ValueBuf, Len, RealLen);
 }
 
 
 void JSDCCTV::InfoParseIntKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, int* Value)
 {
-	ErrorNum ret = CWALK_NET_InfoParseIntKeyValue(ObjInfo, Key, Value);
-	if (ret != CWALKSDK_OK)
-	{
-		InsertLog(WARN, "CWALK_NET_InfoParseIntKeyValue failed. Error number is %d\n", ret);
-	}
+	CWALK_NET_InfoParseIntKeyValue(ObjInfo, Key, Value);
 }
 
 
@@ -1848,7 +1840,6 @@ bool JSDCCTV::InfoHelperCreate(CWALK_HELP_HD* HelpHD)
 	ErrorNum ret = CWALK_NET_InfoHelperCreate(HelpHD);
 	if (ret != CWALKSDK_OK)
 	{
-		InsertLog(FATAL, "CWALK_NET_InfoHelperCreate failed. Error number is %d\n", ret);
 		return false;
 	}
 
@@ -1858,39 +1849,23 @@ bool JSDCCTV::InfoHelperCreate(CWALK_HELP_HD* HelpHD)
 
 void JSDCCTV::InfoHelperAddKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, const TCHAR* Value)
 {
-	ErrorNum ret = CWALK_NET_InfoHelperAddKeyValue(HelpHD, Key, Value);
-	if (ret != CWALKSDK_OK)
-	{
-		InsertLog(WARN, "CWALK_NET_InfoHelperAddKeyValue failed. Error number is %d\n", ret);
-	}
+	CWALK_NET_InfoHelperAddKeyValue(HelpHD, Key, Value);
 }
 
 
 void JSDCCTV::InfoHelperAddIntKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, int Value)
 {
-	ErrorNum ret = CWALK_NET_InfoHelperAddIntKeyValue(HelpHD, Key, Value);
-	if (ret != CWALKSDK_OK)
-	{
-		InsertLog(WARN, "CWALK_NET_InfoHelperAddIntKeyValue failed. Error number is %d\n", ret);
-	}
+	CWALK_NET_InfoHelperAddIntKeyValue(HelpHD, Key, Value);
 }
 
 
 void JSDCCTV::InfoHelperGetData(CWALK_HELP_HD HelpHD, LPCTSTR* Buf, int* BufLen)
 {
-	ErrorNum ret = CWALK_NET_InfoHelperGetData(HelpHD, Buf, BufLen);
-	if (ret != CWALKSDK_OK)
-	{
-		InsertLog(WARN, "CWALK_NET_InfoHelperGetData failed. Error number is %d\n", ret);
-	}
+	CWALK_NET_InfoHelperGetData(HelpHD, Buf, BufLen);
 }
 
 
 void JSDCCTV::InfoHelperRelease(CWALK_HELP_HD HelpHD)
 {
-	ErrorNum ret = CWALK_NET_InfoHelperRelease(HelpHD);
-	if (ret != CWALKSDK_OK)
-	{
-		InsertLog(WARN, "CWALK_NET_InfoHelperRelease failed. Error number is %d\n", ret);
-	}
+	CWALK_NET_InfoHelperRelease(HelpHD);
 }

@@ -5,7 +5,7 @@
 
 #define NAME_LEN					64
 #define FILE_PATH_LEN				256
-#define RES_CODE_LEN				256
+#define RES_CODE_LEN				1024
 #define MAX_COMBO_ITEM_CNT			128
 #define MAX_DISPLAY_CNT				16
 #define MAX_DISPLAYMODE_CNT			32

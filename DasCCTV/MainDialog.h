@@ -4,7 +4,7 @@
 #include "BitmapComboBox.h"
 #include "PtzControlButton.h"
 #include "DisplayControlDialog.h"
-
+#include "resource.h"
 #include "JSDCCTV.h"
 
 // MainDialog 对话框
@@ -20,12 +20,11 @@ public:
 	static std::vector<std::string> SplitString(const char* _str, char _seq);
 	static std::vector<CString> SplitString(const wchar_t* _wstr, wchar_t _seq);
 
-public:
 	enum { IDD = IDD_MAINDIALOG };
 	MainDialog(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~MainDialog();
 	
-	void Login();
+	bool Login();
 	
 	void AddOneDisplayMode(const char* ModeName);
 	void DelCurSelDisplayMode();
@@ -38,6 +37,12 @@ public:
 	void ShowDisplayModeList();
 	void ShowCurSwitchList();
 
+	void AddOneStation(const char* StationName, const char* StationResCode);
+	void AddOneArea(const char* AreaName, const char* AreaResCode);
+	void AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus);
+	void AddOneSwitch(const char* SwitchName, const char* SwitchCode);
+	void DelCurSelSwitch();
+
 private:
 	void InitCCTV();
 	void InitFilePath();
@@ -48,11 +53,7 @@ private:
 	void InitPtzControlButton();
 	void InitChildWindow();	
 
-	void AddOneStation(const char* StationName, const char* StationResCode);
-	void AddOneArea(const char* AreaName, const char* AreaResCode);
-	void AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus);
-	void AddOneSwitch(const char* SwitchName, const char* SwitchCode);
-	void DelCurSelSwitch();
+
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持

@@ -11,9 +11,6 @@ BitmapComboBox::BitmapComboBox() : CComboBox()
 		m_DeviceType[i] = INVALID_VALUE;
 		m_DeviceSubType[i] = INVALID_VALUE;
 		m_DeviceStatus[i] = INVALID_VALUE;
-#ifdef MULTI_SUBWAY_ROUTE
-		m_Routes[i] = INVALID_VALUE;
-#endif
 	}
 }
 
@@ -38,19 +35,21 @@ void BitmapComboBox::ClearAllContent()
 }
 
 
-void BitmapComboBox::SetDeviceResCode(int index, const char* DeviceResCode)
+void BitmapComboBox::SetDeviceResCode(const char* DeviceResCode)
 {
+	int index = GetCount();
 	if (!DeviceResCode || index < 0 || index >= MAX_COMBO_ITEM_CNT)
 	{
 		return;
 	}
-
+	
 	strcpy_s(m_DeviceResCode[index], RES_CODE_LEN, DeviceResCode);
 }
 
 
-void BitmapComboBox::SetDeviceName(int index, const char* DeviceName)
+void BitmapComboBox::SetDeviceName(const char* DeviceName)
 {
+	int index = GetCount();
 	if (!DeviceName || index < 0 || index >= MAX_COMBO_ITEM_CNT)
 	{
 		return;
@@ -74,8 +73,9 @@ void BitmapComboBox::GetCurSelDeviceName(char* Retval) const
 }
 
 
-void BitmapComboBox::SetDeviceType(int index, int DeviceType)
+void BitmapComboBox::SetDeviceType(int DeviceType)
 {
+	int index = GetCount();
 	if (index < 0 || index >= MAX_COMBO_ITEM_CNT)
 	{
 		return;
@@ -85,8 +85,9 @@ void BitmapComboBox::SetDeviceType(int index, int DeviceType)
 }
 
 
-void BitmapComboBox::SetDeviceStatus(int index, int DeviceStatus)
+void BitmapComboBox::SetDeviceStatus(int DeviceStatus)
 {
+	int index = GetCount();
 	if (index < 0 || index >= MAX_COMBO_ITEM_CNT)
 	{
 		return;
@@ -110,14 +111,16 @@ int BitmapComboBox::GetCurSelDeviceStatus() const
 }
 
 
-void BitmapComboBox::SetDeviceID(int index, long DeviceID)
+void BitmapComboBox::SetDeviceID(long DeviceID)
 {
+	int index = GetCount();
 	m_DeviceID[index] = DeviceID;
 }
 
 
-void BitmapComboBox::SetDeviceSubType(int index, int DeviceSubType)
+void BitmapComboBox::SetDeviceSubType(int DeviceSubType)
 {
+	int index = GetCount();
 	m_DeviceSubType[index] = DeviceSubType;
 }
 
@@ -134,21 +137,6 @@ int BitmapComboBox::GetCurSelDeviceSubType() const
 	int index = GetCurSel();
 	return m_DeviceSubType[index];
 }
-
-
-#ifdef MULTI_SUBWAY_ROUTE
-void BitmapComboBox::SetRoute(int index, int Route)
-{
-	m_Routes[index] = Route;
-}
-
-
-int BitmapComboBox::GetCurSelRoute() const
-{
-	int index = GetCurSel();
-	return m_Routes[index];
-}
-#endif
 
 
 void BitmapComboBox::AddOneRow(const char* RowName)

@@ -219,6 +219,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BitmapComboBox.cpp" />
+    <ClCompile Include="CallBack.cpp" />
     <ClCompile Include="DasCCTV.cpp" />
     <ClCompile Include="DasCCTVCtrl.cpp" />
     <ClCompile Include="DasCCTVPropPage.cpp" />
@@ -236,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitmapComboBox.h" />
+    <ClInclude Include="CallBack.h" />
     <ClInclude Include="DasCCTV.h" />
     <ClInclude Include="DasCCTVCtrl.h" />
     <ClInclude Include="DasCCTVPropPage.h" />

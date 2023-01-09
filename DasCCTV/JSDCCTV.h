@@ -286,14 +286,14 @@ public:		/************************************* CCTV 网络模块 ******************
 	bool ExecuteScript(const TCHAR* ScriptType, const TCHAR* Script);										// 执行脚本
 
 	// 帮助函数
-	void InfoParseKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, void* ValueBuf,
-						   int Len, int* RealLen);															// 对象解析帮助函数，用于获取 ListObjects 函数中，objInfo 参数中的对象属性信息
-	void InfoParseIntKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, int* Value);							// 对象解析帮助函数，用于解析 Key-Value 格式 JSON 字符串
-	bool InfoHelperCreate(CWALK_HELP_HD* HelpHD);															// 创建 Key-Value 格式辅助函数，创建一个 Key-Value 格式 JSON 字符串生成器；用完之后，必须使用 InfoHelperRelease 释放 
-	void InfoHelperAddKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, const TCHAR* Value);					// 对象信息生成帮助函数，添加 key-value 到对象信息
-	void InfoHelperAddIntKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, int Value);						// 对象信息生成帮助函数，添加 key-value 到对象信息
-	void InfoHelperGetData(CWALK_HELP_HD HelpHD, LPCTSTR* Buf, int* BufLen);								// 对象信息生成帮助函数，得到缓存区中的数据
-	void InfoHelperRelease(CWALK_HELP_HD HelpHD);															// 对象信息生成帮助函数,释放资源
+	static void InfoParseKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, void* ValueBuf,
+								  int Len, int* RealLen);													// 对象解析帮助函数，用于获取 ListObjects 函数中，objInfo 参数中的对象属性信息
+	static void InfoParseIntKeyValue(const TCHAR* ObjInfo, const TCHAR* Key, int* Value);					// 对象解析帮助函数，用于解析 Key-Value 格式 JSON 字符串
+	static bool InfoHelperCreate(CWALK_HELP_HD* HelpHD);															// 创建 Key-Value 格式辅助函数，创建一个 Key-Value 格式 JSON 字符串生成器；用完之后，必须使用 InfoHelperRelease 释放 
+	static void InfoHelperAddKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, const TCHAR* Value);					// 对象信息生成帮助函数，添加 key-value 到对象信息
+	static void InfoHelperAddIntKeyValue(CWALK_HELP_HD HelpHD, const TCHAR* Key, int Value);						// 对象信息生成帮助函数，添加 key-value 到对象信息
+	static void InfoHelperGetData(CWALK_HELP_HD HelpHD, LPCTSTR* Buf, int* BufLen);								// 对象信息生成帮助函数，得到缓存区中的数据
+	static void InfoHelperRelease(CWALK_HELP_HD HelpHD);															// 对象信息生成帮助函数,释放资源
 
 private:
 	bool m_IsInitPlay;

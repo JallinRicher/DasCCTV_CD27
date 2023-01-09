@@ -5,6 +5,7 @@
 #include "DasCCTV.h"
 #include "afxdialogex.h"
 #include "MainDialog.h"
+#include "CallBack.h"
 
 
 // MainDialog 对话框
@@ -451,7 +452,7 @@ void MainDialog::StartCurSelDisplayMode()
 
 void MainDialog::ShowCurStationList()
 {
-
+	//m_JsdCCTV->ListObjectsEx();
 }
 
 
@@ -463,7 +464,7 @@ void MainDialog::ShowCurAreaList()
 
 void MainDialog::ShowCurCameraList()
 {
-
+	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, nullptr, ListObject_CallBack, this);
 }
 
 
@@ -479,47 +480,48 @@ void MainDialog::ShowCurSwitchList()
 }
 
 
-void MainDialog::Login()
+bool MainDialog::Login()
 {
+	if (m_JsdCCTV->Login())
+	{
+		m_IsLogin = true;
+	}
 
+	return m_IsLogin;
 }
 
 
 void MainDialog::AddOneStation(const char* StationName, const char* StationResCode)
 {
 
-	int index = m_StationComboBox.GetCount();
-	m_StationComboBox.SetDeviceName(index, StationName);
-	m_StationComboBox.SetDeviceResCode(index, StationResCode);
+	m_StationComboBox.SetDeviceName(StationName);
+	m_StationComboBox.SetDeviceResCode(StationResCode);
 	m_StationComboBox.AddOneRow(StationName);
 }
 
 
 void MainDialog::AddOneArea(const char* AreaName, const char* AreaResCode)
 {
-	int index = m_AreaComboBox.GetCount();
-	m_AreaComboBox.SetDeviceName(index, AreaName);
-	m_AreaComboBox.SetDeviceResCode(index, AreaResCode);
+	m_AreaComboBox.SetDeviceName(AreaName);
+	m_AreaComboBox.SetDeviceResCode(AreaResCode);
 	m_AreaComboBox.AddOneRow(AreaName);
 }
 
 
 void MainDialog::AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus)
 {
-	int index = m_CameraComboBox.GetCount();
-	m_CameraComboBox.SetDeviceName(index, CameraName);
-	m_CameraComboBox.SetDeviceResCode(index, CameraResCode);
-	m_CameraComboBox.SetDeviceType(index, CameraType);
-	m_CameraComboBox.SetDeviceStatus(index, CameraStatus);
+	m_CameraComboBox.SetDeviceName(CameraName);
+	m_CameraComboBox.SetDeviceResCode(CameraResCode);
+	m_CameraComboBox.SetDeviceType(CameraType);
+	m_CameraComboBox.SetDeviceStatus(CameraStatus);
 	m_CameraComboBox.AddOneRow(CameraName);
 }
 
 
 void MainDialog::AddOneSwitch(const char* SwitchName, const char* SwitchCode)
 {
-	int index = m_SwitchComboBox.GetCount();
-	m_SwitchComboBox.SetDeviceName(index, SwitchName);
-	m_SwitchComboBox.SetDeviceResCode(index, SwitchCode);
+	m_SwitchComboBox.SetDeviceName(SwitchName);
+	m_SwitchComboBox.SetDeviceResCode(SwitchCode);
 	m_SwitchComboBox.AddOneRow(SwitchName);
 }
 
@@ -592,7 +594,14 @@ void MainDialog::OnTimer(UINT_PTR nIDEvent)
 		Login();
 	}
 
-	// TODO: 控件其他代码
+	if (m_IsLogin)
+	{
+		ShowCurStationList();
+		ShowCurAreaList();
+		ShowCurCameraList();
+		ShowCurSwitchList();
+	}
+
 
 	
 
