@@ -190,9 +190,9 @@ void JSDCCTV::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 }
 
 
-bool JSDCCTV::SetLogFile(const wchar_t* LogPath)
+bool JSDCCTV::SetLogFile(const wchar_t* LogPath, int Mode)
 {
-	m_LogFile.open(LogPath, std::ofstream::out | std::ofstream::app | std::ofstream::ate);
+	m_LogFile.open(LogPath, Mode);
 	if (!m_LogFile.is_open())
 	{
 		// LOG —— 创建日志文件失败

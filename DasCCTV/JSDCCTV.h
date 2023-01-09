@@ -23,7 +23,7 @@ public:
 	void ReleaseSDK();																									// 释放SDK
 	bool IsInit();
 	bool IsLogin();
-	bool SetLogFile(const wchar_t* LogPath);
+	bool SetLogFile(const wchar_t* LogPath, int Mode = std::ios_base::in | std::ios_base::out | std::ios_base::app | std::ios_base::ate);
 	void SetDCRUserInfo(UserInfo DCRUserInfo);
 
 public:		/************************************* CCTV 文件操作模块 *************************************/
@@ -300,7 +300,7 @@ private:
 	bool m_IsInitFile;
 	bool m_IsInitNet;
 	bool m_IsLogin;
-	std::ofstream m_LogFile;
+	std::fstream m_LogFile;
 
 	CWALK_NET_HD m_LoginHandle;
 	UserInfo m_DCSUserInfo;

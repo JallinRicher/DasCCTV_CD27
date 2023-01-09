@@ -165,9 +165,9 @@ void MainDialog::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 }
 
 
-bool MainDialog::SetLogFile(const wchar_t* LogPath)
+bool MainDialog::SetLogFile(const wchar_t* LogPath, int Mode)
 {
-	m_LogFile.open(LogPath, std::ofstream::out | std::ofstream::app | std::ofstream::ate | std::ofstream::binary);
+	m_LogFile.open(LogPath, Mode);
 	if (!m_LogFile.is_open())
 	{
 		AfxMessageBox(L"打开日志文件失败");
