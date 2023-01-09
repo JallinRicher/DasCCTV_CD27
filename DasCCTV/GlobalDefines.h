@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
+#include <vector>
+#include <list>
 
 #define NAME_LEN					64
 #define FILE_PATH_LEN				256
-#define RES_CODE_LEN				64
+#define RES_CODE_LEN				256
 #define MAX_COMBO_ITEM_CNT			128
 #define MAX_DISPLAY_CNT				16
 #define MAX_DISPLAYMODE_CNT			32
@@ -13,7 +15,8 @@
 #define FILE_PATH_LEN				256
 #define IPADDR_LEN					64
 #define PASSWORD_LEN				64
-#define DEFAULT_STR_LEN				1024
+
+#define DEFAULT_STR_LEN				256
 #define DEFAULT_STR					L""
 #define DEFAULT_INT					0
 
@@ -25,13 +28,7 @@
 #define CONFIG_KEY_DEFAULT_LAYOUT				L"DefaultLayout"
 
 #define SECTION_DCSUSERINFO						L"DCSUSERINFO"
-#define CONFIG_KEY_USERNAME						L"UserName"
-#define CONFIG_KEY_PASSWORD						L"Password"
-#define CONFIG_KEY_SERVERIP						L"ServerIP"
-#define CONFIG_KEY_SERVERPORT					L"ServerPort"
-
 #define SECTION_DCRUSERINFO						L"DCRUSERINFO"
-#define SECTION_DCSUSERINFO						L"DCSUSERINFO"
 #define CONFIG_KEY_USERNAME						L"UserName"
 #define CONFIG_KEY_PASSWORD						L"Password"
 #define CONFIG_KEY_SERVERIP						L"ServerIP"
@@ -48,7 +45,6 @@
 #define CONFIG_KEY_MODECOUNT					L"ModeCount"
 #define CONFIG_KEY_MODENAME_PREFIX				L"ModeName"
 #define CONFIG_KEY_MODECAMERA_PREFIX			L"ModeCamera"
-
 
 
 

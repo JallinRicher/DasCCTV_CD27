@@ -60,14 +60,73 @@ void MainDialog::ReadConfigFile()
 	for (unsigned int i = 0; i < _modeCount; ++i)
 	{
 		CString tempKeyName, tempKeyCamera;
-		wchar_t tempCamera[DEFAULT_STR_LEN] = { 0 };
+		wchar_t tempCamera[RES_CODE_LEN] = { 0 };
+		wchar_t tempName[NAME_LEN] = { 0 };
 		tempKeyName.Format(L"%s%ud", CONFIG_KEY_MODENAME_PREFIX, i);
 		tempKeyCamera.Format(L"%s%ud", CONFIG_KEY_MODECAMERA_PREFIX, i);
 
+		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyName, DEFAULT_STR, tempName, sizeof(tempName), m_ConfigFilePath);
+		wcsncpy_s(m_DisplayMode._modeArray[i].ModeName, tempName, sizeof(m_DisplayMode._modeArray[i].ModeName));
+
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCamera, DEFAULT_STR, tempCamera, sizeof(tempCamera), m_ConfigFilePath);
-		// 分割字符串
+		std::vector<CString> vecCameraList = SplitString(tempCamera, ',');
+		
+		int CameraNum = vecCameraList.size() > MAX_DISPLAY_CNT ? MAX_DISPLAY_CNT : vecCameraList.size();
+		for (int j = 0; j < CameraNum; ++j)
+		{
+			wcsncpy_s(m_DisplayMode._modeArray[i].ModeCamera[j], vecCameraList[j], sizeof(m_DisplayMode._modeArray[i].ModeName));
+		}
+	}
+}
+
+
+std::vector<std::string> MainDialog::SplitString(const char* _str, char _seq)
+{
+	std::vector<std::string> Retval;
+
+	int strLen = strlen(_str);
+	std::string tempStr;
+	for (int i = 0; i < strLen; ++i)
+	{
+		if (_str[i] == _seq)
+		{
+			Retval.push_back(tempStr);
+			tempStr.clear();
+		}
+		else
+		{
+			tempStr += _str[i];
+		}
 	}
 
+	Retval.push_back(tempStr);
+	tempStr.clear();
+	return Retval;
+}
+
+
+std::vector<CString> MainDialog::SplitString(const wchar_t* _wstr, wchar_t _seq)
+{
+	std::vector<CString> Retval;
+
+	int strLen = wcslen(_wstr);
+	CString tempStr;
+	for (int i = 0; i < strLen; ++i)
+	{
+		if (_wstr[i] == _seq)
+		{
+			Retval.push_back(tempStr);
+			tempStr.Empty();
+		}
+		else
+		{
+			tempStr += _wstr[i];
+		}
+	}
+
+	Retval.push_back(tempStr);
+	tempStr.Empty();
+	return Retval;
 }
 
 
@@ -261,6 +320,7 @@ BOOL MainDialog::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	InitUIFrame();
 	InitFilePath();
+	ReadConfigFile();
 	InitCCTV();
 
 	m_DisplayControl = new DisplayControlDialog(this);
@@ -535,6 +595,6 @@ void MainDialog::InitFilePath()
 	CString tempWorkPath = m_AppWorkPath;
 	CString tempLogPath = tempWorkPath + _T("\\Log");
 	CString tempConfigPath = tempWorkPath + L"\\" + CONFIG_FILE;
-	wcsncpy_s(m_LogFilePath, sizeof(m_LogFilePath), tempLogPath, sizeof(m_LogFilePath));
-	wcsncpy_s(m_ConfigFilePath, sizeof(m_ConfigFilePath), tempConfigPath, sizeof(m_ConfigFilePath));
+	wcsncpy_s(m_LogFilePath, tempLogPath, sizeof(m_LogFilePath));
+	wcsncpy_s(m_ConfigFilePath, tempConfigPath, sizeof(m_ConfigFilePath));
 }
