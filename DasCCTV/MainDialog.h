@@ -16,6 +16,7 @@ class MainDialog : public CDialog
 public:
 	void ReadConfigFile();
 	void InsertLog(LOGLEVEL Level, const char* const _Format, ...);
+	bool SetLogFile(const wchar_t* LogPath);
 	static std::vector<std::string> SplitString(const char* _str, char _seq);
 	static std::vector<CString> SplitString(const wchar_t* _wstr, wchar_t _seq);
 

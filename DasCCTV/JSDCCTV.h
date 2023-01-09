@@ -23,7 +23,8 @@ public:
 	void ReleaseSDK();																									// 释放SDK
 	bool IsInit();
 	bool IsLogin();
-	bool SetLogFile(const char* LogPath);
+	bool SetLogFile(const wchar_t* LogPath);
+	void SetDCRUserInfo(UserInfo DCRUserInfo);
 
 public:		/************************************* CCTV 文件操作模块 *************************************/
 	

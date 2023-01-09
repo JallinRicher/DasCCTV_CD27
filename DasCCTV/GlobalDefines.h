@@ -53,8 +53,7 @@ typedef enum
 	FATAL = 0,
 	WARN,
 	DEBUG,
-	INFO,
-	BLANK
+	INFO
 }LOGLEVEL;
 
 
@@ -162,4 +161,16 @@ void CharToWChar(const char* Source, wchar_t* Destination)
 	wcsncpy_s(Destination, sizeof(Destination), _tempWchar, sizeof(_tempWchar));
 
 	delete[] _tempWchar;
+}
+
+
+void WCharToChar(const wchar_t* Source, char* Destination)
+{
+	int _tempLen = WideCharToMultiByte(CP_ACP, 0, Source, -1, Destination, 0, nullptr, nullptr);
+	char *_tempChar = new char[_tempLen];
+	memset(_tempChar, 0, _tempLen);
+	WideCharToMultiByte(CP_ACP, 0, Source, -1, Destination, _tempLen, nullptr, nullptr);
+	strcpy_s(Destination, sizeof(Destination), _tempChar);
+
+	delete[] _tempChar;
 }

@@ -144,25 +144,40 @@ void MainDialog::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 	vsnprintf(buffer, len * sizeof(char), _Format, args);
 	va_end(args);
 
-	CString str;
-	CString strHead;
 	CTime curTime = CTime::GetCurrentTime();
-	str.Format(L"[ %04d-%02d-%02d %02d:%02d:%02d ] %s", curTime.GetYear(), curTime.GetMonth(), curTime.GetDay(), curTime.GetHour(), curTime.GetMinute(), curTime.GetSecond(), buffer);
+	char tempStr[DEFAULT_STR_LEN] = { 0 };
+	sprintf_s(tempStr, DEFAULT_STR_LEN, "[ %04d-%02d-%02d %02d:%02d:%02d ] %s", curTime.GetYear(), curTime.GetMonth(), curTime.GetDay(), curTime.GetHour(), curTime.GetMinute(), curTime.GetSecond(), buffer);
 
+	std::string str;
 	switch (Level)
 	{
-	case FATAL: strHead = L"[ FATAL ] ";	break;
-	case WARN:	strHead = L"[ WARN ]  ";	break;
-	case DEBUG: strHead = L"[ DEBUG ] ";	break;
-	case INFO:	strHead = L"[ INFO ]  ";	break;
-	case BLANK: strHead = L"[ BLANK ] ";	break;
+	case FATAL: str = "[ FATAL ] ";	break;
+	case WARN:	str = "[ WARN ]  ";	break;
+	case DEBUG: str = "[ DEBUG ] ";	break;
+	case INFO:	str = "[ INFO ]  ";	break;
 	default: break;
 	}
 
-	str = strHead + str;
-	m_LogFile << str.GetBuffer(0);
+	str = str + tempStr;
+	m_LogFile << str;
 
 	delete[] buffer;
+}
+
+
+bool MainDialog::SetLogFile(const wchar_t* LogPath)
+{
+	m_LogFile.open(LogPath, std::ofstream::out | std::ofstream::app | std::ofstream::ate | std::ofstream::binary);
+	if (!m_LogFile.is_open())
+	{
+		AfxMessageBox(L"打开日志文件失败");
+		return false;
+	}
+
+	m_LogFile.write("123", 3);
+	m_LogFile << "123" << L"123" << 0xFFFF;
+	//InsertLog(INFO, "********************* Log start here *********************\n");
+	return true;
 }
 
 
@@ -322,6 +337,11 @@ BOOL MainDialog::OnInitDialog()
 	InitFilePath();
 	ReadConfigFile();
 	InitCCTV();
+	
+	
+	CString CCTVLogFile = m_LogFilePath;
+	CCTVLogFile.Append(L"\\DasCCTV_LOG.LOG");
+	SetLogFile(CCTVLogFile);
 
 	m_DisplayControl = new DisplayControlDialog(this);
 	m_DisplayControl->Create(IDD_DISPLATCONTROLDIALOG, this);
@@ -583,7 +603,17 @@ void MainDialog::OnTimer(UINT_PTR nIDEvent)
 
 void MainDialog::InitCCTV()
 {
-	//m_JsdCCTV->InitSDK();
+	m_JsdCCTV = new JSDCCTV(m_DCSUserInfo);
+	CString JsdLogFile = m_LogFilePath;
+	JsdLogFile.Append(L"\\JSDCCTV_LOG.LOG");
+	m_JsdCCTV->SetLogFile(JsdLogFile);
+
+	if (wcslen(m_DCRUserInfo.IPAddress))
+	{
+		m_JsdCCTV->SetDCRUserInfo(m_DCRUserInfo);
+	}
+
+	m_JsdCCTV->InitSDK();
 }
 
 
@@ -593,7 +623,7 @@ void MainDialog::InitFilePath()
 	PathRemoveFileSpec(m_AppWorkPath);
 
 	CString tempWorkPath = m_AppWorkPath;
-	CString tempLogPath = tempWorkPath + _T("\\Log");
+	CString tempLogPath = tempWorkPath + _T("\\Logs");
 	CString tempConfigPath = tempWorkPath + L"\\" + CONFIG_FILE;
 	wcsncpy_s(m_LogFilePath, tempLogPath, sizeof(m_LogFilePath));
 	wcsncpy_s(m_ConfigFilePath, tempConfigPath, sizeof(m_ConfigFilePath));

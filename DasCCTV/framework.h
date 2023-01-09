@@ -34,8 +34,8 @@
 
 #endif // _WIN64
 
+#include <afxwin.h>
 #include "GlobalDefines.h"
-
 #include "CWALKSDKDefines.h"
 #include "CWALKSDKErrors.h"
 #include "common/common.h"

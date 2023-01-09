@@ -180,7 +180,6 @@ void JSDCCTV::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 	case WARN:	strHead	= L"[ WARN ]  "	;	break;
 	case DEBUG: strHead = L"[ DEBUG ] "	;	break;
 	case INFO:	strHead	= L"[ INFO ]  "	;	break;
-	case BLANK: strHead = L"[ BLANK ] "	;	break;
 	default: break;
 	}
 	
@@ -191,7 +190,7 @@ void JSDCCTV::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 }
 
 
-bool JSDCCTV::SetLogFile(const char* LogPath)
+bool JSDCCTV::SetLogFile(const wchar_t* LogPath)
 {
 	m_LogFile.open(LogPath, std::ofstream::out | std::ofstream::app | std::ofstream::ate);
 	if (!m_LogFile.is_open())
@@ -200,8 +199,14 @@ bool JSDCCTV::SetLogFile(const char* LogPath)
 		return false;
 	}
 
-	InsertLog(BLANK, "********************* [ %s %s ] Log start here *********************\n", __DATE__, __TIME__);
+	InsertLog(INFO, "********************* Log start here *********************\n");
 	return true;
+}
+
+
+void JSDCCTV::SetDCRUserInfo(UserInfo DCRUserInfo)
+{
+	m_DCRUserInfo = DCRUserInfo;
 }
 
 
