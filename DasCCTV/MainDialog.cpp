@@ -494,34 +494,28 @@ bool MainDialog::Login()
 void MainDialog::AddOneStation(const char* StationName, const char* StationResCode)
 {
 
-	m_StationComboBox.SetDeviceName(StationName);
-	m_StationComboBox.SetDeviceResCode(StationResCode);
+
 	m_StationComboBox.AddOneRow(StationName);
 }
 
 
 void MainDialog::AddOneArea(const char* AreaName, const char* AreaResCode)
 {
-	m_AreaComboBox.SetDeviceName(AreaName);
-	m_AreaComboBox.SetDeviceResCode(AreaResCode);
+
 	m_AreaComboBox.AddOneRow(AreaName);
 }
 
 
 void MainDialog::AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus)
 {
-	m_CameraComboBox.SetDeviceName(CameraName);
-	m_CameraComboBox.SetDeviceResCode(CameraResCode);
-	m_CameraComboBox.SetDeviceType(CameraType);
-	m_CameraComboBox.SetDeviceStatus(CameraStatus);
+
 	m_CameraComboBox.AddOneRow(CameraName);
 }
 
 
 void MainDialog::AddOneSwitch(const char* SwitchName, const char* SwitchCode)
 {
-	m_SwitchComboBox.SetDeviceName(SwitchName);
-	m_SwitchComboBox.SetDeviceResCode(SwitchCode);
+
 	m_SwitchComboBox.AddOneRow(SwitchName);
 }
 
