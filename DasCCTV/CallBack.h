@@ -25,6 +25,18 @@ public:
 };
 
 
+class GatewayCallBack : public _callback_base
+{
+	int Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo) override;
+};
+
+
+class DeviceCallBack : public _callback_base
+{
+	int Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo) override;
+};
+
+
 class CameraCallBack : public _callback_base
 {
 public:
@@ -32,10 +44,11 @@ public:
 };
 
 
-class GatewayCallBack : public _callback_base
-{
-	int Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo) override;
-};
+
+
+
+
+
 
 
 

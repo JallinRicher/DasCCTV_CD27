@@ -34,33 +34,69 @@ CallBackOpt::~CallBackOpt()
 }
 
 
-int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
+int GatewayCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
 {
-	int Level = -1;
-	char NameBuf[RES_CODE_LEN] = { 0 };
-	char AddrBuf[RES_CODE_LEN] = { 0 };
-	char PathBuf[RES_CODE_LEN] = { 0 };
-	char TitleBuf[RES_CODE_LEN] = { 0 };
-	char HostBuf[RES_CODE_LEN] = { 0 };
+	int MaxVod = -1;
+	int DisableEvent = -1;
+	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
+	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
 	MainDialog* MainDlg = (MainDialog*)UserParam;
-	
-	JSDCCTV::InfoParseIntKeyValue(ObjInfo, L"level", &Level);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, RES_CODE_LEN, nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"addr", AddrBuf, RES_CODE_LEN, nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"path", PathBuf, RES_CODE_LEN, nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, RES_CODE_LEN, nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"host", HostBuf, RES_CODE_LEN, nullptr);
-	UNUSED(MainDlg);
 
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
+
+	TypeGateway Gateway;
+	Gateway.SetData(DisableEvent, MaxVod, NameBuf, TitleBuf);
+	MainDlg->m_StationComboBox.AddOneRow(NameBuf);
+	MainDlg->m_StationComboBox.AddOneGateway(Gateway);
 
 	return CWALKSDK_OK;
 }
 
 
-int GatewayCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
+int DeviceCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
 {
+	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
+	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
+	wchar_t UrlBuf[RES_CODE_LEN] = { 0 };
+
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"url", UrlBuf, sizeof(UrlBuf), nullptr);
+
+	TypeDevice Device;
+	Device.SetData(NameBuf, TitleBuf, UrlBuf);
 
 }
+
+
+int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
+{
+	int Level = -1;
+	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
+	wchar_t AddrBuf[RES_CODE_LEN] = { 0 };
+	wchar_t PathBuf[RES_CODE_LEN] = { 0 };
+	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
+	wchar_t HostBuf[RES_CODE_LEN] = { 0 };
+	MainDialog* MainDlg = (MainDialog*)UserParam;
+	
+	JSDCCTV::InfoParseIntKeyValue(ObjInfo, L"level", &Level);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"addr", AddrBuf, sizeof(AddrBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"path", PathBuf, sizeof(PathBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"host", HostBuf, sizeof(HostBuf), nullptr);
+
+	TypeCamera camera;
+	camera.SetData(AddrBuf, HostBuf, NameBuf, PathBuf, TitleBuf);
+	MainDlg->m_CameraComboBox.AddOneRow(NameBuf);
+	MainDlg->m_CameraComboBox.AddOneCamera(camera);
+
+	return CWALKSDK_OK;
+}
+
+
+
 
 
 BOOL CWALK_SDK_CALLBACK ListObject_CallBack(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
