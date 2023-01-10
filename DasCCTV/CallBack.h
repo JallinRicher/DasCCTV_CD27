@@ -7,21 +7,21 @@
 #include "cwalk_playsdk.h"
 #include "JSDCCTV.h"
 
-class _callback_base;
-
-class CallBackOpt
-{
-public:
-	CallBackOpt(CWALKNetObjectType ObjType);
-
-	_callback_base* m_callback_base;
-};
-
 
 class _callback_base
 {
 public:
 	virtual int Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo) = 0;
+	virtual ~_callback_base() {};
+};
+
+
+class CallBackOpt
+{
+public:
+	CallBackOpt(CWALKNetObjectType ObjType);
+	~CallBackOpt();
+	_callback_base* m_callback_base;
 };
 
 

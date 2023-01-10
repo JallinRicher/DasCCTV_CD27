@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CallBack.h"
 
-CallBackOpt::CallBackOpt(CWALKNetObjectType ObjType)
+CallBackOpt::CallBackOpt(CWALKNetObjectType ObjType) : m_callback_base(nullptr)
 {
 	switch (ObjType)
 	{
@@ -9,10 +9,8 @@ CallBackOpt::CallBackOpt(CWALKNetObjectType ObjType)
 	case CWALKNET_TYPE_GATEWAY: break;
 	case CWALKNET_TYPE_DEVICE: break;
 	case CWALKNET_TYPE_CAMERA: 
-	{
 		m_callback_base = (_callback_base*)new CameraCallBack;
 		break;
-	}
 	case CWALKNET_TYPE_MONITOR: break;
 	case CWALKNET_TYPE_AUDIO: break;
 	case CWALKNET_TYPE_TRUNKIN: break;
@@ -20,10 +18,18 @@ CallBackOpt::CallBackOpt(CWALKNetObjectType ObjType)
 	case CWALKNET_TYPE_ALARMIN: break;
 	case CWALKNET_TYPE_ALARMOUT: break;
 	default: 
-	{
 		m_callback_base = nullptr;
 		break;
 	}
+}
+
+
+CallBackOpt::~CallBackOpt()
+{
+	if (m_callback_base)
+	{
+		delete m_callback_base;
+		m_callback_base = nullptr;
 	}
 }
 
