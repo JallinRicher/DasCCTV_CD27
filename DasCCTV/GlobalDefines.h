@@ -125,18 +125,18 @@ typedef struct UserInfo
 }UserInfo;
 
 
-typedef struct _mode
+typedef struct _TypeDisplayMode_
 {
 	wchar_t ModeName[NAME_LEN];
 	wchar_t ModeCamera[MAX_DISPLAY_CNT][RES_CODE_LEN];
 
-	_mode()
+	_TypeDisplayMode_()
 	{
 		memset(ModeName, 0, sizeof(ModeName));
 		memset(ModeCamera, 0, sizeof(ModeCamera));
 	}
 
-}_mode, ModeArray[MAX_DISPLAYMODE_CNT];
+}TypeDisplayMode, ModeArray[MAX_DISPLAYMODE_CNT];
 
 
 typedef struct DisplayMode
@@ -150,6 +150,89 @@ typedef struct DisplayMode
 	}
 
 }DisplayMode;
+
+
+typedef struct _TypeGateway_
+{
+	_TypeGateway_()
+	{
+		disableEvent = -1;
+		maxVod = -1;
+	}
+
+	void SetData(int DisableEvent, int MaxVod, const CString& Name, const CString& Title);
+	void GetData(int& DisableEvent, int& MaxVod, CString& Name, CString& Title) const;
+
+	int disableEvent;
+	int maxVod;
+	CString name;
+	CString title;
+
+}TypeGateway, * pTypeGateway;
+
+
+typedef struct _TypeDevice_
+{
+	void SetData(const CString& Name, const CString& Title, const CString& Url);
+	void GetData(CString& Name, CString& Title, CString& Url) const;
+
+	CString name;
+	CString title;
+	CString url;
+
+}TypeDevice, * pTypeDevice;
+
+
+typedef struct _TypeCamera_
+{
+	_TypeCamera_()
+	{
+		level = -1;
+	}
+
+	void SetData(const CString& Addr, const CString& Host, const CString& Name, const CString& Path, const CString& Title);
+	void GetData(CString& Addr, CString& Host, CString& Name, CString& Path, CString& Title) const;
+
+	int level;
+	CString addr;
+	CString host;
+	CString name;
+	CString path;
+	CString title;
+
+}TypeCamera, * pTypeCamera;
+
+
+typedef struct _TypeMonitor_
+{
+	void SetData(const CString& Name, const CString& Title);
+	void GetData(CString& Name, CString& Title) const;
+
+	CString name;
+	CString title;
+
+}TypeMonitor, * pTypeMonitor;
+
+
+typedef struct _TypeAudio_
+{
+	_TypeAudio_()
+	{
+		audioin = -1;
+		audioout = -1;
+	}
+
+	void SetData(const CString& Addr, int AudioIn, int AudioOut, const CString& HostUrl, const CString& Name, const CString& Title);
+	void GetData(CString& Addr, int& AudioIn, int& AudioOut, CString& HostUrl, CString& Name, CString& Title) const;
+
+	CString addr;
+	int audioin;
+	int audioout;
+	CString hostUrl;
+	CString name;
+	CString title;
+
+}TypeAudio, * pTypeAudio;
 
 
 void CharToWChar(const char* Source, wchar_t* Destination)

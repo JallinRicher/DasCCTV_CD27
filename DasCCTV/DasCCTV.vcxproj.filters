@@ -48,6 +48,9 @@
     <ClCompile Include="CallBack.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="GlobalDefines.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DasCCTV.h">
@@ -100,6 +103,7 @@
     <None Include="DasCCTV.def">
       <Filter>源文件</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DasCCTV.rc">
