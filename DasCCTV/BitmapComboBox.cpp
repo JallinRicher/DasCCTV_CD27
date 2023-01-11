@@ -109,6 +109,13 @@ void BitmapComboBox::DelOneData(int index)
 			m_vecAudios[i] = m_vecAudios[i + 1];
 		m_vecAudios.pop_back();
 		break;
+	case CWALKNET_TYPE_DISPLAY:
+		size = m_vecDisplayModes.size();
+		for (int i = index; i < size - 1; ++i)
+			m_vecDisplayModes[i] = m_vecDisplayModes[i + 1];
+		m_vecDisplayModes.pop_back();
+		break;
+	case CWALKNET_TYPE_SWITCH: break;
 	default: break;
 	}
 }
@@ -149,7 +156,7 @@ void BitmapComboBox::AddOneAudio(const TypeAudio& Audio)
 }
 
 
-void BitmapComboBox::AddOneDisplayMode(const TypeDisplayMode& DisplayMode)
+void BitmapComboBox::AddOneDisplayMode(const TypeDisplayMode DisplayMode)
 {
 	AddOneRow(DisplayMode.ModeName);
 	m_vecDisplayModes.push_back(DisplayMode);

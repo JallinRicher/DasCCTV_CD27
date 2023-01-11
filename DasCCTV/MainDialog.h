@@ -40,6 +40,7 @@ private:
 	void InitCCTV();
 	void InitFilePath();
 	void InitUIFrame();
+	void InitDisplayControlDialog();
 	void InitBitmap();
 	void InitAllComboBox();
 	void InitButton();

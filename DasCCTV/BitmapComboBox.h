@@ -23,7 +23,7 @@ public:
     void AddOneCamera(const TypeCamera& Camera);
     void AddOneMonitor(const TypeMonitor& Monitor);
     void AddOneAudio(const TypeAudio& Audio);
-    void AddOneDisplayMode(const TypeDisplayMode& DisplayMode);
+    void AddOneDisplayMode(const TypeDisplayMode DisplayMode);
 
     void SetComboBoxType(int ObjType) { m_ComboBoxType = ObjType; }
 

@@ -60,7 +60,7 @@ void MainDialog::ReadConfigFile()
 	unsigned int ModeCount = _modeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : _modeCount;
 	for (unsigned int i = 0; i < ModeCount; ++i)
 	{
-		TypeDisplayMode _displayMode;
+		TypeDisplayMode* _displayMode = new TypeDisplayMode;
 		CString tempKeyName, tempKeyCamera;
 		wchar_t tempCamera[RES_CODE_LEN] = { 0 };
 		wchar_t tempName[NAME_LEN] = { 0 };
@@ -68,7 +68,7 @@ void MainDialog::ReadConfigFile()
 		tempKeyCamera.Format(L"%s%ud", CONFIG_KEY_MODECAMERA_PREFIX, i);
 
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyName, DEFAULT_STR, tempName, sizeof(tempName), m_ConfigFilePath);
-		wcsncpy_s(_displayMode.ModeName, tempName, sizeof(_displayMode.ModeName));
+		wcsncpy_s(_displayMode->ModeName, tempName, sizeof(_displayMode->ModeName));
 
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCamera, DEFAULT_STR, tempCamera, sizeof(tempCamera), m_ConfigFilePath);
 		std::vector<CString> vecCameraList = SplitString(tempCamera, ',');
@@ -76,8 +76,11 @@ void MainDialog::ReadConfigFile()
 		int CameraNum = vecCameraList.size() > MAX_DISPLAY_CNT ? MAX_DISPLAY_CNT : vecCameraList.size();
 		for (int j = 0; j < CameraNum; ++j)
 		{
-			wcsncpy_s(_displayMode.ModeCamera[i], vecCameraList[j], sizeof(_displayMode.ModeCamera[i]));
+			wcsncpy_s(_displayMode->ModeCamera[i], vecCameraList[j], sizeof(_displayMode->ModeCamera[i]));
 		}
+
+		m_DisplayComboBox.AddOneDisplayMode((*_displayMode));
+		delete _displayMode;
 	}
 }
 
@@ -340,11 +343,17 @@ BOOL MainDialog::OnInitDialog()
 	ReadConfigFile();
 	InitCCTV();
 	
-	
 	CString CCTVLogFile = m_LogFilePath;
 	CCTVLogFile.Append(L"\\DasCCTV_LOG.LOG");
 	SetLogFile(CCTVLogFile);
 
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// 异常: OCX 属性页应返回 FALSE
+}
+
+
+void MainDialog::InitDisplayControlDialog()
+{
 	m_DisplayControl = new DisplayControlDialog(this);
 	m_DisplayControl->Create(IDD_DISPLATCONTROLDIALOG, this);
 	m_DisplayControl->ShowWindow(SW_HIDE);
@@ -354,21 +363,18 @@ BOOL MainDialog::OnInitDialog()
 	m_DisplayControl->MoveWindow(35, 27, oRect.Width() - 640, oRect.Height() - 300, TRUE);
 	m_DisplayControl->SetDialogRect(35, 27, oRect.Width() - 640, oRect.Height() - 320);
 	m_DisplayControl->DefaultDisplayLayout();
-	m_LayoutComboBox.SetCurSel(1);
 	m_DisplayControl->ShowWindow(SW_SHOW);
 	m_DisplayControl->EnableWindow(TRUE);
-
-	return TRUE;  // return TRUE unless you set the focus to a control
-	// 异常: OCX 属性页应返回 FALSE
 }
 
 
 void MainDialog::InitUIFrame()
 {
 	InitBitmap();
-	InitAllComboBox();
 	InitButton();
-	InitPtzControlButton();
+	InitAllComboBox();
+	InitDisplayControlDialog();
+	
 	
 	m_MainDialogProgressText.SetWindowTextW(_T("ADDSAD"));
 	m_MainDialogProgress.ShowWindow(TRUE);
@@ -399,13 +405,14 @@ void MainDialog::InitAllComboBox()
 	m_DisplayComboBox.SetComboBoxType(CWALKNET_TYPE_DISPLAY);
 	m_SwitchComboBox.SetComboBoxType(CWALKNET_TYPE_SWITCH);
 
+	m_LayoutComboBox.SetCurSel(1);
 
 }
 
 
 void MainDialog::InitButton()
 {
-
+	InitPtzControlButton();
 }
 
 
