@@ -6,9 +6,13 @@ CallBackOpt::CallBackOpt(CWALKNetObjectType ObjType) : m_callback_base(nullptr)
 	switch (ObjType)
 	{
 	case CWALKNET_TYPE_UNKNOWN: break;
-	case CWALKNET_TYPE_GATEWAY: break;
-	case CWALKNET_TYPE_DEVICE: break;
-	case CWALKNET_TYPE_CAMERA: 
+	case CWALKNET_TYPE_GATEWAY:
+		m_callback_base = (_callback_base*)new GatewayCallBack;
+		break;
+	case CWALKNET_TYPE_DEVICE:
+		m_callback_base = (_callback_base*)new DeviceCallBack;
+		break;
+	case CWALKNET_TYPE_CAMERA:
 		m_callback_base = (_callback_base*)new CameraCallBack;
 		break;
 	case CWALKNET_TYPE_MONITOR: break;
@@ -47,7 +51,6 @@ int GatewayCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectT
 
 	TypeGateway Gateway;
 	Gateway.SetData(DisableEvent, MaxVod, NameBuf, TitleBuf);
-	MainDlg->m_StationComboBox.AddOneRow(NameBuf);
 	MainDlg->m_StationComboBox.AddOneGateway(Gateway);
 
 	return CWALKSDK_OK;
@@ -59,6 +62,8 @@ int DeviceCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
 	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
 	wchar_t UrlBuf[RES_CODE_LEN] = { 0 };
+	MainDialog* MainDlg = (MainDialog*)UserParam;
+	UNUSED(MainDlg);
 
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
@@ -67,6 +72,7 @@ int DeviceCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 	TypeDevice Device;
 	Device.SetData(NameBuf, TitleBuf, UrlBuf);
 
+	return CWALKSDK_OK;
 }
 
 
@@ -89,12 +95,27 @@ int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 
 	TypeCamera camera;
 	camera.SetData(AddrBuf, HostBuf, NameBuf, PathBuf, TitleBuf);
-	MainDlg->m_CameraComboBox.AddOneRow(NameBuf);
 	MainDlg->m_CameraComboBox.AddOneCamera(camera);
 
 	return CWALKSDK_OK;
 }
 
+
+int MonitorCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
+{
+	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
+	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
+	MainDialog* MainDlg = (MainDialog*)UserParam;
+	UNUSED(MainDlg);
+
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
+
+	TypeMonitor monitor;
+	monitor.SetData(NameBuf, TitleBuf);
+
+	return CWALKSDK_OK;
+}
 
 
 

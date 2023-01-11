@@ -11,27 +11,29 @@ public:
     explicit BitmapComboBox();
     ~BitmapComboBox();
     
-    
-    void DelOneData(int index);
-    
     TypeGateway GetCurSelGateway() const { return m_vecGateways[GetCurSel()]; }
     TypeDevice GetCurSelDevices() const { return m_vecDevices[GetCurSel()]; }
     TypeCamera GetCurSelCameras() const { return m_vecCameras[GetCurSel()]; }
     TypeMonitor GetCurSelMonitor() const { return m_vecMonitors[GetCurSel()]; }
     TypeAudio GetCurSelAudio() const { return m_vecAudios[GetCurSel()]; }
+    TypeDisplayMode GetCurSelDisplayMode() const { return m_vecDisplayModes[GetCurSel()]; }
 
-    void AddOneGateway(const TypeGateway& Gateway) { m_vecGateways.push_back(Gateway); }
-    void AddOneDevice(const TypeDevice& Device) { m_vecDevices.push_back(Device); }
-    void AddOneCamera(const TypeCamera& Camera) { m_vecCameras.push_back(Camera); }
-    void AddOneMonitor(const TypeMonitor& Monitor) { m_vecMonitors.push_back(Monitor); }
-    void AddAudio(const TypeAudio& Audio) { m_vecAudios.push_back(Audio); }
+    void AddOneGateway(const TypeGateway& Gateway);
+    void AddOneDevice(const TypeDevice& Device);
+    void AddOneCamera(const TypeCamera& Camera);
+    void AddOneMonitor(const TypeMonitor& Monitor);
+    void AddOneAudio(const TypeAudio& Audio);
+    void AddOneDisplayMode(const TypeDisplayMode& DisplayMode);
 
-    void SetComboBoxType(CWALKNetObjectType ObjType) { m_ComboBoxType = ObjType; }
+    void SetComboBoxType(int ObjType) { m_ComboBoxType = ObjType; }
 
-    void AddOneRow(const char* RowName);
-    void AddOneRow(const wchar_t* RowName);
     void ClearAllContent();
     void DeleteCurSelRow();
+
+private:
+    void DelOneData(int index);
+    void AddOneRow(const char* RowName);
+    void AddOneRow(const wchar_t* RowName);
     
 
 public:
@@ -39,14 +41,14 @@ public:
 
 
 private:
-    CWALKNetObjectType m_ComboBoxType;
+    int m_ComboBoxType;
 
     std::vector<TypeGateway> m_vecGateways;
     std::vector<TypeDevice> m_vecDevices;
     std::vector<TypeCamera> m_vecCameras;
     std::vector<TypeMonitor> m_vecMonitors;
     std::vector<TypeAudio> m_vecAudios;
-
+    std::vector<TypeDisplayMode> m_vecDisplayModes;
     
 };
 

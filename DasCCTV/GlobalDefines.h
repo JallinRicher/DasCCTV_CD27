@@ -54,6 +54,7 @@ typedef enum
 	WARN,
 	DEBUG,
 	INFO
+
 }LOGLEVEL;
 
 
@@ -68,6 +69,7 @@ typedef enum
 	IS_RECORDING,
 	IS_DOWNLOADING,
 	IS_SNATCHING
+
 }DisplayState;
 
 
@@ -77,6 +79,7 @@ typedef enum
 	FOUR_DIALOG = 4,
 	NINE_DIALOG = 9,
 	SIXTEEN_DIALOG = 16
+
 }LayoutState;
 
 

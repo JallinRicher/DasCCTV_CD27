@@ -29,6 +29,12 @@ void BitmapComboBox::OnCbnDropdown()
 
 void BitmapComboBox::ClearAllContent()
 {
+	m_vecGateways.clear();
+	m_vecDevices.clear();
+	m_vecCameras.clear();
+	m_vecMonitors.clear();
+	m_vecAudios.clear();
+
 	CComboBox::Clear();
 }
 
@@ -103,5 +109,48 @@ void BitmapComboBox::DelOneData(int index)
 			m_vecAudios[i] = m_vecAudios[i + 1];
 		m_vecAudios.pop_back();
 		break;
+	default: break;
 	}
+}
+
+
+void BitmapComboBox::AddOneGateway(const TypeGateway& Gateway)
+{
+	AddOneRow(Gateway.name);
+	m_vecGateways.push_back(Gateway);
+}
+
+
+void BitmapComboBox::AddOneDevice(const TypeDevice& Device)
+{
+	AddOneRow(Device.name);
+	m_vecDevices.push_back(Device);
+}
+
+
+void BitmapComboBox::AddOneCamera(const TypeCamera& Camera)
+{
+	AddOneRow(Camera.name);
+	m_vecCameras.push_back(Camera);
+}
+
+
+void BitmapComboBox::AddOneMonitor(const TypeMonitor& Monitor)
+{
+	AddOneRow(Monitor.name);
+	m_vecMonitors.push_back(Monitor);
+}
+
+
+void BitmapComboBox::AddOneAudio(const TypeAudio& Audio)
+{
+	AddOneRow(Audio.name);
+	m_vecAudios.push_back(Audio);
+}
+
+
+void BitmapComboBox::AddOneDisplayMode(const TypeDisplayMode& DisplayMode)
+{
+	AddOneRow(DisplayMode.ModeName);
+	m_vecDisplayModes.push_back(DisplayMode);
 }

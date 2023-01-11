@@ -56,10 +56,11 @@ void MainDialog::ReadConfigFile()
 	GetPrivateProfileString(SECTION_STORAGE, CONFIG_KEY_DOWNLOADPATH, DEFAULT_STR, m_DownloadPath, sizeof(m_DownloadPath), m_ConfigFilePath);
 
 	/* 获取显示模式 */
-	m_DisplayMode.ModeCount = GetPrivateProfileInt(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, DEFAULT_INT, m_ConfigFilePath);
-	unsigned int _modeCount = m_DisplayMode.ModeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : m_DisplayMode.ModeCount;
-	for (unsigned int i = 0; i < _modeCount; ++i)
+	unsigned int _modeCount = GetPrivateProfileInt(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, DEFAULT_INT, m_ConfigFilePath);
+	unsigned int ModeCount = _modeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : _modeCount;
+	for (unsigned int i = 0; i < ModeCount; ++i)
 	{
+		TypeDisplayMode _displayMode;
 		CString tempKeyName, tempKeyCamera;
 		wchar_t tempCamera[RES_CODE_LEN] = { 0 };
 		wchar_t tempName[NAME_LEN] = { 0 };
@@ -67,7 +68,7 @@ void MainDialog::ReadConfigFile()
 		tempKeyCamera.Format(L"%s%ud", CONFIG_KEY_MODECAMERA_PREFIX, i);
 
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyName, DEFAULT_STR, tempName, sizeof(tempName), m_ConfigFilePath);
-		wcsncpy_s(m_DisplayMode._modeArray[i].ModeName, tempName, sizeof(m_DisplayMode._modeArray[i].ModeName));
+		wcsncpy_s(_displayMode.ModeName, tempName, sizeof(_displayMode.ModeName));
 
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCamera, DEFAULT_STR, tempCamera, sizeof(tempCamera), m_ConfigFilePath);
 		std::vector<CString> vecCameraList = SplitString(tempCamera, ',');
@@ -75,7 +76,7 @@ void MainDialog::ReadConfigFile()
 		int CameraNum = vecCameraList.size() > MAX_DISPLAY_CNT ? MAX_DISPLAY_CNT : vecCameraList.size();
 		for (int j = 0; j < CameraNum; ++j)
 		{
-			wcsncpy_s(m_DisplayMode._modeArray[i].ModeCamera[j], vecCameraList[j], sizeof(m_DisplayMode._modeArray[i].ModeName));
+			wcsncpy_s(_displayMode.ModeCamera[i], vecCameraList[j], sizeof(_displayMode.ModeCamera[i]));
 		}
 	}
 }
@@ -387,14 +388,18 @@ void MainDialog::InitAllComboBox()
 	m_AreaComboBox.Clear();
 	m_CameraComboBox.Clear();
 	m_SoundComboBox.Clear();
+	m_DisplayComboBox.Clear();
+	m_SwitchComboBox.Clear();
 
-	m_LayoutComboBox.AddOneRow("1 X 1");
-	m_LayoutComboBox.AddOneRow("2 X 2");
-	m_LayoutComboBox.AddOneRow("3 X 3");
-	m_LayoutComboBox.AddOneRow("4 X 4");
-	
-	m_SoundComboBox.AddOneRow("打开声音");
-	m_SoundComboBox.AddOneRow("关闭声音");
+	m_LayoutComboBox.SetComboBoxType(CWALKNET_TYPE_UNKNOWN);
+	m_StationComboBox.SetComboBoxType(CWALKNET_TYPE_GATEWAY);
+	m_AreaComboBox.SetComboBoxType(CWALKNET_TYPE_GATEWAY);
+	m_CameraComboBox.SetComboBoxType(CWALKNET_TYPE_CAMERA);
+	m_SoundComboBox.SetComboBoxType(CWALKNET_TYPE_AUDIO);
+	m_DisplayComboBox.SetComboBoxType(CWALKNET_TYPE_DISPLAY);
+	m_SwitchComboBox.SetComboBoxType(CWALKNET_TYPE_SWITCH);
+
+
 }
 
 
@@ -416,17 +421,6 @@ void MainDialog::OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult)
 	// TODO: 在此添加控件通知处理程序代码
 	UNREFERENCED_PARAMETER(pNMCD);
 	*pResult = 0;
-}
-
-
-void MainDialog::AddOneDisplayMode(const char* ModeName)
-{
-	if (!ModeName)
-	{
-		return;
-	}
-
-	m_DisplayComboBox.AddOneRow(ModeName);
 }
 
 
@@ -491,45 +485,10 @@ bool MainDialog::Login()
 }
 
 
-void MainDialog::AddOneStation(const char* StationName, const char* StationResCode)
-{
-
-
-	m_StationComboBox.AddOneRow(StationName);
-}
-
-
-void MainDialog::AddOneArea(const char* AreaName, const char* AreaResCode)
-{
-
-	m_AreaComboBox.AddOneRow(AreaName);
-}
-
-
-void MainDialog::AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus)
-{
-
-	m_CameraComboBox.AddOneRow(CameraName);
-}
-
-
-void MainDialog::AddOneSwitch(const char* SwitchName, const char* SwitchCode)
-{
-
-	m_SwitchComboBox.AddOneRow(SwitchName);
-}
-
-
-void MainDialog::DelCurSelSwitch()
-{
-	m_SwitchComboBox.DeleteCurSelRow();
-}
-
-
 void MainDialog::OnBnClickedButtonAdddspmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	AddOneDisplayMode(nullptr);
+	
 }
 
 
@@ -557,14 +516,14 @@ void MainDialog::OnBnClickedButtonStartdspmode()
 void MainDialog::OnBnClickedButtonAddswitchmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	AddOneSwitch(nullptr, nullptr);
+	
 }
 
 
 void MainDialog::OnBnClickedButtonDelswitchmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	DelCurSelSwitch();
+	
 }
 
 

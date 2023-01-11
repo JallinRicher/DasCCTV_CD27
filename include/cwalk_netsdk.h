@@ -46,7 +46,11 @@ typedef enum
 	CWALKNET_TYPE_TRUNKOUT 		= 0x0200,	///< 输出干线, dcs不支持
 	CWALKNET_TYPE_ALARMIN		= 0x1000,	///< 报警输入
 	CWALKNET_TYPE_ALARMOUT		= 0x2000,   ///< 报警输出
-	CWALKNET_TYPE_GIS			= 0x4000
+	CWALKNET_TYPE_GIS			= 0x4000,
+
+	CWALKNET_TYPE_SWITCH		= 0x0011,	///< 轮切（自定义类型）
+	CWALKNET_TYPE_DISPLAY		= 0x0012	///< 显示模式（自定义类型）
+
 } CWALKNetObjectType;
 
 typedef enum

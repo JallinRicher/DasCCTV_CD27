@@ -26,7 +26,6 @@ public:
 	
 	bool Login();
 	
-	void AddOneDisplayMode(const char* ModeName);
 	void DelCurSelDisplayMode();
 	void ModifyCurSelDisplayMode();
 	void StartCurSelDisplayMode();
@@ -36,12 +35,6 @@ public:
 	void ShowCurCameraList();
 	void ShowDisplayModeList();
 	void ShowCurSwitchList();
-
-	void AddOneStation(const char* StationName, const char* StationResCode);
-	void AddOneArea(const char* AreaName, const char* AreaResCode);
-	void AddOneCamera(const char* CameraName, const char* CameraResCode, int CameraType, int CameraStatus);
-	void AddOneSwitch(const char* SwitchName, const char* SwitchCode);
-	void DelCurSelSwitch();
 
 private:
 	void InitCCTV();
@@ -113,7 +106,6 @@ private:
 	std::fstream m_LogFile;
 	UserInfo m_DCSUserInfo;
 	UserInfo m_DCRUserInfo;
-	DisplayMode m_DisplayMode;
 	DisplayControlDialog* m_DisplayControl;
 	
 	JSDCCTV* m_JsdCCTV;

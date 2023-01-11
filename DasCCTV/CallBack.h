@@ -44,7 +44,11 @@ public:
 };
 
 
-
+class MonitorCallBack : public _callback_base
+{
+public:
+	int Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo) override;
+};
 
 
 
