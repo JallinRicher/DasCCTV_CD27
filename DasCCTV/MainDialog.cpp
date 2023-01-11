@@ -17,6 +17,7 @@ MainDialog::MainDialog(CWnd* pParent /*=nullptr*/)
 {
 	m_DisplayControl = nullptr;
 	m_IsLogin = false;
+	m_IsFirstLogin = true;
 	m_JsdCCTV = nullptr;
 
 	memset(m_AppWorkPath, 0, sizeof(m_AppWorkPath));
@@ -31,6 +32,13 @@ MainDialog::~MainDialog()
 	if (m_JsdCCTV)
 	{
 		delete m_JsdCCTV;
+		m_JsdCCTV = nullptr;
+	}
+
+	if (m_DisplayControl)
+	{
+		delete m_DisplayControl;
+		m_DisplayControl = nullptr;
 	}
 }
 
@@ -143,17 +151,16 @@ void MainDialog::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 }
 
 
-bool MainDialog::SetLogFile(const wchar_t* LogPath, int Mode)
+bool MainDialog::SetLogFile(const char* LogPath, int Mode)
 {
 	m_LogFile.open(LogPath, Mode);
 	if (!m_LogFile.is_open())
 	{
-		AfxMessageBox(L"打开日志文件失败");
+		AfxMessageBox("打开日志文件失败");
 		return false;
 	}
 
-	m_LogFile.write("123", 3);
-	m_LogFile << "123" << L"123" << 0xFFFF;
+	m_LogFile << "123" << 0xFFFF;
 	//InsertLog(INFO, "********************* Log start here *********************\n");
 	return true;
 }
@@ -302,8 +309,10 @@ BOOL MainDialog::OnInitDialog()
 	InitCCTV();
 	
 	CString CCTVLogFile = m_LogFilePath;
-	CCTVLogFile.Append(L"\\DasCCTV_LOG.LOG");
+	CCTVLogFile.Append("\\DasCCTV_LOG.LOG");
 	SetLogFile(CCTVLogFile);
+
+	SetTimer(1, 2000, nullptr);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -334,7 +343,7 @@ void MainDialog::InitUIFrame()
 	InitDisplayControlDialog();
 	
 	
-	m_MainDialogProgressText.SetWindowTextW(_T("ADDSAD"));
+	m_MainDialogProgressText.SetWindowText("ADDSAD");
 	m_MainDialogProgress.ShowWindow(TRUE);
 }
 
@@ -451,27 +460,27 @@ void MainDialog::ShowCameraList()
 void MainDialog::ShowDisplayModeList()
 {
 	/* 获取显示模式 */
-	unsigned int _modeCount = GetPrivateProfileInt(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, DEFAULT_INT, m_ConfigFilePath);
-	unsigned int ModeCount = _modeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : _modeCount;
-	for (unsigned int i = 0; i < ModeCount; ++i)
+	int _modeCount = GetPrivateProfileInt(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, DEFAULT_INT, m_ConfigFilePath);
+	int ModeCount = _modeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : _modeCount;
+	for (int i = 0; i < ModeCount; ++i)
 	{
-		TypeDisplayMode* _displayMode = new TypeDisplayMode;
 		CString tempKeyName, tempKeyCamera;
-		wchar_t tempCamera[RES_CODE_LEN] = { 0 };
-		wchar_t tempName[NAME_LEN] = { 0 };
-		tempKeyName.Format(L"%s%ud", CONFIG_KEY_MODENAME_PREFIX, i);
-		tempKeyCamera.Format(L"%s%ud", CONFIG_KEY_MODECAMERA_PREFIX, i);
+		char tempName[NAME_LEN] = { 0 };
+		char tempCamera[RES_CODE_LEN] = { 0 };
+		TypeDisplayMode* _displayMode = new TypeDisplayMode;
+		tempKeyName.Format("%s%d", CONFIG_KEY_MODENAME_PREFIX, i);
+		tempKeyCamera.Format("%s%d", CONFIG_KEY_MODECAMERA_PREFIX, i);
 
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyName, DEFAULT_STR, tempName, sizeof(tempName), m_ConfigFilePath);
-		wcsncpy_s(_displayMode->ModeName, tempName, sizeof(_displayMode->ModeName));
+		strcpy_s(_displayMode->ModeName, NAME_LEN, tempName);
 
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCamera, DEFAULT_STR, tempCamera, sizeof(tempCamera), m_ConfigFilePath);
-		std::vector<CString> vecCameraList = SplitString(tempCamera, ',');
+		std::vector<std::string> vecCameraList = SplitString(tempCamera, ',');
 
 		int CameraNum = vecCameraList.size() > MAX_DISPLAY_CNT ? MAX_DISPLAY_CNT : vecCameraList.size();
 		for (int j = 0; j < CameraNum; ++j)
 		{
-			wcsncpy_s(_displayMode->ModeCamera[i], vecCameraList[j], sizeof(_displayMode->ModeCamera[i]));
+			strcpy_s(_displayMode->ModeCamera[i], RES_CODE_LEN, vecCameraList[i].c_str());
 		}
 
 		m_DisplayComboBox.AddOneDisplayMode((*_displayMode));
@@ -554,18 +563,17 @@ void MainDialog::OnBnClickedButtonStartswitchmode()
 void MainDialog::OnTimer(UINT_PTR nIDEvent)
 {
 	KillTimer(1);
-	if (!m_IsLogin)
+	if (!m_IsLogin && m_IsFirstLogin)
 	{
-		if (Login())
-		{
-			ShowStationList();
-			ShowAreaList();
-			ShowCameraList();
-			ShowDisplayModeList();
-			ShowSwitchList();
-		}
-	}
+		Login();
+		ShowStationList();
+		ShowAreaList();
+		ShowCameraList();
+		ShowDisplayModeList();
+		ShowSwitchList();
 
+		m_IsFirstLogin = false;
+	}
 
 	SetTimer(1, 2000, nullptr);
 	CDialog::OnTimer(nIDEvent);
@@ -576,10 +584,10 @@ void MainDialog::InitCCTV()
 {
 	m_JsdCCTV = new JSDCCTV(m_DCSUserInfo);
 	CString JsdLogFile = m_LogFilePath;
-	JsdLogFile.Append(L"\\JSDCCTV_LOG.LOG");
+	JsdLogFile.Append("\\JSDCCTV_LOG.LOG");
 	m_JsdCCTV->SetLogFile(JsdLogFile);
 
-	if (wcslen(m_DCRUserInfo.IPAddress))
+	if (strlen(m_DCRUserInfo.IPAddress))
 	{
 		m_JsdCCTV->SetDCRUserInfo(m_DCRUserInfo);
 	}
@@ -595,7 +603,7 @@ void MainDialog::InitFilePath()
 
 	CString tempWorkPath = m_AppWorkPath;
 	CString tempLogPath = tempWorkPath + _T("\\Logs");
-	CString tempConfigPath = tempWorkPath + L"\\" + CONFIG_FILE;
-	wcsncpy_s(m_LogFilePath, tempLogPath, sizeof(m_LogFilePath));
-	wcsncpy_s(m_ConfigFilePath, tempConfigPath, sizeof(m_ConfigFilePath));
+	CString tempConfigPath = tempWorkPath + "\\" + CONFIG_FILE;
+	strcpy_s(m_LogFilePath, FILE_PATH_LEN, tempLogPath);
+	strcpy_s(m_ConfigFilePath, FILE_PATH_LEN, tempConfigPath);
 }

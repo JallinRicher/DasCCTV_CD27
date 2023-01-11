@@ -15,7 +15,6 @@ class JSDCCTV
 public:
 	JSDCCTV(UserInfo DCSUserInfo);
 	void InsertLog(LOGLEVEL Level, const char* const _Format, ...);
-	static void CharToWChar(const char* Source, wchar_t* Destination);
 
 	bool InitSDK();																										// 初始化SDK
 	bool Login();																										// 登录服务器
@@ -23,7 +22,7 @@ public:
 	void ReleaseSDK();																									// 释放SDK
 	bool IsInit();
 	bool IsLogin();
-	bool SetLogFile(const wchar_t* LogPath, int Mode = std::ios_base::in | std::ios_base::out | std::ios_base::app | std::ios_base::ate);
+	bool SetLogFile(const char* LogPath, int Mode = std::ios_base::in | std::ios_base::out | std::ios_base::app | std::ios_base::ate);
 	void SetDCRUserInfo(UserInfo DCRUserInfo);
 
 public:		/************************************* CCTV 文件操作模块 *************************************/

@@ -18,6 +18,11 @@ DisplayControlDialog::DisplayControlDialog(MainDialog* ParentDialog, CWnd* pPare
 	m_CurSelDisplayDialog = nullptr;
 	m_LayoutState = INVALID_VALUE;
 	m_LastLayoutState = INVALID_VALUE;
+
+	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
+	{
+		m_DisplayDialogs[i] = nullptr;
+	}
 }
 
 DisplayControlDialog::~DisplayControlDialog()
@@ -25,7 +30,14 @@ DisplayControlDialog::~DisplayControlDialog()
 	m_ParentDialog = nullptr;
 	m_CurSelDisplayDialog = nullptr;
 
-	delete[] m_DisplayDialogs;
+	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
+	{
+		if (m_DisplayDialogs[i])
+		{
+			delete m_DisplayDialogs[i];
+			m_DisplayDialogs[i] = nullptr;
+		}
+	}
 }
 
 void DisplayControlDialog::DoDataExchange(CDataExchange* pDX)

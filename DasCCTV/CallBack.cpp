@@ -42,12 +42,12 @@ int GatewayCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectT
 {
 	int MaxVod = -1;
 	int DisableEvent = -1;
-	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
-	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
+	char NameBuf[RES_CODE_LEN] = { 0 };
+	char TitleBuf[RES_CODE_LEN] = { 0 };
 	
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
-
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "name", NameBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "title", TitleBuf, RES_CODE_LEN, nullptr);
+	
 	TypeGateway Gateway;
 	Gateway.SetData(DisableEvent, MaxVod, NameBuf, TitleBuf);
 	((std::vector<TypeGateway>*)UserParam)->push_back(Gateway);
@@ -58,13 +58,13 @@ int GatewayCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectT
 
 int DeviceCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
 {
-	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
-	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
-	wchar_t UrlBuf[RES_CODE_LEN] = { 0 };
+	char NameBuf[RES_CODE_LEN] = { 0 };
+	char TitleBuf[RES_CODE_LEN] = { 0 };
+	char UrlBuf[RES_CODE_LEN] = { 0 };
 
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"url", UrlBuf, sizeof(UrlBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "name", NameBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "title", TitleBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "url", UrlBuf, RES_CODE_LEN, nullptr);
 
 	TypeDevice Device;
 	Device.SetData(NameBuf, TitleBuf, UrlBuf);
@@ -77,18 +77,18 @@ int DeviceCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
 {
 	int Level = -1;
-	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
-	wchar_t AddrBuf[RES_CODE_LEN] = { 0 };
-	wchar_t PathBuf[RES_CODE_LEN] = { 0 };
-	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
-	wchar_t HostBuf[RES_CODE_LEN] = { 0 };
+	char NameBuf[RES_CODE_LEN] = { 0 };
+	char AddrBuf[RES_CODE_LEN] = { 0 };
+	char PathBuf[RES_CODE_LEN] = { 0 };
+	char TitleBuf[RES_CODE_LEN] = { 0 };
+	char HostBuf[RES_CODE_LEN] = { 0 };
 	
-	JSDCCTV::InfoParseIntKeyValue(ObjInfo, L"level", &Level);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"addr", AddrBuf, sizeof(AddrBuf), nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"path", PathBuf, sizeof(PathBuf), nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"host", HostBuf, sizeof(HostBuf), nullptr);
+	JSDCCTV::InfoParseIntKeyValue(ObjInfo, "level", &Level);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "name", NameBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "addr", AddrBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "path", PathBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "title", TitleBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "host", HostBuf, RES_CODE_LEN, nullptr);
 
 	TypeCamera camera;
 	camera.SetData(AddrBuf, HostBuf, NameBuf, PathBuf, TitleBuf);
@@ -100,11 +100,11 @@ int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 
 int MonitorCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
 {
-	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
-	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
+	char NameBuf[RES_CODE_LEN] = { 0 };
+	char TitleBuf[RES_CODE_LEN] = { 0 };
 
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "name", NameBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "title", TitleBuf, RES_CODE_LEN, nullptr);
 
 	TypeMonitor monitor;
 	monitor.SetData(NameBuf, TitleBuf);

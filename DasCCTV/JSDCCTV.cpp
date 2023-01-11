@@ -12,25 +12,13 @@ JSDCCTV::JSDCCTV(UserInfo DCSUserInfo) : m_DCSUserInfo(DCSUserInfo)
 }
 
 
-void JSDCCTV::CharToWChar(const char* Source, wchar_t* Destination)
-{
-	int _tempLen = MultiByteToWideChar(CP_ACP, 0, Source, strlen(Source), nullptr, 0);
-	TCHAR* _tempWchar = new wchar_t[_tempLen + 1];
-	memset(_tempWchar, 0, 2 * _tempLen + 2);
-	MultiByteToWideChar(CP_ACP, 0, Source, strlen(Source), _tempWchar, _tempLen);
-	wcsncpy_s(Destination, sizeof(Destination), _tempWchar, sizeof(_tempWchar));
-
-	delete[] _tempWchar;
-}
-
-
 void JSDCCTV::InitPlaySDK()
 {
-	wchar_t InfoBuf[INFOBUFFER_SIZE] = { 0 };
+	char InfoBuf[INFOBUFFER_SIZE] = { 0 };
 	int RealLen = 0;
 	CWALK_PLAY_Init();
 	m_IsInitPlay = true;
-	ErrorNum ret = CWALK_PLAY_GetSDK_Version(InfoBuf, sizeof(InfoBuf), &RealLen);
+	ErrorNum ret = CWALK_PLAY_GetSDK_Version(InfoBuf, INFOBUFFER_SIZE, &RealLen);
 	if (ret == CWALKSDK_OK)
 	{
 		InsertLog(WARN, "CWALK_PLAY_GetSDK_Version failed. Error number is %d\n", ret);
@@ -40,7 +28,7 @@ void JSDCCTV::InitPlaySDK()
 
 bool JSDCCTV::InitFileSDK()
 {
-	wchar_t InfoBuf[INFOBUFFER_SIZE] = { 0 };
+	char InfoBuf[INFOBUFFER_SIZE] = { 0 };
 	int RealLen = 0;
 	ErrorNum ret = CWALK_FILE_Init();
 	if (ret != CWALKSDK_OK)
@@ -50,8 +38,8 @@ bool JSDCCTV::InitFileSDK()
 	}
 
 	m_IsInitFile = true;
-	memset(InfoBuf, 0, sizeof(InfoBuf));
-	ret = CWALK_FILE_GetSDK_Version(InfoBuf, sizeof(InfoBuf), &RealLen);
+	memset(InfoBuf, 0, INFOBUFFER_SIZE);
+	ret = CWALK_FILE_GetSDK_Version(InfoBuf, INFOBUFFER_SIZE, &RealLen);
 	if (ret == CWALKSDK_OK)
 	{
 		InsertLog(WARN, "CWALK_FILE_GetSDK_Version failed. Error number is %d\n", ret);
@@ -172,7 +160,7 @@ void JSDCCTV::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 	CString str;
 	CString strHead;
 	CTime curTime = CTime::GetCurrentTime();
-	str.Format(L"[ %04d-%02d-%02d %02d:%02d:%02d ] %s", curTime.GetYear(), curTime.GetMonth(), curTime.GetDay(), curTime.GetHour(), curTime.GetMinute(), curTime.GetSecond(), buffer);
+	str.Format("[ %04d-%02d-%02d %02d:%02d:%02d ] %s", curTime.GetYear(), curTime.GetMonth(), curTime.GetDay(), curTime.GetHour(), curTime.GetMinute(), curTime.GetSecond(), buffer);
 	
 	switch (Level)
 	{
@@ -190,7 +178,7 @@ void JSDCCTV::InsertLog(LOGLEVEL Level, const char* const _Format, ...)
 }
 
 
-bool JSDCCTV::SetLogFile(const wchar_t* LogPath, int Mode)
+bool JSDCCTV::SetLogFile(const char* LogPath, int Mode)
 {
 	m_LogFile.open(LogPath, Mode);
 	if (!m_LogFile.is_open())

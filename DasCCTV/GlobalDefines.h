@@ -17,34 +17,34 @@
 #define PASSWORD_LEN				64
 
 #define DEFAULT_STR_LEN				256
-#define DEFAULT_STR					L""
+#define DEFAULT_STR					""
 #define DEFAULT_INT					0
 
 
 /************************************* CCTV 配置文件信息 *************************************/
-#define CONFIG_FILE								L"DasCCTV.ini"
+#define CONFIG_FILE								"DasCCTV.ini"
 
-#define SECTION_GLOBAL							L"GLOBAL"
-#define CONFIG_KEY_DEFAULT_LAYOUT				L"DefaultLayout"
+#define SECTION_GLOBAL							"GLOBAL"
+#define CONFIG_KEY_DEFAULT_LAYOUT				"DefaultLayout"
 
-#define SECTION_DCSUSERINFO						L"DCSUSERINFO"
-#define SECTION_DCRUSERINFO						L"DCRUSERINFO"
-#define CONFIG_KEY_USERNAME						L"UserName"
-#define CONFIG_KEY_PASSWORD						L"Password"
-#define CONFIG_KEY_SERVERIP						L"ServerIP"
-#define CONFIG_KEY_SERVERPORT					L"ServerPort"
+#define SECTION_DCSUSERINFO						"DCSUSERINFO"
+#define SECTION_DCRUSERINFO						"DCRUSERINFO"
+#define CONFIG_KEY_USERNAME						"UserName"
+#define CONFIG_KEY_PASSWORD						"Password"
+#define CONFIG_KEY_SERVERIP						"ServerIP"
+#define CONFIG_KEY_SERVERPORT					"ServerPort"
 
-#define SECTION_STORAGE							L"STORAGE"
-#define CONFIG_KEY_DOWNLOADPATH					L"DownloadPath"
+#define SECTION_STORAGE							"STORAGE"
+#define CONFIG_KEY_DOWNLOADPATH					"DownloadPath"
 
-#define SECTION_LASTCAMERA						L"LASTCAMERA"
-#define CONFIG_KEY_LASTCAMERA_PREFIX			L"LastCamera"
-#define CONFIG_KEY_LASTCAMERATYPE_PREFIX		L"LastCameraType"
+#define SECTION_LASTCAMERA						"LASTCAMERA"
+#define CONFIG_KEY_LASTCAMERA_PREFIX			"LastCamera"
+#define CONFIG_KEY_LASTCAMERATYPE_PREFIX		"LastCameraType"
 
-#define SECTION_DISPLAYMODE						L"DISPLAYMODE"
-#define CONFIG_KEY_MODECOUNT					L"ModeCount"
-#define CONFIG_KEY_MODENAME_PREFIX				L"ModeName"
-#define CONFIG_KEY_MODECAMERA_PREFIX			L"ModeCamera"
+#define SECTION_DISPLAYMODE						"DISPLAYMODE"
+#define CONFIG_KEY_MODECOUNT					"ModeCount"
+#define CONFIG_KEY_MODENAME_PREFIX				"ModeName"
+#define CONFIG_KEY_MODECAMERA_PREFIX			"ModeCamera"
 
 
 
@@ -112,9 +112,9 @@ typedef struct DisplayDeviceInfo
 
 typedef struct UserInfo
 {
-	wchar_t UserName[NAME_LEN];
-	wchar_t Password[PASSWORD_LEN];
-	wchar_t IPAddress[IPADDR_LEN];
+	char UserName[NAME_LEN];
+	char Password[PASSWORD_LEN];
+	char IPAddress[IPADDR_LEN];
 	unsigned int Port;
 
 	UserInfo()
@@ -130,8 +130,8 @@ typedef struct UserInfo
 
 typedef struct _TypeDisplayMode_
 {
-	wchar_t ModeName[NAME_LEN];
-	wchar_t ModeCamera[MAX_DISPLAY_CNT][RES_CODE_LEN];
+	char ModeName[NAME_LEN];
+	char ModeCamera[MAX_DISPLAY_CNT][RES_CODE_LEN];
 
 	_TypeDisplayMode_()
 	{
@@ -238,25 +238,8 @@ typedef struct _TypeAudio_
 }TypeAudio, * pTypeAudio;
 
 
-void CharToWChar(const char* Source, wchar_t* Destination)
-{
-	int _tempLen = MultiByteToWideChar(CP_ACP, 0, Source, strlen(Source), nullptr, 0);
-	TCHAR* _tempWchar = new wchar_t[_tempLen + 1];
-	memset(_tempWchar, 0, 2 * _tempLen + 2);
-	MultiByteToWideChar(CP_ACP, 0, Source, strlen(Source), _tempWchar, _tempLen);
-	wcsncpy_s(Destination, sizeof(Destination), _tempWchar, sizeof(_tempWchar));
-
-	delete[] _tempWchar;
-}
-
-
-void WCharToChar(const wchar_t* Source, char* Destination)
-{
-	int _tempLen = WideCharToMultiByte(CP_ACP, 0, Source, -1, Destination, 0, nullptr, nullptr);
-	char *_tempChar = new char[_tempLen];
-	memset(_tempChar, 0, _tempLen);
-	WideCharToMultiByte(CP_ACP, 0, Source, -1, Destination, _tempLen, nullptr, nullptr);
-	strcpy_s(Destination, sizeof(Destination), _tempChar);
-
-	delete[] _tempChar;
-}
+void CharToWideChar(LPSTR pChar, ULONG ulCharSize, BOOL bIsUTF8, LPCWSTR pWideChar);
+void WideCharToChar(LPCWSTR pWideChar, ULONG ulCharSize, BOOL bIsUTF8, LPSTR pChar);
+void ConvertUTF8ToUnicode(LPSTR pSrcChar, LPSTR pcDestChar, int length);
+void ConvertUnicodeToUTF8(LPSTR pSrcChar, LPSTR pcDestChar, int length);
+void ConvertStringToCtime(char* pcStr, CTime* pTime);

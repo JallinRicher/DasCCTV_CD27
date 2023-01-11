@@ -16,7 +16,7 @@ class MainDialog : public CDialog
 public:
 	void ReadConfigFile();
 	void InsertLog(LOGLEVEL Level, const char* const _Format, ...);
-	bool SetLogFile(const wchar_t* LogPath, int Mode = std::ios_base::in | std::ios_base::out | std::ios_base::app | std::ios_base::ate);
+	bool SetLogFile(const char* LogPath, int Mode = std::ios_base::in | std::ios_base::out | std::ios_base::app | std::ios_base::ate);
 	static std::vector<std::string> SplitString(const char* _str, char _seq);
 	static std::vector<CString> SplitString(const wchar_t* _wstr, wchar_t _seq);
 
@@ -96,12 +96,13 @@ public:
 
 private:
 	bool m_IsLogin;
+	bool m_IsFirstLogin;
 	unsigned int m_CurrentLayout;
 
-	wchar_t m_AppWorkPath[FILE_PATH_LEN];
-	wchar_t m_LogFilePath[FILE_PATH_LEN];
-	wchar_t m_ConfigFilePath[FILE_PATH_LEN];
-	wchar_t m_DownloadPath[FILE_PATH_LEN];
+	char m_AppWorkPath[FILE_PATH_LEN];
+	char m_LogFilePath[FILE_PATH_LEN];
+	char m_ConfigFilePath[FILE_PATH_LEN];
+	char m_DownloadPath[FILE_PATH_LEN];
 
 	std::fstream m_LogFile;
 	UserInfo m_DCSUserInfo;

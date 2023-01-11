@@ -110,7 +110,7 @@ LONG WINAPI MyUnhandledFilter(struct _EXCEPTION_POINTERS* lpExceptionInfo)
 	}
 	else
 	{
-		printf("Create File %ws Failed %d\n", szFileName, GetLastError());
+		printf("Create File %s Failed %d\n", szFileName, GetLastError());
 	}
 	return ret;
 }
