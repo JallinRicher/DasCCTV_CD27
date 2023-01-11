@@ -177,9 +177,8 @@ public:		/************************************* CCTV 网络模块 ******************
 	void GetServiceStatus(CWALKNetServiceType ServiceType, void* InfoBuf, int Len, int* RealLen);	// 获取服务器状态信息
 
 	// 列举
-	void ListObjects(CWALKNetObjectType ObjType, const TCHAR* SerName = nullptr,					// 列举对象，当 SerName 为空时，表示当前登录服务器
-					 int* Count = nullptr, CallBack_OnListObj FnOnListObj = nullptr, 
-					 void* UserParam = nullptr);													
+	void ListObjects(CWALKNetObjectType ObjType, const TCHAR* SerName, int* Count,					// 列举对象，当 SerName 为空时，表示当前登录服务器
+					 CallBack_OnListObj FnOnListObj, void* UserParam);													
 	void ListObjectsEx(CWALKNetObjectType ObjType, const TCHAR* SerName = nullptr,					// 列举对象，当 SerName 为空时，表示当前登录服务器；GroupID 不为空表示列举
 					   int* Count = nullptr, CallBack_OnListObj FnOnListObj = nullptr,				// 当前 GroupID 对应的摄像机；IsGetAllCamera 表示是否列举所有有权限的设备
 					   void* UserParam = nullptr, const TCHAR* GroupID = nullptr,					// IsGetAllCamera = true && GroupID == NULL —— 获取所有摄像机

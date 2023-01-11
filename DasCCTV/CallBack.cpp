@@ -44,14 +44,13 @@ int GatewayCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectT
 	int DisableEvent = -1;
 	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
 	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
-	MainDialog* MainDlg = (MainDialog*)UserParam;
-
+	
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
 
 	TypeGateway Gateway;
 	Gateway.SetData(DisableEvent, MaxVod, NameBuf, TitleBuf);
-	MainDlg->m_StationComboBox.AddOneGateway(Gateway);
+	((std::vector<TypeGateway>*)UserParam)->push_back(Gateway);
 
 	return CWALKSDK_OK;
 }
@@ -62,8 +61,6 @@ int DeviceCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
 	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
 	wchar_t UrlBuf[RES_CODE_LEN] = { 0 };
-	MainDialog* MainDlg = (MainDialog*)UserParam;
-	UNUSED(MainDlg);
 
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
@@ -71,6 +68,7 @@ int DeviceCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 
 	TypeDevice Device;
 	Device.SetData(NameBuf, TitleBuf, UrlBuf);
+	((std::vector<TypeDevice>*)UserParam)->push_back(Device);
 
 	return CWALKSDK_OK;
 }
@@ -84,7 +82,6 @@ int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 	wchar_t PathBuf[RES_CODE_LEN] = { 0 };
 	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
 	wchar_t HostBuf[RES_CODE_LEN] = { 0 };
-	MainDialog* MainDlg = (MainDialog*)UserParam;
 	
 	JSDCCTV::InfoParseIntKeyValue(ObjInfo, L"level", &Level);
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
@@ -95,7 +92,7 @@ int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 
 	TypeCamera camera;
 	camera.SetData(AddrBuf, HostBuf, NameBuf, PathBuf, TitleBuf);
-	MainDlg->m_CameraComboBox.AddOneCamera(camera);
+	((std::vector<TypeCamera>*)UserParam)->push_back(camera);
 
 	return CWALKSDK_OK;
 }
@@ -105,14 +102,13 @@ int MonitorCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectT
 {
 	wchar_t NameBuf[RES_CODE_LEN] = { 0 };
 	wchar_t TitleBuf[RES_CODE_LEN] = { 0 };
-	MainDialog* MainDlg = (MainDialog*)UserParam;
-	UNUSED(MainDlg);
 
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"name", NameBuf, sizeof(NameBuf), nullptr);
 	JSDCCTV::InfoParseKeyValue(ObjInfo, L"title", TitleBuf, sizeof(TitleBuf), nullptr);
 
 	TypeMonitor monitor;
 	monitor.SetData(NameBuf, TitleBuf);
+	((std::vector<TypeMonitor>*)UserParam)->push_back(monitor);
 
 	return CWALKSDK_OK;
 }
@@ -125,21 +121,5 @@ BOOL CWALK_SDK_CALLBACK ListObject_CallBack(void* UserParam, CWALK_NET_HD UserHD
 	CallBackOpt callbackOpt(ObjType);
 	return callbackOpt.m_callback_base->Parse(UserParam, UserHD, ObjType, ObjName, ObjInfo);
 
-
-	switch (ObjType)
-	{
-	case CWALKNET_TYPE_UNKNOWN: break;
-	case CWALKNET_TYPE_GATEWAY: break;
-	case CWALKNET_TYPE_DEVICE: break;
-	case CWALKNET_TYPE_CAMERA: break;
-	case CWALKNET_TYPE_MONITOR: break;
-	case CWALKNET_TYPE_AUDIO: break;
-	case CWALKNET_TYPE_TRUNKIN: break;
-	case CWALKNET_TYPE_TRUNKOUT: break;
-	case CWALKNET_TYPE_ALARMIN: break;
-	case CWALKNET_TYPE_ALARMOUT: break;
-	default: break;
-	}
-
-	return 0;
+	return CWALKSDK_OK;
 }

@@ -55,33 +55,6 @@ void MainDialog::ReadConfigFile()
 	/* 获取下载路径 */
 	GetPrivateProfileString(SECTION_STORAGE, CONFIG_KEY_DOWNLOADPATH, DEFAULT_STR, m_DownloadPath, sizeof(m_DownloadPath), m_ConfigFilePath);
 
-	/* 获取显示模式 */
-	unsigned int _modeCount = GetPrivateProfileInt(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, DEFAULT_INT, m_ConfigFilePath);
-	unsigned int ModeCount = _modeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : _modeCount;
-	for (unsigned int i = 0; i < ModeCount; ++i)
-	{
-		TypeDisplayMode* _displayMode = new TypeDisplayMode;
-		CString tempKeyName, tempKeyCamera;
-		wchar_t tempCamera[RES_CODE_LEN] = { 0 };
-		wchar_t tempName[NAME_LEN] = { 0 };
-		tempKeyName.Format(L"%s%ud", CONFIG_KEY_MODENAME_PREFIX, i);
-		tempKeyCamera.Format(L"%s%ud", CONFIG_KEY_MODECAMERA_PREFIX, i);
-
-		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyName, DEFAULT_STR, tempName, sizeof(tempName), m_ConfigFilePath);
-		wcsncpy_s(_displayMode->ModeName, tempName, sizeof(_displayMode->ModeName));
-
-		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCamera, DEFAULT_STR, tempCamera, sizeof(tempCamera), m_ConfigFilePath);
-		std::vector<CString> vecCameraList = SplitString(tempCamera, ',');
-		
-		int CameraNum = vecCameraList.size() > MAX_DISPLAY_CNT ? MAX_DISPLAY_CNT : vecCameraList.size();
-		for (int j = 0; j < CameraNum; ++j)
-		{
-			wcsncpy_s(_displayMode->ModeCamera[i], vecCameraList[j], sizeof(_displayMode->ModeCamera[i]));
-		}
-
-		m_DisplayComboBox.AddOneDisplayMode((*_displayMode));
-		delete _displayMode;
-	}
 }
 
 
@@ -230,21 +203,6 @@ BEGIN_MESSAGE_MAP(MainDialog, CDialog)
 END_MESSAGE_MAP()
 
 
-void MainDialog::InitChildWindow()
-{
-	m_DisplayControl = new DisplayControlDialog(this);
-	m_DisplayControl->Create(IDD_DISPLATCONTROLDIALOG, this);
-	m_DisplayControl->ShowWindow(SW_HIDE);
-
-	CRect oRect;
-	GetClientRect(&oRect);
-	m_DisplayControl->MoveWindow(35, 27, oRect.Width() - 640, oRect.Height() - 320, TRUE);
-	m_DisplayControl->SetDialogRect(35, 27, oRect.Width() - 640, oRect.Height() - 320);
-	m_DisplayControl->ShowWindow(SW_SHOW);
-	m_DisplayControl->EnableWindow(TRUE);
-}
-
-
 void MainDialog::OnCbnSelchangeComboLayout()
 {
 	// TODO: 在此添加控件通知处理程序代码
@@ -275,8 +233,8 @@ void MainDialog::OnCbnSelchangeComboStation()
 	// TODO: 在此添加控件通知处理程序代码
 	m_AreaComboBox.ClearAllContent();
 	m_CameraComboBox.ClearAllContent();
-	ShowCurAreaList();
-	ShowCurCameraList();
+	ShowAreaList();
+	ShowCameraList();
 }
 
 
@@ -284,7 +242,7 @@ void MainDialog::OnCbnSelchangeComboArea()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	m_CameraComboBox.ClearAllContent();
-	ShowCurCameraList();
+	ShowCameraList();
 }
 
 
@@ -451,31 +409,78 @@ void MainDialog::StartCurSelDisplayMode()
 }
 
 
-void MainDialog::ShowCurStationList()
+void MainDialog::ShowStationList()
 {
-	//m_JsdCCTV->ListObjectsEx();
+	std::vector<TypeGateway> vecGateways;
+	m_JsdCCTV->ListObjects(CWALKNET_TYPE_GATEWAY, nullptr, nullptr, ListObject_CallBack, (void*)&vecGateways);
+
+	int size = vecGateways.size();
+	for (int i = 0; i < size; ++i)
+	{
+		m_StationComboBox.AddOneGateway(vecGateways[i]);
+	}
 }
 
 
-void MainDialog::ShowCurAreaList()
+void MainDialog::ShowAreaList()
 {
+	std::vector<TypeGateway> vecGateways;
+	m_JsdCCTV->ListObjects(CWALKNET_TYPE_GATEWAY, nullptr, nullptr, ListObject_CallBack, (void*)&vecGateways);
 
+	int size = vecGateways.size();
+	for (int i = 0; i < size; ++i)
+	{
+		m_AreaComboBox.AddOneGateway(vecGateways[i]);
+	}
 }
 
 
-void MainDialog::ShowCurCameraList()
+void MainDialog::ShowCameraList()
 {
-	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, nullptr, ListObject_CallBack, this);
+	std::vector<TypeCamera> vecCameras;
+	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, nullptr, ListObject_CallBack, (void*)&vecCameras);
+
+	int size = vecCameras.size();
+	for (int i = 0; i < size; ++i)
+	{
+		m_CameraComboBox.AddOneCamera(vecCameras[i]);
+	}
 }
 
 
 void MainDialog::ShowDisplayModeList()
 {
+	/* 获取显示模式 */
+	unsigned int _modeCount = GetPrivateProfileInt(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, DEFAULT_INT, m_ConfigFilePath);
+	unsigned int ModeCount = _modeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : _modeCount;
+	for (unsigned int i = 0; i < ModeCount; ++i)
+	{
+		TypeDisplayMode* _displayMode = new TypeDisplayMode;
+		CString tempKeyName, tempKeyCamera;
+		wchar_t tempCamera[RES_CODE_LEN] = { 0 };
+		wchar_t tempName[NAME_LEN] = { 0 };
+		tempKeyName.Format(L"%s%ud", CONFIG_KEY_MODENAME_PREFIX, i);
+		tempKeyCamera.Format(L"%s%ud", CONFIG_KEY_MODECAMERA_PREFIX, i);
 
+		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyName, DEFAULT_STR, tempName, sizeof(tempName), m_ConfigFilePath);
+		wcsncpy_s(_displayMode->ModeName, tempName, sizeof(_displayMode->ModeName));
+
+		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCamera, DEFAULT_STR, tempCamera, sizeof(tempCamera), m_ConfigFilePath);
+		std::vector<CString> vecCameraList = SplitString(tempCamera, ',');
+
+		int CameraNum = vecCameraList.size() > MAX_DISPLAY_CNT ? MAX_DISPLAY_CNT : vecCameraList.size();
+		for (int j = 0; j < CameraNum; ++j)
+		{
+			wcsncpy_s(_displayMode->ModeCamera[i], vecCameraList[j], sizeof(_displayMode->ModeCamera[i]));
+		}
+
+		m_DisplayComboBox.AddOneDisplayMode((*_displayMode));
+		delete _displayMode;
+	}
 }
 
 
-void MainDialog::ShowCurSwitchList()
+void MainDialog::ShowSwitchList()
 {
 
 }
@@ -551,19 +556,16 @@ void MainDialog::OnTimer(UINT_PTR nIDEvent)
 	KillTimer(1);
 	if (!m_IsLogin)
 	{
-		Login();
+		if (Login())
+		{
+			ShowStationList();
+			ShowAreaList();
+			ShowCameraList();
+			ShowDisplayModeList();
+			ShowSwitchList();
+		}
 	}
 
-	if (m_IsLogin)
-	{
-		ShowCurStationList();
-		ShowCurAreaList();
-		ShowCurCameraList();
-		ShowCurSwitchList();
-	}
-
-
-	
 
 	SetTimer(1, 2000, nullptr);
 	CDialog::OnTimer(nIDEvent);

@@ -30,11 +30,11 @@ public:
 	void ModifyCurSelDisplayMode();
 	void StartCurSelDisplayMode();
 
-	void ShowCurStationList();
-	void ShowCurAreaList();
-	void ShowCurCameraList();
+	void ShowStationList();
+	void ShowAreaList();
+	void ShowCameraList();
 	void ShowDisplayModeList();
-	void ShowCurSwitchList();
+	void ShowSwitchList();
 
 private:
 	void InitCCTV();
@@ -45,7 +45,6 @@ private:
 	void InitAllComboBox();
 	void InitButton();
 	void InitPtzControlButton();
-	void InitChildWindow();	
 
 
 
