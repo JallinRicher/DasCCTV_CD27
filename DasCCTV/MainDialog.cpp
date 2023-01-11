@@ -160,8 +160,7 @@ bool MainDialog::SetLogFile(const char* LogPath, int Mode)
 		return false;
 	}
 
-	m_LogFile << "123" << 0xFFFF;
-	//InsertLog(INFO, "********************* Log start here *********************\n");
+	InsertLog(INFO, "\n********************* Log start here *********************\n");
 	return true;
 }
 
@@ -256,8 +255,13 @@ void MainDialog::OnCbnSelchangeComboArea()
 void MainDialog::OnCbnSelchangeComboCamera()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	TCHAR AvPath[RES_CODE_LEN];
+
 	m_DisplayControl->StopMonitor();
-	m_DisplayControl->StartMonitor();
+	if (!m_DisplayControl->StartMonitor(AvPath))
+	{
+		InsertLog(FATAL, "Start monitor failed. AvPath is %s\n", AvPath);
+	}
 }
 
 
@@ -465,8 +469,8 @@ void MainDialog::ShowDisplayModeList()
 	for (int i = 0; i < ModeCount; ++i)
 	{
 		CString tempKeyName, tempKeyCamera;
-		char tempName[NAME_LEN] = { 0 };
-		char tempCamera[RES_CODE_LEN] = { 0 };
+		TCHAR tempName[NAME_LEN] = { 0 };
+		TCHAR tempCamera[RES_CODE_LEN] = { 0 };
 		TypeDisplayMode* _displayMode = new TypeDisplayMode;
 		tempKeyName.Format("%s%d", CONFIG_KEY_MODENAME_PREFIX, i);
 		tempKeyCamera.Format("%s%d", CONFIG_KEY_MODECAMERA_PREFIX, i);

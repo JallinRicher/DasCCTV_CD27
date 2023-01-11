@@ -4,8 +4,10 @@
 #include "pch.h"
 #include "DasCCTV.h"
 #include "afxdialogex.h"
+#include "MainDialog.h"
 #include "DisplayDialog.h"
 #include "DisplayControlDialog.h"
+
 
 
 // DisplayDialog 对话框
@@ -15,17 +17,6 @@ IMPLEMENT_DYNAMIC(DisplayDialog, CDialog)
 DisplayDialog::DisplayDialog(DisplayControlDialog* ParentDialog, CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_DISPLAYDIALOG, pParent), m_ParentDialog(ParentDialog)
 {
-	InitVariable();
-}
-
-
-DisplayDialog::~DisplayDialog()
-{
-}
-
-
-void DisplayDialog::InitVariable()
-{
 	memset(m_DeviceResCode, 0, RES_CODE_LEN);
 	memset(m_DeviceName, 0, NAME_LEN);
 	m_DeviceID = INVALID_VALUE;
@@ -34,13 +25,17 @@ void DisplayDialog::InitVariable()
 	m_DeviceStatus = INVALID_VALUE;
 	m_RegionID = INVALID_VALUE;
 	memset(m_RegionResCode, 0, RES_CODE_LEN);
-#ifdef MULTI_SUBWAY_ROUTE
-	m_Route = INVALID_VALUE;
-#endif
 
 	m_DisplayState = IS_BLANK;
 	m_IsOpenSound = false;
 	m_SoundChannel = INVALID_VALUE;
+}
+
+
+DisplayDialog::~DisplayDialog()
+{
+	m_ParentDialog = nullptr;
+	m_ParentDialog->m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_PlayHD);
 }
 
 
@@ -62,7 +57,7 @@ END_MESSAGE_MAP()
 // DisplayDialog 消息处理程序
 
 
-void DisplayDialog::SetDisplayState(int State)
+void DisplayDialog::SetDisplayState(DisplayState State)
 {
 	if (State < IS_LIVING || State > IS_SNATCHING)
 	{
@@ -72,7 +67,7 @@ void DisplayDialog::SetDisplayState(int State)
 }
 
 
-int DisplayDialog::GetDisplayState() const
+DisplayState DisplayDialog::GetDisplayState() const
 {
 	return m_DisplayState;
 }
@@ -81,14 +76,14 @@ int DisplayDialog::GetDisplayState() const
 DisplayDeviceInfo DisplayDialog::GetDisplayInfo() const
 {
 	DisplayDeviceInfo Retval;
-	wcsncpy_s(Retval.DeviceResCode, sizeof(Retval.DeviceResCode), m_DeviceResCode, sizeof(Retval.DeviceResCode));
-	wcsncpy_s(Retval.DeviceName, sizeof(Retval.DeviceName), m_DeviceName, sizeof(Retval.DeviceName));
+	strcpy_s(Retval.DeviceResCode, sizeof(Retval.DeviceResCode), m_DeviceResCode);
+	strcpy_s(Retval.DeviceName, sizeof(Retval.DeviceName), m_DeviceName);
 	Retval.DeviceID = m_DeviceID;
 	Retval.DeviceType = m_DeviceType;
 	Retval.DeviceSubType = m_DeviceSubType;
 	Retval.DeviceStatus = m_DeviceStatus;
 	Retval.RegionID = m_RegionID;
-	wcsncpy_s(Retval.RegionResCode, sizeof(Retval.RegionResCode), m_RegionResCode, sizeof(Retval.RegionResCode));
+	strcpy_s(Retval.RegionResCode, sizeof(Retval.RegionResCode), m_RegionResCode);
 
 	return Retval;
 }
@@ -173,23 +168,23 @@ BOOL DisplayDialog::OnInitDialog()
 }
 
 
-void DisplayDialog::SetDeviceResCode(const wchar_t* DeviceResCode)
+void DisplayDialog::SetDeviceResCode(const TCHAR* DeviceResCode)
 {
 	if (DeviceResCode == nullptr)
 	{
 		return;
 	}
-	wcsncpy_s(m_DeviceResCode, sizeof(m_DeviceResCode), DeviceResCode, sizeof(m_DeviceResCode));
+	strcpy_s(m_DeviceResCode, sizeof(m_DeviceResCode), DeviceResCode);
 }
 
 
-void DisplayDialog::SetDeviceName(const wchar_t* DeviceName)
+void DisplayDialog::SetDeviceName(const TCHAR* DeviceName)
 {
 	if (DeviceName == nullptr)
 	{
 		return;
 	}
-	wcsncpy_s(m_DeviceName, sizeof(m_DeviceName), DeviceName, sizeof(m_DeviceName));
+	strcpy_s(m_DeviceName, sizeof(m_DeviceName), DeviceName);
 }
 
 
@@ -223,13 +218,13 @@ void DisplayDialog::SetRegionID(long RegionID)
 }
 
 
-void DisplayDialog::SetRegionResCode(const wchar_t* RegionResCode)
+void DisplayDialog::SetRegionResCode(const TCHAR* RegionResCode)
 {
 	if (RegionResCode == nullptr)
 	{
 		return;
 	}
-	wcsncpy_s(m_RegionResCode, sizeof(m_RegionResCode), RegionResCode, sizeof(m_RegionResCode));
+	strcpy_s(m_RegionResCode, sizeof(m_RegionResCode), RegionResCode);
 }
 
 
@@ -239,15 +234,15 @@ int DisplayDialog::GetSoundChannel() const
 }
 
 
-void DisplayDialog::GetDeviceResCode(wchar_t* Retval) const
+void DisplayDialog::GetDeviceResCode(TCHAR* Retval) const
 {
-	wcsncpy_s(Retval, sizeof(Retval), m_DeviceResCode, sizeof(Retval));
+	strcpy_s(Retval, sizeof(Retval), m_DeviceResCode);
 }
 
 
-void DisplayDialog::GetDeviceName(wchar_t* Retval) const
+void DisplayDialog::GetDeviceName(TCHAR* Retval) const
 {
-	wcsncpy_s(Retval, sizeof(Retval), m_DeviceName, sizeof(Retval));
+	strcpy_s(Retval, sizeof(Retval), m_DeviceName);
 }
 
 
@@ -281,9 +276,9 @@ long DisplayDialog::GetRegionID() const
 }
 
 
-void DisplayDialog::GetRegionResCode(wchar_t* Retval) const
+void DisplayDialog::GetRegionResCode(TCHAR* Retval) const
 {
-	wcsncpy_s(Retval, sizeof(Retval), m_RegionResCode, sizeof(Retval));
+	strcpy_s(Retval, sizeof(Retval), m_RegionResCode);
 }
 
 

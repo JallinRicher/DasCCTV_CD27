@@ -18,6 +18,10 @@ DisplayControlDialog::DisplayControlDialog(MainDialog* ParentDialog, CWnd* pPare
 	m_CurSelDisplayDialog = nullptr;
 	m_LayoutState = INVALID_VALUE;
 	m_LastLayoutState = INVALID_VALUE;
+	m_X = 0;
+	m_Y = 0;
+	m_Height = 0;
+	m_Width = 0;
 
 	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
 	{
@@ -202,18 +206,31 @@ void DisplayControlDialog::SixteenDisplayLayout()
 void DisplayControlDialog::StartDisplayMode()
 {
 
+
 }
 
 
-void DisplayControlDialog::StartMonitor()
+bool DisplayControlDialog::StartMonitor(const TCHAR* avPath)
 {
+	if (m_CurSelDisplayDialog == nullptr)
+	{
+		return false;
+	}
 
+	m_ParentDialog->m_JsdCCTV->CreatePlayer(&m_CurSelDisplayDialog->m_PlayHD, GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
+	m_ParentDialog->m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->m_StreamHD, avPath, nullptr, nullptr, nullptr);
+	m_ParentDialog->m_JsdCCTV->StreamRequestIFrame(m_CurSelDisplayDialog->m_StreamHD);
+	m_CurSelDisplayDialog->SetDisplayState(IS_LIVING);
+
+	return true;
 }
 
 
 void DisplayControlDialog::StopMonitor()
 {
-
+	m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_CurSelDisplayDialog->m_PlayHD);
+	m_ParentDialog->m_JsdCCTV->StopStream(m_CurSelDisplayDialog->m_StreamHD);
+	m_CurSelDisplayDialog->SetDisplayState(IS_BLANK);
 }
 
 

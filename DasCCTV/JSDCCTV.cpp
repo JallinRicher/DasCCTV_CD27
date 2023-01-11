@@ -187,7 +187,7 @@ bool JSDCCTV::SetLogFile(const char* LogPath, int Mode)
 		return false;
 	}
 
-	InsertLog(INFO, "********************* Log start here *********************\n");
+	InsertLog(INFO, "\n********************* Log start here *********************\n");
 	return true;
 }
 
@@ -228,12 +228,12 @@ void JSDCCTV::SetTransferRobbedCallBack(CallBack_OnTransferRobbed FnRobbed, void
 }
 
 
-bool JSDCCTV::CreatePlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, int DecodeMode, int HwType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam)
+bool JSDCCTV::CreatePlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam)
 {
-	ErrorNum ret = CWALK_PLAY_CreatePlayerEx(PlayHD, Hwnd, StreamType, DecodeMode, HwType, FnOnDecoder, UserParam);
+	ErrorNum ret = CWALK_PLAY_CreatePlayer(PlayHD, Hwnd, StreamType, FnOnDecoder, UserParam);
 	if (ret != CWALKSDK_OK)
 	{
-		InsertLog(FATAL, "CWALK_PLAY_CreatePlayerEx failed. Error number is %d\n", ret);
+		InsertLog(FATAL, "CWALK_PLAY_CreatePlayer failed. Error number is %d\n", ret);
 		return false;
 	}
 

@@ -83,7 +83,7 @@ public:		/************************************* CCTV 媒体播放模块 **************
 	// 播放器创建和释放
 	void DetectDecSupports(char* pDecoderTypes, INT_PTR* Len);													// 枚举支持硬解类型接口
 	bool CreatePlayer(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType,
-					  int DecodeMode, int HwType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);		// 创建播放器
+					  Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);									// 创建播放器
 	bool CreatePlayerEx(CWALK_PLAY_HD* PlayHD, HWND Hwnd, CWALKPLayStreamType StreamType, 
 		                int DecodeMode, int HwType, Callback_OnVideoDecodeData FnOnDecoder, void* UserParam);	// 创建播放器（同CreatePlayer）
 	void ReleasePlayer(CWALK_PLAY_HD PlayHD);																	// 释放播放器

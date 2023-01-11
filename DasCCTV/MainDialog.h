@@ -54,6 +54,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
+	JSDCCTV* m_JsdCCTV;
+
 	BitmapComboBox m_LayoutComboBox;
 	BitmapComboBox m_StationComboBox;
 	BitmapComboBox m_AreaComboBox;
@@ -99,15 +101,13 @@ private:
 	bool m_IsFirstLogin;
 	unsigned int m_CurrentLayout;
 
-	char m_AppWorkPath[FILE_PATH_LEN];
-	char m_LogFilePath[FILE_PATH_LEN];
-	char m_ConfigFilePath[FILE_PATH_LEN];
-	char m_DownloadPath[FILE_PATH_LEN];
+	TCHAR m_AppWorkPath[FILE_PATH_LEN];
+	TCHAR m_LogFilePath[FILE_PATH_LEN];
+	TCHAR m_ConfigFilePath[FILE_PATH_LEN];
+	TCHAR m_DownloadPath[FILE_PATH_LEN];
 
 	std::fstream m_LogFile;
 	UserInfo m_DCSUserInfo;
 	UserInfo m_DCRUserInfo;
 	DisplayControlDialog* m_DisplayControl;
-	
-	JSDCCTV* m_JsdCCTV;
 };

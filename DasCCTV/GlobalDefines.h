@@ -63,8 +63,8 @@ enum { INVALID_VALUE = -1 };
 
 typedef enum
 {
-	IS_LIVING = 0,
-	IS_BLANK,
+	IS_BLANK = 0,
+	IS_LIVING,
 	IS_SWITCHING,
 	IS_RECORDING,
 	IS_DOWNLOADING,
@@ -86,14 +86,14 @@ typedef enum
 // 播放信息
 typedef struct DisplayDeviceInfo
 {
-	wchar_t DeviceResCode[RES_CODE_LEN];		// 设备资源编码
-	wchar_t DeviceName[NAME_LEN];				// 设备名
+	TCHAR DeviceResCode[RES_CODE_LEN];			// 设备资源编码
+	TCHAR DeviceName[NAME_LEN];					// 设备名
 	long DeviceID;								// 设备编号
 	int DeviceType;								// 设备类型
 	int DeviceSubType;							// 设备子类型
 	int DeviceStatus;							// 设备状态
 	long RegionID;								// 区域编号
-	wchar_t RegionResCode[RES_CODE_LEN];		// 区域资源编码
+	TCHAR RegionResCode[RES_CODE_LEN];		// 区域资源编码
 
 	DisplayDeviceInfo()
 	{

@@ -39,16 +39,14 @@ void BitmapComboBox::ClearAllContent()
 }
 
 
-void BitmapComboBox::AddOneRow(const char* RowName)
+void BitmapComboBox::AddOneRow(LPCTSTR RowName)
 {
 	if (RowName == nullptr)
 	{
 		return;
 	}
-	int size = strlen(RowName);
-	char* _tempName = new char[2 * size];
-	ConvertUnicodeToUTF8(const_cast<char*>(RowName), _tempName, size);
-	AddString(_tempName);
+
+	AddString(RowName);
 }
 
 

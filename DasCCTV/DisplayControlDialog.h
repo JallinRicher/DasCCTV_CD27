@@ -21,7 +21,7 @@ public:
 	void DefaultDisplayLayout();
 
 	void StartDisplayMode();
-	void StartMonitor();
+	bool StartMonitor(const TCHAR* avPath);
 	void StopMonitor();
 	void StartPtzControl();
 	void StopPtzControl();
@@ -52,10 +52,9 @@ public:
 	virtual BOOL OnInitDialog();
 
 public:
-	
+	MainDialog* m_ParentDialog;
 
 private:
-	MainDialog* m_ParentDialog;
 	DisplayDialog* m_DisplayDialogs[MAX_DISPLAY_CNT];
 	DisplayDialog* m_CurSelDisplayDialog;
 	int m_LayoutState;

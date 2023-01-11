@@ -32,7 +32,7 @@ public:
 
 private:
     void DelOneData(int index);
-    void AddOneRow(const char* RowName);
+    void AddOneRow(LPCTSTR RowName);
     
 
 public:
