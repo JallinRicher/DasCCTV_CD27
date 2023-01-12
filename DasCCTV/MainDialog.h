@@ -42,7 +42,7 @@ private:
 	void InitButton();
 	void InitPtzControlButton();
 
-	void SetProgressCtrlText(TCHAR* Text, int HoldMiliseconds) { m_MainDialogProgressText.SetWindowText(Text); Sleep(HoldMiliseconds); }
+	void SetProgressCtrlText(int HoldMiliseconds, const char* const _Format, ...);
 	void SetProgressPos(int Pos) { m_MainDialogProgress.SetPos(Pos); }
 
 

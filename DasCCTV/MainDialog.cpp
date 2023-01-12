@@ -474,7 +474,7 @@ void MainDialog::ShowDisplayModeList()
 		int CameraNum = vecCameraList.size() > MAX_DISPLAY_CNT ? MAX_DISPLAY_CNT : vecCameraList.size();
 		for (int j = 0; j < CameraNum; ++j)
 		{
-			strcpy_s(_displayMode->ModeCamera[i], RES_CODE_LEN, vecCameraList[i].c_str());
+			strcpy_s(_displayMode->ModeCamera[j], RES_CODE_LEN, vecCameraList[j].c_str());
 		}
 		_displayMode->CameraNumber = CameraNum;
 
@@ -528,7 +528,9 @@ void MainDialog::OnBnClickedButtonStartdspmode()
 	TypeDisplayMode _curMode = m_DisplayComboBox.GetCurSelDisplayMode();
 	int _cameraNum = _curMode.CameraNumber;
 
-
+	m_MainDialogProgress.SetPos(0);
+	m_MainDialogProgress.ShowWindow(TRUE);
+	SetProgressCtrlText(800, "正在调用显示模式【%s】，摄像头总数：%d", _curMode.ModeName, _cameraNum);
 
 	if (_cameraNum == 1)
 	{
@@ -547,15 +549,25 @@ void MainDialog::OnBnClickedButtonStartdspmode()
 		m_DisplayControl->SixteenDisplayLayout();
 	}
 
+	m_MainDialogProgress.SetPos(20);
+
+	int Pos = 20;
+	int Step = (int)(80 / _cameraNum);
 	for (int i = 0; i < _cameraNum; ++i)
 	{
+		Pos += Step;
 		TCHAR* AvPath = _curMode.ModeCamera[i];
 		m_DisplayControl->StopMonitor(i);
 		if (!m_DisplayControl->StartMonitor(AvPath, i))
 		{
 			// LOG
 		}
+		m_MainDialogProgress.SetPos(Pos);
 	}
+
+	m_MainDialogProgress.SetPos(100);
+	SetProgressCtrlText(500, "显示模式调用完成");
+	m_MainDialogProgress.ShowWindow(FALSE);
 }
 
 
@@ -594,42 +606,42 @@ void MainDialog::OnTimer(UINT_PTR nIDEvent)
 	{
 		m_MainDialogProgress.ShowWindow(TRUE);
 		m_MainDialogProgress.SetPos(0);
-		SetProgressCtrlText("登录 DCS 服务器...", 800);
+		SetProgressCtrlText(800, "登录 DCS 服务器...");
 		bool flag = Login();
 		if (flag == true)
 		{
-			SetProgressCtrlText("登录成功", 800);
+			SetProgressCtrlText(800, "登录成功");
 		}
 		else
 		{
-			SetProgressCtrlText("登录失败", 800);
+			SetProgressCtrlText(800, "登录失败");
 		}
 
 		m_MainDialogProgress.SetPos(30);
-		SetProgressCtrlText("获取车站列表...", 800);
+		SetProgressCtrlText(800, "获取车站列表...");
 		ShowStationList();
 
 		m_MainDialogProgress.SetPos(50);
-		SetProgressCtrlText("获取区域列表...", 800);
+		SetProgressCtrlText(800, "获取区域列表...");
 		ShowAreaList();
 
 		m_MainDialogProgress.SetPos(70);
-		SetProgressCtrlText("获取摄像头列表...", 800);
+		SetProgressCtrlText(800, "获取摄像头列表...");
 		ShowCameraList();
 
 		m_MainDialogProgress.SetPos(80);
-		SetProgressCtrlText("读取显示模式...", 800);
+		SetProgressCtrlText(800, "读取显示模式...");
 		ShowDisplayModeList();
 
 		m_MainDialogProgress.SetPos(90);
-		SetProgressCtrlText("获取轮切列表...", 800);
+		SetProgressCtrlText(800, "获取轮切列表...");
 		ShowSwitchList();
 
 		m_IsFirstLogin = false;
 
 		m_MainDialogProgress.SetPos(100);
-		SetProgressCtrlText("完成", 800);
-		SetProgressCtrlText("", 800);
+		SetProgressCtrlText(800, "完成");
+		SetProgressCtrlText(0, "");
 		m_MainDialogProgress.SetPos(0);
 		m_MainDialogProgress.ShowWindow(FALSE);
 	}
@@ -665,4 +677,20 @@ void MainDialog::InitFilePath()
 	CString tempConfigPath = tempWorkPath + "\\" + CONFIG_FILE;
 	strcpy_s(m_LogFilePath, FILE_PATH_LEN, tempLogPath);
 	strcpy_s(m_ConfigFilePath, FILE_PATH_LEN, tempConfigPath);
+}
+
+
+void MainDialog::SetProgressCtrlText(int HoldMiliseconds, const char* const _Format, ...)
+{ 
+	va_list _args;
+	va_start(_args, _Format);
+	int _len = _vscprintf(_Format, _args) + 1;
+	char* _buffer = new char[_len * sizeof(char)];
+	vsnprintf(_buffer, _len * sizeof(char), _Format, _args);
+	va_end(_args);
+
+	m_MainDialogProgressText.SetWindowText(_buffer);
+	Sleep(HoldMiliseconds); 
+
+	delete[] _buffer;
 }
