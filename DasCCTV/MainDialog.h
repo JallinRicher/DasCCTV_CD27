@@ -25,10 +25,6 @@ public:
 	virtual ~MainDialog();
 	
 	bool Login();
-	
-	void DelCurSelDisplayMode();
-	void ModifyCurSelDisplayMode();
-	void StartCurSelDisplayMode();
 
 	void ShowStationList();
 	void ShowAreaList();
@@ -46,6 +42,8 @@ private:
 	void InitButton();
 	void InitPtzControlButton();
 
+	void SetProgressCtrlText(TCHAR* Text, int HoldMiliseconds) { m_MainDialogProgressText.SetWindowText(Text); Sleep(HoldMiliseconds); }
+	void SetProgressPos(int Pos) { m_MainDialogProgress.SetPos(Pos); }
 
 
 protected:
@@ -115,4 +113,6 @@ private:
 	UserInfo m_DCRUserInfo;
 	DisplayControlDialog* m_DisplayControl;
 	
+
+	int TestFlag{ 0 };
 };

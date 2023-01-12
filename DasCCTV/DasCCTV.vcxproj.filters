@@ -230,5 +230,113 @@
     <Image Include="..\res\焦距2_N.bmp">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_D_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_D_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_D_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_L_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_L_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_L_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_R_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_R_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_R_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_UP_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_UP_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Arrow_UP_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\base.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\bmp00001.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Camera.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Camera_Offline.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\DomeCamera.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\DomeCamera_Offline.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\GuardTourResource.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\LocalDomain.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\nvbmp.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\Preset.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\silence.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\sound.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\光圈_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\光圈_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\光圈_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\光圈2_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\光圈2_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\光圈2_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\焦距_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\焦距_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\焦距_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\焦距2_H.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\焦距2_MASK.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Git_Repository\DasCCTV\DasCCTV\res\焦距2_N.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

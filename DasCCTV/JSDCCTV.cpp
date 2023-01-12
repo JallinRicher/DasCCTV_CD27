@@ -19,7 +19,7 @@ void JSDCCTV::InitPlaySDK()
 	CWALK_PLAY_Init();
 	m_IsInitPlay = true;
 	ErrorNum ret = CWALK_PLAY_GetSDK_Version(InfoBuf, INFOBUFFER_SIZE, &RealLen);
-	if (ret == CWALKSDK_OK)
+	if (ret != CWALKSDK_OK)
 	{
 		InsertLog(WARN, "CWALK_PLAY_GetSDK_Version failed. Error number is %d\n", ret);
 	}
@@ -40,7 +40,7 @@ bool JSDCCTV::InitFileSDK()
 	m_IsInitFile = true;
 	memset(InfoBuf, 0, INFOBUFFER_SIZE);
 	ret = CWALK_FILE_GetSDK_Version(InfoBuf, INFOBUFFER_SIZE, &RealLen);
-	if (ret == CWALKSDK_OK)
+	if (ret != CWALKSDK_OK)
 	{
 		InsertLog(WARN, "CWALK_FILE_GetSDK_Version failed. Error number is %d\n", ret);
 	}
@@ -63,7 +63,7 @@ bool JSDCCTV::InitNetSDK()
 	m_IsInitNet = true;
 	memset(InfoBuf, 0, sizeof(InfoBuf));
 	ret = CWALK_NET_GetSDK_Version(InfoBuf, sizeof(InfoBuf), &RealLen);
-	if (ret == CWALKSDK_OK)
+	if (ret != CWALKSDK_OK)
 	{
 		InsertLog(WARN, "CWALK_NET_GetSDK_Version failed. Error number is %d\n", ret);
 	}

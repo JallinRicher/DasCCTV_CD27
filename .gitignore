@@ -5,3 +5,4 @@ DasCCTV/x64
 .vs
 x64
 dcs_sdk_log
+*.dmp

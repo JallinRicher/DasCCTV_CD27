@@ -288,35 +288,6 @@ void MainDialog::OnCbnSelchangeComboSound()
 void MainDialog::OnCbnSelchangeComboDisplaymode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	TypeDisplayMode _curMode = m_DisplayComboBox.GetCurSelDisplayMode();
-	int _cameraNum = _curMode.CameraNumber;
-
-	if (_cameraNum == 1)
-	{
-		m_DisplayControl->OneDisplayLayout();
-	}
-	else if (_cameraNum > 1 && _cameraNum <= 4)
-	{
-		m_DisplayControl->FourDisplayLayout();
-	}
-	else if (_cameraNum > 4 && _cameraNum <= 9)
-	{
-		m_DisplayControl->NineDisplayLayout();
-	}
-	else if (_cameraNum > 9 && _cameraNum <= 16)
-	{
-		m_DisplayControl->SixteenDisplayLayout();
-	}
-
-	for (int i = 0; i < _cameraNum; ++i)
-	{
-		TCHAR* AvPath = _curMode.ModeCamera[i];
-		m_DisplayControl->StopMonitor(i);
-		if (!m_DisplayControl->StartMonitor(AvPath, i))
-		{
-			// LOG
-		}
-	}
 }
 
 
@@ -382,9 +353,8 @@ void MainDialog::InitUIFrame()
 	InitAllComboBox();
 	InitDisplayControlDialog();
 	
-	
-	m_MainDialogProgressText.SetWindowText("ADDSAD");
-	m_MainDialogProgress.ShowWindow(TRUE);
+	m_MainDialogProgress.SetPos(0);
+	m_MainDialogProgress.ShowWindow(FALSE);
 }
 
 
@@ -439,26 +409,6 @@ void MainDialog::OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult)
 	// TODO: 在此添加控件通知处理程序代码
 	UNREFERENCED_PARAMETER(pNMCD);
 	*pResult = 0;
-}
-
-
-void MainDialog::DelCurSelDisplayMode()
-{
-	m_DisplayComboBox.DeleteCurSelRow();
-}
-
-
-void MainDialog::ModifyCurSelDisplayMode()
-{
-	int index = m_DisplayComboBox.GetCurSel();
-	UNREFERENCED_PARAMETER(index);
-}
-
-
-void MainDialog::StartCurSelDisplayMode()
-{
-	int index = m_DisplayComboBox.GetCurSel();
-	UNREFERENCED_PARAMETER(index);
 }
 
 
@@ -561,21 +511,51 @@ void MainDialog::OnBnClickedButtonAdddspmode()
 void MainDialog::OnBnClickedButtonDeldspmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	DelCurSelDisplayMode();
+	
 }
 
 
 void MainDialog::OnBnClickedButtonModifydspmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	ModifyCurSelDisplayMode();
+	
 }
 
 
 void MainDialog::OnBnClickedButtonStartdspmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	StartCurSelDisplayMode();
+	TypeDisplayMode _curMode = m_DisplayComboBox.GetCurSelDisplayMode();
+	int _cameraNum = _curMode.CameraNumber;
+
+
+
+	if (_cameraNum == 1)
+	{
+		m_DisplayControl->OneDisplayLayout();
+	}
+	else if (_cameraNum > 1 && _cameraNum <= 4)
+	{
+		m_DisplayControl->FourDisplayLayout();
+	}
+	else if (_cameraNum > 4 && _cameraNum <= 9)
+	{
+		m_DisplayControl->NineDisplayLayout();
+	}
+	else if (_cameraNum > 9 && _cameraNum <= 16)
+	{
+		m_DisplayControl->SixteenDisplayLayout();
+	}
+
+	for (int i = 0; i < _cameraNum; ++i)
+	{
+		TCHAR* AvPath = _curMode.ModeCamera[i];
+		m_DisplayControl->StopMonitor(i);
+		if (!m_DisplayControl->StartMonitor(AvPath, i))
+		{
+			// LOG
+		}
+	}
 }
 
 
@@ -608,16 +588,50 @@ void MainDialog::OnBnClickedButtonStartswitchmode()
 void MainDialog::OnTimer(UINT_PTR nIDEvent)
 {
 	KillTimer(1);
-	if (!m_IsLogin && m_IsFirstLogin)
+	TestFlag++;
+
+	if (!m_IsLogin && m_IsFirstLogin && TestFlag > 3)
 	{
-		Login();
+		m_MainDialogProgress.ShowWindow(TRUE);
+		m_MainDialogProgress.SetPos(0);
+		SetProgressCtrlText("登录 DCS 服务器...", 800);
+		bool flag = Login();
+		if (flag == true)
+		{
+			SetProgressCtrlText("登录成功", 800);
+		}
+		else
+		{
+			SetProgressCtrlText("登录失败", 800);
+		}
+
+		m_MainDialogProgress.SetPos(30);
+		SetProgressCtrlText("获取车站列表...", 800);
 		ShowStationList();
+
+		m_MainDialogProgress.SetPos(50);
+		SetProgressCtrlText("获取区域列表...", 800);
 		ShowAreaList();
+
+		m_MainDialogProgress.SetPos(70);
+		SetProgressCtrlText("获取摄像头列表...", 800);
 		ShowCameraList();
+
+		m_MainDialogProgress.SetPos(80);
+		SetProgressCtrlText("读取显示模式...", 800);
 		ShowDisplayModeList();
+
+		m_MainDialogProgress.SetPos(90);
+		SetProgressCtrlText("获取轮切列表...", 800);
 		ShowSwitchList();
 
 		m_IsFirstLogin = false;
+
+		m_MainDialogProgress.SetPos(100);
+		SetProgressCtrlText("完成", 800);
+		SetProgressCtrlText("", 800);
+		m_MainDialogProgress.SetPos(0);
+		m_MainDialogProgress.ShowWindow(FALSE);
 	}
 
 	SetTimer(1, 2000, nullptr);
