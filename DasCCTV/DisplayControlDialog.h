@@ -20,7 +20,6 @@ public:
 	void SixteenDisplayLayout();
 	void DefaultDisplayLayout();
 
-	void StartDisplayMode();
 	bool StartMonitor(const TCHAR* AvPath, int Index);
 	bool StartMonitorBasedCurSelDlg(const TCHAR* AvPath);
 	void StopMonitor(int Index);
@@ -60,6 +59,8 @@ public:
 private:
 	DisplayDialog* m_DisplayDialogs[MAX_DISPLAY_CNT];
 	DisplayDialog* m_CurSelDisplayDialog;
+	OpenSoundDialog* m_SoundDialog;
+
 	int m_LayoutState;
 	int m_LastLayoutState;
 	int m_X;

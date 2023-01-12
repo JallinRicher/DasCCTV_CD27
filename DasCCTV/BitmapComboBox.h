@@ -12,8 +12,8 @@ public:
     ~BitmapComboBox();
     
     TypeGateway GetCurSelGateway() const { return m_vecGateways[GetCurSel()]; }
-    TypeDevice GetCurSelDevices() const { return m_vecDevices[GetCurSel()]; }
-    TypeCamera GetCurSelCameras() const { return m_vecCameras[GetCurSel()]; }
+    TypeDevice GetCurSelDevice() const { return m_vecDevices[GetCurSel()]; }
+    TypeCamera GetCurSelCamera() const { return m_vecCameras[GetCurSel()]; }
     TypeMonitor GetCurSelMonitor() const { return m_vecMonitors[GetCurSel()]; }
     TypeAudio GetCurSelAudio() const { return m_vecAudios[GetCurSel()]; }
     TypeDisplayMode GetCurSelDisplayMode() const { return m_vecDisplayModes[GetCurSel()]; }

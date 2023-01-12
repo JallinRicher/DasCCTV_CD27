@@ -249,19 +249,21 @@ void MainDialog::OnCbnSelchangeComboArea()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	m_CameraComboBox.ClearAllContent();
+
+	TypeGateway _area = m_AreaComboBox.GetCurSelGateway();
+
 	ShowCameraList();
 }
 
 
 void MainDialog::OnCbnSelchangeComboCamera()
 {
-	// TODO: 在此添加控件通知处理程序代码
-	TCHAR AvPath[RES_CODE_LEN];
-
+	TypeCamera _camera = m_CameraComboBox.GetCurSelCamera();
+	
 	m_DisplayControl->StopMonitorBasedCurSelDlg();
-	if (!m_DisplayControl->StartMonitorBasedCurSelDlg(AvPath))
+	if (!m_DisplayControl->StartMonitorBasedCurSelDlg(_camera.path))
 	{
-		InsertLog(FATAL, "Start monitor failed. AvPath is %s\n", AvPath);
+		InsertLog(FATAL, "Start monitor failed. AvPath is %s\n", _camera.path);
 	}
 }
 
@@ -386,6 +388,11 @@ void MainDialog::InitAllComboBox()
 	m_LayoutComboBox.AddString("2 X 2");
 	m_LayoutComboBox.AddString("3 X 3");
 	m_LayoutComboBox.AddString("4 X 4");
+
+	m_SoundComboBox.AddString("打开声音");
+	m_SoundComboBox.AddString("关闭声音");
+
+	m_SoundComboBox.SetCurSel(1);
 	m_LayoutComboBox.SetCurSel(1);
 
 }

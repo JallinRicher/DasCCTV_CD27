@@ -134,3 +134,15 @@ void CWALK_SDK_CALLBACK StreamData_CallBack(void* UserParam, CWALK_NET_HD Stream
 		// LOG ¡ª¡ª ÏÔÊ¾ÔÚÆÁÄ»ÉÏ
 	}
 }
+
+
+void CWALK_SDK_CALLBACK VideoDecodeData_CallBack(CWALK_PLAY_HD PlayHD, const void* Buf, int len, const CWALKPLayFrameInfo* FInfo, void* UserParam)
+{
+
+}
+
+
+void CWALK_SDK_CALLBACK AudioDecodeData_CallBack(CWALK_PLAY_HD PlayHD, CWALKPLayPcmFrame* PcmFrame, void* UserParma)
+{
+	
+}

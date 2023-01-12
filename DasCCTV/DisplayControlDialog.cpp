@@ -15,13 +15,13 @@ IMPLEMENT_DYNAMIC(DisplayControlDialog, CDialog)
 DisplayControlDialog::DisplayControlDialog(MainDialog* ParentDialog, CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_DISPLATCONTROLDIALOG, pParent), m_ParentDialog(ParentDialog)
 {
-	m_CurSelDisplayDialog = nullptr;
-	m_LayoutState = INVALID_VALUE;
-	m_LastLayoutState = INVALID_VALUE;
 	m_X = 0;
 	m_Y = 0;
 	m_Height = 0;
 	m_Width = 0;
+	m_CurSelDisplayDialog = nullptr;
+	m_LayoutState = INVALID_VALUE;
+	m_LastLayoutState = INVALID_VALUE;
 	m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
 
 	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
@@ -204,13 +204,6 @@ void DisplayControlDialog::SixteenDisplayLayout()
 }
 
 
-void DisplayControlDialog::StartDisplayMode()
-{
-
-
-}
-
-
 bool DisplayControlDialog::StartMonitorBasedCurSelDlg(const TCHAR* AvPath)
 {
 	if (m_CurSelDisplayDialog == nullptr)
@@ -218,10 +211,20 @@ bool DisplayControlDialog::StartMonitorBasedCurSelDlg(const TCHAR* AvPath)
 		return false;
 	}
 
-	m_ParentDialog->m_JsdCCTV->CreatePlayer(&m_CurSelDisplayDialog->m_PlayHD, m_CurSelDisplayDialog->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
-	m_ParentDialog->m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->m_StreamHD, AvPath, nullptr, nullptr, nullptr);
-	m_ParentDialog->m_JsdCCTV->StreamRequestIFrame(m_CurSelDisplayDialog->m_StreamHD);
+	RealPlay _realPlay;
+	_realPlay.m_JsdCCTV = m_JsdCCTV;
+
+	m_JsdCCTV->CreatePlayer(&m_CurSelDisplayDialog->m_PlayHD, m_CurSelDisplayDialog->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
+	m_JsdCCTV->SoundEnable(m_CurSelDisplayDialog->m_PlayHD, FALSE);				// 默认不播放声音
+	_realPlay.m_PlayHD = m_CurSelDisplayDialog->m_PlayHD;
+
+	m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->m_StreamHD, AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
+	_realPlay.m_StreamHD = m_CurSelDisplayDialog->m_StreamHD;
+
+	m_JsdCCTV->StreamRequestIFrame(m_CurSelDisplayDialog->m_StreamHD);
+
 	m_CurSelDisplayDialog->SetDisplayState(IS_LIVING);
+	m_CurSelDisplayDialog->EnableSound(false);				// 默认不播放声音
 
 	return true;
 }
@@ -238,14 +241,17 @@ bool DisplayControlDialog::StartMonitor(const TCHAR* AvPath, int Index)
 	RealPlay _realPlay;
 	_realPlay.m_JsdCCTV = m_JsdCCTV;
 
-	m_ParentDialog->m_JsdCCTV->CreatePlayer(&m_DisplayDialogs[Index]->m_PlayHD, m_DisplayDialogs[Index]->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
+	m_JsdCCTV->CreatePlayer(&m_DisplayDialogs[Index]->m_PlayHD, m_DisplayDialogs[Index]->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
+	m_JsdCCTV->SoundEnable(m_DisplayDialogs[Index]->m_PlayHD, FALSE);		// 默认不播放声音
 	_realPlay.m_PlayHD = m_DisplayDialogs[Index]->m_PlayHD;
 
-	m_ParentDialog->m_JsdCCTV->StartStream(&m_DisplayDialogs[Index]->m_StreamHD, AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
+	m_JsdCCTV->StartStream(&m_DisplayDialogs[Index]->m_StreamHD, AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
 	_realPlay.m_StreamHD = m_DisplayDialogs[Index]->m_StreamHD;
 
-	m_ParentDialog->m_JsdCCTV->StreamRequestIFrame(m_DisplayDialogs[Index]->m_StreamHD);
+	m_JsdCCTV->StreamRequestIFrame(m_DisplayDialogs[Index]->m_StreamHD);
+
 	m_DisplayDialogs[Index]->SetDisplayState(IS_LIVING);
+	m_DisplayDialogs[Index]->EnableSound(false);			// 默认不播放声音
 
 	return true;
 }
@@ -309,13 +315,34 @@ void DisplayControlDialog::StopSwitch()
 
 void DisplayControlDialog::StartSound()
 {
+	if (m_CurSelDisplayDialog == nullptr)
+	{
+		AfxMessageBox("请选择播放窗口");
+		return;
+	}
 
+	if (m_SoundDialog.m_CurOpenSoundDialog != nullptr)
+	{
+		StopSound();
+	}
+
+	m_JsdCCTV->SoundEnable(m_CurSelDisplayDialog->m_PlayHD, TRUE);
+	m_SoundDialog.m_CurOpenSoundDialog = m_CurSelDisplayDialog;
+	m_CurSelDisplayDialog->EnableSound(true);
 }
 
 
 void DisplayControlDialog::StopSound()
 {
+	if (m_SoundDialog.m_CurOpenSoundDialog == nullptr)
+	{
+		return;
+	}
 
+	DisplayDialog* m_CurOpenSoundDlg = m_SoundDialog.m_CurOpenSoundDialog;
+	m_JsdCCTV->SoundEnable(m_CurOpenSoundDlg->m_PlayHD, FALSE);
+	m_CurOpenSoundDlg->EnableSound(false);
+	m_SoundDialog.m_CurOpenSoundDialog = nullptr;
 }
 
 

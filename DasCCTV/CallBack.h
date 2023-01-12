@@ -55,3 +55,5 @@ public:
 
 BOOL CWALK_SDK_CALLBACK ListObject_CallBack(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo);
 void CWALK_SDK_CALLBACK StreamData_CallBack(void* UserParam, CWALK_NET_HD StreamHD, const void* Data, int DataLen);
+void CWALK_SDK_CALLBACK VideoDecodeData_CallBack(CWALK_PLAY_HD PlayHD, const void* Buf, int len, const CWALKPLayFrameInfo* FInfo, void* UserParam);
+void CWALK_SDK_CALLBACK AudioDecodeData_CallBack(CWALK_PLAY_HD PlayHD, CWALKPLayPcmFrame* PcmFrame, void* UserParma);

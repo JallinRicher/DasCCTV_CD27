@@ -385,6 +385,13 @@ typedef struct _RealPlay
 }RealPlay, *pRealPlay;
 
 
+typedef struct _CurOpenSoundDialog
+{
+	DisplayDialog* m_CurOpenSoundDialog;
+	CWALKPLayPcmFrame m_PcmFrame;
+
+}OpenSoundDialog;
+
 
 
 void CharToWideChar(LPSTR pChar, ULONG ulCharSize, BOOL bIsUTF8, LPCWSTR pWideChar);
