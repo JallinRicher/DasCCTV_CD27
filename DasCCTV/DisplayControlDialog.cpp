@@ -22,6 +22,7 @@ DisplayControlDialog::DisplayControlDialog(MainDialog* ParentDialog, CWnd* pPare
 	m_Y = 0;
 	m_Height = 0;
 	m_Width = 0;
+	m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
 
 	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
 	{
@@ -210,15 +211,15 @@ void DisplayControlDialog::StartDisplayMode()
 }
 
 
-bool DisplayControlDialog::StartMonitor(const TCHAR* avPath)
+bool DisplayControlDialog::StartMonitorBasedCurSelDlg(const TCHAR* AvPath)
 {
 	if (m_CurSelDisplayDialog == nullptr)
 	{
 		return false;
 	}
 
-	m_ParentDialog->m_JsdCCTV->CreatePlayer(&m_CurSelDisplayDialog->m_PlayHD, GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
-	m_ParentDialog->m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->m_StreamHD, avPath, nullptr, nullptr, nullptr);
+	m_ParentDialog->m_JsdCCTV->CreatePlayer(&m_CurSelDisplayDialog->m_PlayHD, m_CurSelDisplayDialog->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
+	m_ParentDialog->m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->m_StreamHD, AvPath, nullptr, nullptr, nullptr);
 	m_ParentDialog->m_JsdCCTV->StreamRequestIFrame(m_CurSelDisplayDialog->m_StreamHD);
 	m_CurSelDisplayDialog->SetDisplayState(IS_LIVING);
 
@@ -226,8 +227,56 @@ bool DisplayControlDialog::StartMonitor(const TCHAR* avPath)
 }
 
 
-void DisplayControlDialog::StopMonitor()
+bool DisplayControlDialog::StartMonitor(const TCHAR* AvPath, int Index)
 {
+	if (m_DisplayDialogs[Index]->GetDisplayState() == IS_LIVING)
+	{
+		// LOG —— 显示信息到屏幕上
+		return false;
+	}
+
+	RealPlay _realPlay;
+	_realPlay.m_JsdCCTV = m_JsdCCTV;
+
+	m_ParentDialog->m_JsdCCTV->CreatePlayer(&m_DisplayDialogs[Index]->m_PlayHD, m_DisplayDialogs[Index]->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
+	_realPlay.m_PlayHD = m_DisplayDialogs[Index]->m_PlayHD;
+
+	m_ParentDialog->m_JsdCCTV->StartStream(&m_DisplayDialogs[Index]->m_StreamHD, AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
+	_realPlay.m_StreamHD = m_DisplayDialogs[Index]->m_StreamHD;
+
+	m_ParentDialog->m_JsdCCTV->StreamRequestIFrame(m_DisplayDialogs[Index]->m_StreamHD);
+	m_DisplayDialogs[Index]->SetDisplayState(IS_LIVING);
+
+	return true;
+}
+
+
+void DisplayControlDialog::StopMonitor(int Index)
+{
+	if (m_DisplayDialogs[Index]->GetDisplayState() == IS_BLANK)
+	{
+		return;
+	}
+
+	m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_DisplayDialogs[Index]->m_PlayHD);
+	m_ParentDialog->m_JsdCCTV->StopStream(m_DisplayDialogs[Index]->m_StreamHD);
+	m_DisplayDialogs[Index]->SetDisplayState(IS_BLANK);
+}
+
+
+void DisplayControlDialog::StopMonitorBasedCurSelDlg()
+{
+	if (m_CurSelDisplayDialog == nullptr)
+	{
+		// LOG
+		return;
+	}
+
+	if (m_CurSelDisplayDialog->GetDisplayState() == IS_BLANK)
+	{
+		return;
+	}
+
 	m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_CurSelDisplayDialog->m_PlayHD);
 	m_ParentDialog->m_JsdCCTV->StopStream(m_CurSelDisplayDialog->m_StreamHD);
 	m_CurSelDisplayDialog->SetDisplayState(IS_BLANK);

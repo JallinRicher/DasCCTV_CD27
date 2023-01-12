@@ -3,6 +3,8 @@
 #include "cwalk_playsdk.h"
 #include "cwalk_filesdk.h"
 #include "cwalk_netsdk.h"
+#include "JSDCCTV.h"
+#include "CallBack.h"
 #include <string>
 
 
@@ -20,28 +22,9 @@ public:
 	virtual ~DisplayDialog();
 
 	void SetDisplayState(DisplayState State);
-	void SetDeviceResCode(const TCHAR* DeviceResCode);
-	void SetDeviceName(const TCHAR* DeviceName);
-	void SetDeviceID(long DeviceID);
-	void SetDeviceType(int DeviceType);
-	void SetDeviceSubType(int DeviceSubType);
-	void SetDeviceStatus(int DeviceStatus);
-	void SetRegionID(long RegionID);
-	void SetRegionResCode(const TCHAR* RegionResCode);
-
-	DisplayDeviceInfo GetDisplayInfo() const;
 	DisplayState GetDisplayState() const;
-	int GetSoundChannel() const;
-	void GetDeviceResCode(TCHAR* Retval) const;
-	void GetDeviceName(TCHAR* Retval) const;
-	long GetDeviceID() const;
-	int GetDeviceType() const;
-	int GetDeviceSubType() const;
-	int GetDeviceStatus() const;
-	long GetRegionID() const;
-	void GetRegionResCode(TCHAR* Retval) const;
 
-	void OpenSound(int SoundChannel);
+	void EnableSound(bool Flag);
 	bool IsOpenSound() const;
 
 public:
@@ -68,16 +51,8 @@ public:
 
 private:
 	DisplayControlDialog* m_ParentDialog;
-	TCHAR m_DeviceResCode[RES_CODE_LEN];
-	TCHAR m_DeviceName[NAME_LEN];
-	long m_DeviceID;
-	int m_DeviceType;
-	int m_DeviceSubType;
-	int m_DeviceStatus;
-	long m_RegionID;
-	TCHAR m_RegionResCode[RES_CODE_LEN];
+	JSDCCTV* m_JsdCCTV;
 
 	DisplayState m_DisplayState;			// 窗口的播放状态
 	bool m_IsOpenSound;						// 是否打开声音
-	long m_SoundChannel;					// 声音播放通道
 };

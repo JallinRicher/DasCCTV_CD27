@@ -206,6 +206,7 @@ BEGIN_MESSAGE_MAP(MainDialog, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_MODIFYSWITCHMODE, &MainDialog::OnBnClickedButtonModifyswitchmode)
 	ON_BN_CLICKED(IDC_BUTTON_STARTSWITCHMODE, &MainDialog::OnBnClickedButtonStartswitchmode)
 	ON_WM_TIMER()
+	ON_CBN_SELCHANGE(IDC_COMBO_DISPLAYMODE, &MainDialog::OnCbnSelchangeComboDisplaymode)
 END_MESSAGE_MAP()
 
 
@@ -257,8 +258,8 @@ void MainDialog::OnCbnSelchangeComboCamera()
 	// TODO: 在此添加控件通知处理程序代码
 	TCHAR AvPath[RES_CODE_LEN];
 
-	m_DisplayControl->StopMonitor();
-	if (!m_DisplayControl->StartMonitor(AvPath))
+	m_DisplayControl->StopMonitorBasedCurSelDlg();
+	if (!m_DisplayControl->StartMonitorBasedCurSelDlg(AvPath))
 	{
 		InsertLog(FATAL, "Start monitor failed. AvPath is %s\n", AvPath);
 	}
@@ -280,6 +281,41 @@ void MainDialog::OnCbnSelchangeComboSound()
 		break;
 	default:
 		break;
+	}
+}
+
+
+void MainDialog::OnCbnSelchangeComboDisplaymode()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	TypeDisplayMode _curMode = m_DisplayComboBox.GetCurSelDisplayMode();
+	int _cameraNum = _curMode.CameraNumber;
+
+	if (_cameraNum == 1)
+	{
+		m_DisplayControl->OneDisplayLayout();
+	}
+	else if (_cameraNum > 1 && _cameraNum <= 4)
+	{
+		m_DisplayControl->FourDisplayLayout();
+	}
+	else if (_cameraNum > 4 && _cameraNum <= 9)
+	{
+		m_DisplayControl->NineDisplayLayout();
+	}
+	else if (_cameraNum > 9 && _cameraNum <= 16)
+	{
+		m_DisplayControl->SixteenDisplayLayout();
+	}
+
+	for (int i = 0; i < _cameraNum; ++i)
+	{
+		TCHAR* AvPath = _curMode.ModeCamera[i];
+		m_DisplayControl->StopMonitor(i);
+		if (!m_DisplayControl->StartMonitor(AvPath, i))
+		{
+			// LOG
+		}
 	}
 }
 
@@ -376,6 +412,10 @@ void MainDialog::InitAllComboBox()
 	m_DisplayComboBox.SetComboBoxType(CWALKNET_TYPE_DISPLAY);
 	m_SwitchComboBox.SetComboBoxType(CWALKNET_TYPE_SWITCH);
 
+	m_LayoutComboBox.AddString("1 X 1");
+	m_LayoutComboBox.AddString("2 X 2");
+	m_LayoutComboBox.AddString("3 X 3");
+	m_LayoutComboBox.AddString("4 X 4");
 	m_LayoutComboBox.SetCurSel(1);
 
 }
@@ -486,6 +526,7 @@ void MainDialog::ShowDisplayModeList()
 		{
 			strcpy_s(_displayMode->ModeCamera[i], RES_CODE_LEN, vecCameraList[i].c_str());
 		}
+		_displayMode->CameraNumber = CameraNum;
 
 		m_DisplayComboBox.AddOneDisplayMode((*_displayMode));
 		delete _displayMode;

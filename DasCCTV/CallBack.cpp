@@ -116,10 +116,21 @@ int MonitorCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectT
 
 
 
+
 BOOL CWALK_SDK_CALLBACK ListObject_CallBack(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
 {
 	CallBackOpt callbackOpt(ObjType);
 	return callbackOpt.m_callback_base->Parse(UserParam, UserHD, ObjType, ObjName, ObjInfo);
 
 	return CWALKSDK_OK;
+}
+
+
+void CWALK_SDK_CALLBACK StreamData_CallBack(void* UserParam, CWALK_NET_HD StreamHD, const void* Data, int DataLen)
+{
+	RealPlay* _realPlay = (pRealPlay)UserParam;
+	if (!_realPlay->m_JsdCCTV->InputData(_realPlay->m_PlayHD, Data, DataLen))
+	{
+		// LOG ║╙║╙ отй╬тзфад╩ио
+	}
 }

@@ -53,7 +53,5 @@ public:
 
 
 
-
-
-
 BOOL CWALK_SDK_CALLBACK ListObject_CallBack(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo);
+void CWALK_SDK_CALLBACK StreamData_CallBack(void* UserParam, CWALK_NET_HD StreamHD, const void* Data, int DataLen);

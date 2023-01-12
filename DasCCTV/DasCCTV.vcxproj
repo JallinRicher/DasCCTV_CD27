@@ -169,6 +169,12 @@
       <OutputFile>$(OutDir)$(ProjectName).ocx</OutputFile>
       <RegisterOutput>false</RegisterOutput>
       <AdditionalDependencies>cwalklog_14.lib;comm_14.lib;cwalk_codecsdk.lib;cwalk_filesdk.lib;cwalk_netsdk.lib;cwalk_playsdk.lib;CWALKIntelligentMFC.lib;CWALKIntelligentSDK.lib;cwalktcm_14.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <HeapCommitSize>
+      </HeapCommitSize>
+      <StackReserveSize>
+      </StackReserveSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

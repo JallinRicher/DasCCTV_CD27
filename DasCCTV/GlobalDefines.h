@@ -1,11 +1,18 @@
 #pragma once
+#include <map>
+#include <list>
 #include <string>
 #include <vector>
-#include <list>
+#include "cwalk_playsdk.h"
+#include "cwalk_filesdk.h"
+#include "cwalk_netsdk.h"
+
+
+class JSDCCTV;
 
 #define NAME_LEN					64
 #define FILE_PATH_LEN				256
-#define RES_CODE_LEN				1024
+#define RES_CODE_LEN				512
 #define MAX_COMBO_ITEM_CNT			128
 #define MAX_DISPLAY_CNT				16
 #define MAX_DISPLAYMODE_CNT			32
@@ -15,6 +22,7 @@
 #define FILE_PATH_LEN				256
 #define IPADDR_LEN					64
 #define PASSWORD_LEN				64
+#define CAMERA_CODE_LEN				512
 
 #define DEFAULT_STR_LEN				256
 #define DEFAULT_STR					""
@@ -130,11 +138,13 @@ typedef struct UserInfo
 
 typedef struct _TypeDisplayMode_
 {
+	int CameraNumber;
 	char ModeName[NAME_LEN];
-	char ModeCamera[MAX_DISPLAY_CNT][RES_CODE_LEN];
+	char ModeCamera[MAX_DISPLAY_CNT][RES_CODE_LEN];			// AvPath
 
 	_TypeDisplayMode_()
 	{
+		CameraNumber = 0;
 		memset(ModeName, 0, sizeof(ModeName));
 		memset(ModeCamera, 0, sizeof(ModeCamera));
 	}
@@ -171,7 +181,7 @@ typedef struct _TypeGateway_
 	CString name;
 	CString title;
 
-}TypeGateway, * pTypeGateway;
+}TypeGateway, *pTypeGateway;
 
 
 typedef struct _TypeDevice_
@@ -183,7 +193,7 @@ typedef struct _TypeDevice_
 	CString title;
 	CString url;
 
-}TypeDevice, * pTypeDevice;
+}TypeDevice, *pTypeDevice;
 
 
 typedef struct _TypeCamera_
@@ -203,7 +213,7 @@ typedef struct _TypeCamera_
 	CString path;
 	CString title;
 
-}TypeCamera, * pTypeCamera;
+}TypeCamera, *pTypeCamera;
 
 
 typedef struct _TypeMonitor_
@@ -214,7 +224,7 @@ typedef struct _TypeMonitor_
 	CString name;
 	CString title;
 
-}TypeMonitor, * pTypeMonitor;
+}TypeMonitor, *pTypeMonitor;
 
 
 typedef struct _TypeAudio_
@@ -235,7 +245,146 @@ typedef struct _TypeAudio_
 	CString name;
 	CString title;
 
-}TypeAudio, * pTypeAudio;
+}TypeAudio, *pTypeAudio;
+
+
+typedef struct _OSD
+{
+	_OSD()
+	{
+		hd = NULL;
+		type = (CWALKPLayOSDType)-1;
+	}
+	CWALK_PLAY_HD hd;
+	CWALKPLayOSDType type;
+}OSD;
+
+
+typedef struct _SaveFile
+{
+	_SaveFile()
+	{
+#ifdef WATERMARK
+		transHD = NULL;
+#endif
+		writeHd = NULL;
+		playbackHd = NULL;
+		extractorHd = NULL;
+		file = "";
+		hwnd = NULL;
+		isAVI = FALSE;
+		encoding = FALSE;
+	}
+
+	CWALK_FILE_HD writeHd;
+	CWALK_FILE_HD extractorHd;
+	CWALK_NET_HD playbackHd;
+	BOOL isAVI;
+	BOOL encoding;
+	CString file;
+
+	HWND hwnd;
+#ifdef WATERMARK
+	//≤‚ ‘◊™¬Î+ÀÆ”°
+	CWALK_STREAM_TRANS_HD transHD;
+#endif
+}SaveFile, *pSaveFile;
+
+
+typedef struct _RealStream
+{
+	_RealStream()
+	{
+		realEventHd = NULL;
+		realTransferHd = NULL;
+		realLiveHd = NULL;
+		realPlayerHd = NULL;
+		realZoomHd = NULL;
+		decodInfohd = NULL;
+
+		isSeverRecoding = FALSE;
+		isLocalRecoding = FALSE;
+
+		isStream = FALSE;
+
+		hwnd = NULL;
+		hwndZoom = NULL;
+		simpleName = "";
+		name = "";
+		title = "";
+		path = "";
+		level = -1;
+		target = "";
+
+		addr = "";
+		host = "";
+
+		hItem = NULL;
+		isHWDeocder = FALSE;
+		isshow = false;
+		isHwDec = FALSE;
+	}
+
+	void ClearAllContent();
+	CWALK_NET_HD realEventHd;
+	CWALK_NET_HD realTransferHd;
+	CWALK_NET_HD realLiveHd;
+	CWALK_PLAY_HD realPlayerHd;
+	CWALK_PLAY_HD realZoomHd;
+	BOOL isSeverRecoding;
+	BOOL isLocalRecoding;
+	BOOL isHWDeocder;
+
+	HWND hwnd;
+	HWND hwndZoom;
+	CString simpleName;
+	CString name;
+	CString title;
+	CString path;
+	CString strOrg;
+	CString strOrgPath;
+	INT level;
+	CString target;
+
+	CString addr;
+	CString host;
+	INT avType;								//≈–∂œ «∑Ò≈‰÷√‘∆Ã®
+
+	INT isRecording;
+	INT motionDetected;
+	INT status;
+	INT videoLost;
+	BOOL isStream;
+	UINT64 beginTime;
+
+	HTREEITEM hItem;
+	std::vector<OSD> osdHd;
+	SaveFile saveFile;
+
+	std::map<INT, BOOL> osd_id_status;
+
+	CWALK_PLAY_HD decodInfohd;				//±£¥Êosdhd
+	bool isshow;							//≈–∂œ «∑Òœ‘ æ
+	BOOL isHwDec;
+}RealStream, *pRealStream;
+
+
+typedef struct _RealPlay
+{
+	_RealPlay()
+	{
+		m_JsdCCTV = nullptr;
+		m_PlayHD = nullptr;
+		m_StreamHD = nullptr;
+	}
+
+	JSDCCTV* m_JsdCCTV;
+	CWALK_PLAY_HD m_PlayHD;
+	CWALK_NET_HD m_StreamHD;
+	
+}RealPlay, *pRealPlay;
+
+
 
 
 void CharToWideChar(LPSTR pChar, ULONG ulCharSize, BOOL bIsUTF8, LPCWSTR pWideChar);

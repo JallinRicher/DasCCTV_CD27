@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "JSDCCTV.h"
 #include "GlobalDefines.h"
 
 void _TypeGateway_::SetData(int DisableEvent, int MaxVod, const CString& Name, const CString& Title)
@@ -88,6 +89,39 @@ void _TypeAudio_::GetData(CString& Addr, int& AudioIn, int& AudioOut, CString& H
 	HostUrl = hostUrl;
 	Name = name;
 	Title = title;
+}
+
+
+void _RealStream::ClearAllContent()
+{
+	realEventHd = nullptr;
+	realTransferHd = nullptr;
+	realLiveHd = nullptr;
+	realPlayerHd = nullptr;
+	realZoomHd = nullptr;
+	decodInfohd = nullptr;
+
+	isSeverRecoding = FALSE;
+	isLocalRecoding = FALSE;
+
+	isStream = FALSE;
+
+	hwnd = nullptr;
+	hwndZoom = nullptr;
+	simpleName = "";
+	name = "";
+	title = "";
+	path = "";
+	level = -1;
+	target = "";
+
+	addr = "";
+	host = "";
+
+	hItem = nullptr;
+	isHWDeocder = FALSE;
+	isshow = false;
+	isHwDec = FALSE;
 }
 
 

@@ -84,8 +84,11 @@ public:
 	afx_msg void OnCbnSelchangeComboCamera();
 	afx_msg void OnCbnSelchangeComboSound();
 	afx_msg void OnBnClickedButtonFullscreen();
+	afx_msg void OnCbnSelchangeComboDisplaymode();
+
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult);
+
 	afx_msg void OnBnClickedButtonAdddspmode();
 	afx_msg void OnBnClickedButtonDeldspmode();
 	afx_msg void OnBnClickedButtonModifydspmode();
@@ -94,6 +97,7 @@ public:
 	afx_msg void OnBnClickedButtonDelswitchmode();
 	afx_msg void OnBnClickedButtonModifyswitchmode();
 	afx_msg void OnBnClickedButtonStartswitchmode();
+
 	virtual BOOL OnInitDialog();
 
 private:
@@ -110,4 +114,5 @@ private:
 	UserInfo m_DCSUserInfo;
 	UserInfo m_DCRUserInfo;
 	DisplayControlDialog* m_DisplayControl;
+	
 };

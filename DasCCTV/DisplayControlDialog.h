@@ -21,8 +21,10 @@ public:
 	void DefaultDisplayLayout();
 
 	void StartDisplayMode();
-	bool StartMonitor(const TCHAR* avPath);
-	void StopMonitor();
+	bool StartMonitor(const TCHAR* AvPath, int Index);
+	bool StartMonitorBasedCurSelDlg(const TCHAR* AvPath);
+	void StopMonitor(int Index);
+	void StopMonitorBasedCurSelDlg();
 	void StartPtzControl();
 	void StopPtzControl();
 	void StartSwitch();
@@ -53,6 +55,7 @@ public:
 
 public:
 	MainDialog* m_ParentDialog;
+	JSDCCTV* m_JsdCCTV;
 
 private:
 	DisplayDialog* m_DisplayDialogs[MAX_DISPLAY_CNT];
