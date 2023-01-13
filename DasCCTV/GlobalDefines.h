@@ -198,23 +198,25 @@ typedef struct _TypeDevice_
 
 typedef struct _TypeCamera_
 {
-	_TypeCamera_()
+	void SetData(const CString& Type, const CString& Id, const CString& Name, const CString& OrgId, const CString& BelongId,
+				 const CString& NodeId, const CString& RtspUrl, const CString& PtzEnable)
 	{
-		level = INVALID_VALUE;
-		Type = INVALID_VALUE;
+		type = Type; id = Id; name = Name; orgId = OrgId; belongId = BelongId; nodeId = NodeId; rtspUrl = RtspUrl; ptzEnable = PtzEnable;
+	}
+	void GetData(CString& Type, CString& Id, CString& Name, CString& OrgId, CString& BelongId, CString& NodeId,
+				 CString& RtspUrl, CString& PtzEnable) const
+	{
+		Type = type; Id = id; Name = name; OrgId = orgId; BelongId = belongId; NodeId = nodeId; RtspUrl = rtspUrl; PtzEnable = ptzEnable;
 	}
 
-	void SetData(const CString& Addr, const CString& Host, const CString& Name, const CString& Path, const CString& Title);
-	void GetData(CString& Addr, CString& Host, CString& Name, CString& Path, CString& Title) const;
-
-	int level;
-	int Type;
-	CString addr;
-	CString host;
+	CString type;
+	CString id;
 	CString name;
-	CString path;
-	CString title;
-	CString strType;
+	CString orgId;
+	CString belongId;
+	CString nodeId;
+	CString rtspUrl;
+	CString ptzEnable;
 
 }TypeCamera, *pTypeCamera;
 
@@ -404,7 +406,15 @@ typedef struct _Organization_
 	CString administrativeDivision;
 	CString description;
 
-}TypeOrg;
+}TypeOrg, TypeStation, TypeArea;
+
+
+typedef struct _Camera_Callback_
+{
+	CString m_CurSelAreaId;
+	std::vector<TypeCamera> m_vecCameras;
+
+}TypeCameraCallback;
 
 
 

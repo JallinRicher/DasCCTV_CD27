@@ -168,8 +168,8 @@ void DisplayDialog::UpdateCurSelDialogState()
 
 	if (m_DisplayState != IS_BLANK)
 	{
-		mainDialog->m_CameraTitleEdit.SetWindowText(m_Camera.title);
-		mainDialog->m_CameraTypeEdit.SetWindowText(m_Camera.strType);
+		mainDialog->m_CameraTitleEdit.SetWindowText(m_Camera.name);
+		mainDialog->m_CameraTypeEdit.SetWindowText(m_Camera.type);
 	}
 }
 

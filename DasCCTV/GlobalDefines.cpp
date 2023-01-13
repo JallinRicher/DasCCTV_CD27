@@ -37,26 +37,6 @@ void _TypeDevice_::GetData(CString& Name, CString& Title, CString& Url) const
 }
 
 
-void _TypeCamera_::SetData(const CString& Addr, const CString& Host, const CString& Name, const CString& Path, const CString& Title)
-{
-	addr = Addr;
-	host = Host;
-	name = Name;
-	path = Path;
-	title = Title;
-}
-
-
-void _TypeCamera_::GetData(CString& Addr, CString& Host, CString& Name, CString& Path, CString& Title) const
-{
-	Addr = addr;
-	Host = host;
-	Name = name;
-	Path = path;
-	Title = title;
-}
-
-
 void _TypeMonitor_::SetData(const CString& Name, const CString& Title)
 {
 	name = Name;

@@ -76,23 +76,31 @@ int DeviceCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 
 int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectType ObjType, const TCHAR* ObjName, const TCHAR* ObjInfo)
 {
-	int Level = -1;
+	char ParentIdBuf[RES_CODE_LEN] = { 0 };
+	char IdBuf[RES_CODE_LEN] = { 0 };
 	char NameBuf[RES_CODE_LEN] = { 0 };
-	char AddrBuf[RES_CODE_LEN] = { 0 };
-	char PathBuf[RES_CODE_LEN] = { 0 };
-	char TitleBuf[RES_CODE_LEN] = { 0 };
-	char HostBuf[RES_CODE_LEN] = { 0 };
+	char BelongIdBuf[RES_CODE_LEN] = { 0 };
+	char NodeIdBuf[RES_CODE_LEN] = { 0 };
+	char RtspUrlBuf[RES_CODE_LEN] = { 0 };
+	char PtzEnableBuf[RES_CODE_LEN] = { 0 };
+	char TypeBuf[RES_CODE_LEN] = { 0 };
+	TypeCameraCallback* stCameraCallback = (TypeCameraCallback*)UserParam;
+	CString ParentId = stCameraCallback->m_CurSelAreaId;
 	
-	JSDCCTV::InfoParseIntKeyValue(ObjInfo, "level", &Level);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, "name", NameBuf, RES_CODE_LEN, nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, "addr", AddrBuf, RES_CODE_LEN, nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, "path", PathBuf, RES_CODE_LEN, nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, "title", TitleBuf, RES_CODE_LEN, nullptr);
-	JSDCCTV::InfoParseKeyValue(ObjInfo, "host", HostBuf, RES_CODE_LEN, nullptr);
+	JSDCCTV::InfoParseKeyValue(ObjInfo, "orgId", ParentIdBuf, RES_CODE_LEN, nullptr);
+	if (ParentId == ParentIdBuf)
+	{
+		JSDCCTV::InfoParseKeyValue(ObjInfo, "id", IdBuf, RES_CODE_LEN, nullptr);
+		JSDCCTV::InfoParseKeyValue(ObjInfo, "name", NameBuf, RES_CODE_LEN, nullptr);
+		JSDCCTV::InfoParseKeyValue(ObjInfo, "belongId", BelongIdBuf, RES_CODE_LEN, nullptr);
+		JSDCCTV::InfoParseKeyValue(ObjInfo, "nodeId", NodeIdBuf, RES_CODE_LEN, nullptr);
+		JSDCCTV::InfoParseKeyValue(ObjInfo, "rtspUrl", RtspUrlBuf, RES_CODE_LEN, nullptr);
+		JSDCCTV::InfoParseKeyValue(ObjInfo, "ptzEnable", PtzEnableBuf, RES_CODE_LEN, nullptr);
+		JSDCCTV::InfoParseKeyValue(ObjInfo, "type", TypeBuf, RES_CODE_LEN, nullptr);
 
-	TypeCamera camera;
-	camera.SetData(AddrBuf, HostBuf, NameBuf, PathBuf, TitleBuf);
-	((std::vector<TypeCamera>*)UserParam)->push_back(camera);
+		TypeCamera camera;
+		camera.SetData(TypeBuf, IdBuf, NameBuf, ParentIdBuf, BelongIdBuf, NodeIdBuf, RtspUrlBuf, PtzEnableBuf);
+	}
 
 	return CWALKSDK_OK;
 }

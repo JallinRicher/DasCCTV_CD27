@@ -263,9 +263,9 @@ void MainDialog::OnCbnSelchangeComboCamera()
 	TypeCamera _camera = m_CameraComboBox.GetCurSelCamera();
 	
 	m_DisplayControl->StopMonitorBasedCurSelDlg();
-	if (!m_DisplayControl->StartMonitorBasedCurSelDlg(_camera.path))
+	if (!m_DisplayControl->StartMonitorBasedCurSelDlg(_camera.rtspUrl))
 	{
-		InsertLog(FATAL, "Start monitor failed. AvPath is %s\n", _camera.path);
+		InsertLog(FATAL, "Start monitor failed. AvPath is %s\n", _camera.rtspUrl);
 	}
 }
 
@@ -505,13 +505,13 @@ void MainDialog::ShowAreaList()
 
 void MainDialog::ShowCameraList()
 {
-	std::vector<TypeCamera> vecCameras;
-	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, nullptr, ListObject_CallBack, (void*)&vecCameras);
+	TypeCameraCallback stCameraCallback;
+	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, nullptr, ListObject_CallBack, (void*)&stCameraCallback);
 
-	int size = vecCameras.size();
+	int size = stCameraCallback.m_vecCameras.size();
 	for (int i = 0; i < size; ++i)
 	{
-		m_CameraComboBox.AddOneCamera(vecCameras[i]);
+		m_CameraComboBox.AddOneCamera(stCameraCallback.m_vecCameras[i]);
 	}
 }
 
