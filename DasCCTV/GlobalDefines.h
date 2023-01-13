@@ -7,7 +7,7 @@
 #include "cwalk_filesdk.h"
 #include "cwalk_netsdk.h"
 
-
+class DisplayDialog;
 class JSDCCTV;
 
 #define NAME_LEN					64
@@ -200,18 +200,21 @@ typedef struct _TypeCamera_
 {
 	_TypeCamera_()
 	{
-		level = -1;
+		level = INVALID_VALUE;
+		Type = INVALID_VALUE;
 	}
 
 	void SetData(const CString& Addr, const CString& Host, const CString& Name, const CString& Path, const CString& Title);
 	void GetData(CString& Addr, CString& Host, CString& Name, CString& Path, CString& Title) const;
 
 	int level;
+	int Type;
 	CString addr;
 	CString host;
 	CString name;
 	CString path;
 	CString title;
+	CString strType;
 
 }TypeCamera, *pTypeCamera;
 

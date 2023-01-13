@@ -66,8 +66,8 @@ DisplayState DisplayDialog::GetDisplayState() const
 
 void DisplayDialog::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	m_ParentDialog->SetCurSelDisplayDialog(this);
+	UpdateCurSelDialogState();
+
 	int LayoutState = m_ParentDialog->GetLayoutState();
 	int LastLayoutState = m_ParentDialog->GetLastLayoutState();
 	if (LayoutState != FULLSCREEN)
@@ -101,9 +101,8 @@ void DisplayDialog::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void DisplayDialog::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	m_ParentDialog->SetCurSelDisplayDialog(this);
-	//ShowDisplayPic();
+	UpdateCurSelDialogState();
+
 	CDialog::OnLButtonDown(nFlags, point);
 }
 
@@ -118,8 +117,8 @@ void DisplayDialog::OnLButtonUp(UINT nFlags, CPoint point)
 
 void DisplayDialog::OnRButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	m_ParentDialog->SetCurSelDisplayDialog(this);
+	UpdateCurSelDialogState();
+
 	CDialog::OnRButtonDown(nFlags, point);
 }
 
@@ -152,4 +151,33 @@ bool DisplayDialog::IsOpenSound() const
 void DisplayDialog::EnableSound(bool Flag)
 {
 	m_IsOpenSound = Flag;
+}
+
+
+void DisplayDialog::UpdateCurSelDialogState()
+{
+	m_ParentDialog->SetCurSelDisplayDialog(this);
+	MainDialog* mainDialog = m_ParentDialog->m_ParentDialog;
+
+	if (m_IsOpenSound)
+		mainDialog->m_SoundComboBox.SetCurSel(0);
+	else
+		mainDialog->m_SoundComboBox.SetCurSel(1);
+
+	if (m_DisplayState != IS_BLANK)
+	{
+		mainDialog->m_CameraTitleEdit.SetWindowText(m_Camera.title);
+		mainDialog->m_CameraTypeEdit.SetWindowText(m_Camera.strType);
+	}
+
+}
+
+
+void DisplayDialog::FlashSelf()
+{
+	m_PlayHD = nullptr;
+	m_StreamHD = nullptr;
+
+	m_DisplayState = IS_BLANK;
+	m_IsOpenSound = false;
 }

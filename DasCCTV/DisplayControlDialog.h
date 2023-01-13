@@ -59,7 +59,7 @@ public:
 private:
 	DisplayDialog* m_DisplayDialogs[MAX_DISPLAY_CNT];
 	DisplayDialog* m_CurSelDisplayDialog;
-	OpenSoundDialog* m_SoundDialog;
+	OpenSoundDialog m_SoundDialog;
 
 	int m_LayoutState;
 	int m_LastLayoutState;

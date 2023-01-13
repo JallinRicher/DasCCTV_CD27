@@ -72,6 +72,9 @@ public:
 	CButton m_ModifySwitchButton;
 	CButton m_StartSwitchButton;
 
+	CEdit m_CameraTitleEdit;
+	CEdit m_CameraTypeEdit;
+
 	CStatic m_MainDialogProgressText;
 	CProgressCtrl m_MainDialogProgress;
 
@@ -115,4 +118,5 @@ private:
 	
 
 	int TestFlag{ 0 };
+
 };

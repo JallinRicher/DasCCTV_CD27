@@ -23,6 +23,8 @@ public:
 
 	void SetDisplayState(DisplayState State);
 	DisplayState GetDisplayState() const;
+	void UpdateCurSelDialogState();
+	void FlashSelf();
 
 	void EnableSound(bool Flag);
 	bool IsOpenSound() const;
@@ -48,6 +50,7 @@ protected:
 public:
 	CWALK_PLAY_HD m_PlayHD;
 	CWALK_NET_HD m_StreamHD;
+	TypeCamera m_Camera;
 
 private:
 	DisplayControlDialog* m_ParentDialog;

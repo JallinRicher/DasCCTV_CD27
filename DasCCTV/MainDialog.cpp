@@ -186,6 +186,8 @@ void MainDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_DELSWITCHMODE, m_DelSwitchButton);
 	DDX_Control(pDX, IDC_BUTTON_MODIFYSWITCHMODE, m_ModifySwitchButton);
 	DDX_Control(pDX, IDC_BUTTON_STARTSWITCHMODE, m_StartSwitchButton);
+	DDX_Control(pDX, IDC_EDIT_CAMERAID, m_CameraTitleEdit);
+	DDX_Control(pDX, IDC_EDIT_CAMERATYPE, m_CameraTypeEdit);
 }
 
 
@@ -422,6 +424,9 @@ void MainDialog::OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult)
 void MainDialog::ShowStationList()
 {
 	std::vector<TypeGateway> vecGateways;
+	TypeGateway station;
+
+	m_JsdCCTV->GetServerTitle(nullptr, (void*)(const char*)station.title, sizeof(station.title), nullptr);
 	m_JsdCCTV->ListObjects(CWALKNET_TYPE_GATEWAY, nullptr, nullptr, ListObject_CallBack, (void*)&vecGateways);
 
 	int size = vecGateways.size();

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "JSDCCTV.h"
+#include "DisplayDialog.h"
 #include "GlobalDefines.h"
 
 void _TypeGateway_::SetData(int DisableEvent, int MaxVod, const CString& Name, const CString& Title)
