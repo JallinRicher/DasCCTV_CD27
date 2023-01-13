@@ -63,7 +63,6 @@
 #define IDB_BITMAP27                    234
 #define IDC_COMBO2                      234
 #define IDB_BITMAP28                    235
-#define IDC_COMBO3                      235
 #define IDB_BITMAP29                    236
 #define IDC_COMBO_SWITCHMODE            236
 #define IDB_BITMAP30                    237
@@ -74,15 +73,20 @@
 #define IDC_BUTTON_DELSWITCHMODE        239
 #define IDB_BITMAP33                    240
 #define IDC_BUTTON_MODIFYSWITCHMODE     240
+#define IDC_LIST_CAMERALIST             240
 #define IDB_BITMAP34                    241
 #define IDC_BUTTON_STARTSWITCHMODE      241
+#define IDC_LIST_DSPMODELIST            241
 #define IDB_BITMAP35                    242
 #define IDC_COMBO_PRESET                242
 #define IDB_BITMAP36                    243
 #define IDC_STATIC_PRESET               243
 #define IDC_BUTTON_ADDPRESET            244
 #define IDC_BUTTON_DELPRESET            245
+#define IDC_BUTTON_ADDTODSPMODE         245
 #define IDD_ADDDSPMODEDIALOG            246
+#define IDC_BUTTON5                     246
+#define IDC_BUTTON_REMOVEFROMDSPMODE    246
 #define IDC_BUTTON_STARTPRESET          247
 #define IDC_STATIC_CAMERAID             248
 #define IDC_EDIT_CAMERATYPE             249
@@ -94,7 +98,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        248
 #define _APS_NEXT_COMMAND_VALUE         32768
-#define _APS_NEXT_CONTROL_VALUE         234
+#define _APS_NEXT_CONTROL_VALUE         245
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

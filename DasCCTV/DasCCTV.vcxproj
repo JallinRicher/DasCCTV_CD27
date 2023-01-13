@@ -224,6 +224,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AddDspModeDialog.cpp" />
     <ClCompile Include="BitmapComboBox.cpp" />
     <ClCompile Include="CallBack.cpp" />
     <ClCompile Include="DasCCTV.cpp" />
@@ -243,6 +244,7 @@
     <ClCompile Include="PtzControlButton.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddDspModeDialog.h" />
     <ClInclude Include="BitmapComboBox.h" />
     <ClInclude Include="CallBack.h" />
     <ClInclude Include="DasCCTV.h" />

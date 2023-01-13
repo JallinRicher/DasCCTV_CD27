@@ -51,6 +51,9 @@
     <ClCompile Include="GlobalDefines.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="AddDspModeDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DasCCTV.h">
@@ -96,6 +99,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CallBack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AddDspModeDialog.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
