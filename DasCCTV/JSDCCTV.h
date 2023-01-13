@@ -201,7 +201,7 @@ public:		/************************************* CCTV 网络模块 ******************
 	bool DelObject(CWALKNetObjectType ObjType, const TCHAR* ObjName);								// 删除对象
 
 	// 组织结构信息获取和解析
-	void GetOrganization(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount);		// 获取组织结构信息
+	int GetOrganization(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount);		// 获取组织结构信息
 	void GetOrganizationEx(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount,		// 得到分组结构信息，获取全部分组信息，不通过用户ID获取，需要上层应用过滤
 						   BOOL bUseUserID);														
 	void ParseOrganizationInfo(const TCHAR* Info, int Type, int Index, const TCHAR* Key,			// 解析组织结构信息

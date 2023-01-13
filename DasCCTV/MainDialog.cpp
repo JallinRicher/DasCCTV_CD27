@@ -252,7 +252,7 @@ void MainDialog::OnCbnSelchangeComboArea()
 	// TODO: 在此添加控件通知处理程序代码
 	m_CameraComboBox.ClearAllContent();
 
-	TypeGateway _area = m_AreaComboBox.GetCurSelGateway();
+	TypeOrg _area = m_AreaComboBox.GetCurSelArea();
 
 	ShowCameraList();
 }
@@ -423,30 +423,83 @@ void MainDialog::OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult)
 
 void MainDialog::ShowStationList()
 {
-	std::vector<TypeGateway> vecGateways;
-	TypeGateway station;
+	std::vector<TypeOrg> vecStations;
+	int Len = m_JsdCCTV->GetOrganization(nullptr, nullptr, nullptr, nullptr, nullptr);
 
-	m_JsdCCTV->GetServerTitle(nullptr, (void*)(const char*)station.title, sizeof(station.title), nullptr);
-	m_JsdCCTV->ListObjects(CWALKNET_TYPE_GATEWAY, nullptr, nullptr, ListObject_CallBack, (void*)&vecGateways);
+	int OrgCount = 0;
+	void* Buf = (void*)new char[Len];
+	m_JsdCCTV->GetOrganization(Buf, &Len, nullptr, &OrgCount, nullptr);
 
-	int size = vecGateways.size();
-	for (int i = 0; i < size; ++i)
+	void* ValueBuf = new char[RES_CODE_LEN];
+	memset(ValueBuf, 0, RES_CODE_LEN);
+	for (int i = 0; i < OrgCount; ++i)
 	{
-		m_StationComboBox.AddOneGateway(vecGateways[i]);
+		TypeOrg _station;
+		m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "parentId", ValueBuf, RES_CODE_LEN, nullptr);
+		_station.parentid = (TCHAR*)ValueBuf;
+		if (_station.parentid == "")		// 为车站
+		{
+			memset(ValueBuf, 0, RES_CODE_LEN);
+			m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "id", ValueBuf, RES_CODE_LEN, nullptr);
+			_station.id = (TCHAR*)ValueBuf;
+
+			memset(ValueBuf, 0, RES_CODE_LEN);
+			m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "name", ValueBuf, RES_CODE_LEN, nullptr);
+			_station.name = (TCHAR*)ValueBuf;
+
+			vecStations.push_back(_station);
+			break;
+		}
 	}
+
+	for (auto ele : vecStations)
+		m_StationComboBox.AddOneStation(ele);
+	
+	m_StationComboBox.SetCurSel(0);
+
+	delete[] Buf;
+	delete[] ValueBuf;
 }
 
 
 void MainDialog::ShowAreaList()
 {
-	std::vector<TypeGateway> vecGateways;
-	m_JsdCCTV->ListObjects(CWALKNET_TYPE_GATEWAY, nullptr, nullptr, ListObject_CallBack, (void*)&vecGateways);
+	std::vector<TypeOrg> vecAreas;
+	TypeOrg station = m_StationComboBox.GetCurSelStation();
+	int Len = m_JsdCCTV->GetOrganization(nullptr, nullptr, nullptr, nullptr, nullptr);
 
-	int size = vecGateways.size();
-	for (int i = 0; i < size; ++i)
+	int OrgCount = 0;
+	void* Buf = (void*)new char[Len];
+	m_JsdCCTV->GetOrganization(Buf, &Len, nullptr, &OrgCount, nullptr);
+
+	void* ValueBuf = new char[RES_CODE_LEN];
+	memset(ValueBuf, 0, RES_CODE_LEN);
+	for (int i = 0; i < OrgCount; ++i)
 	{
-		m_AreaComboBox.AddOneGateway(vecGateways[i]);
+		TypeOrg _area;
+		m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "parentId", ValueBuf, RES_CODE_LEN, nullptr);
+		_area.parentid = (TCHAR*)ValueBuf;
+		if (_area.parentid == station.id)		// 为车站下的区域
+		{
+			memset(ValueBuf, 0, RES_CODE_LEN);
+			m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "id", ValueBuf, RES_CODE_LEN, nullptr);
+			_area.id = (TCHAR*)ValueBuf;
+
+			memset(ValueBuf, 0, RES_CODE_LEN);
+			m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "name", ValueBuf, RES_CODE_LEN, nullptr);
+			_area.name = (TCHAR*)ValueBuf;
+
+			vecAreas.push_back(_area);
+		}
 	}
+
+	for (auto ele : vecAreas)
+		m_AreaComboBox.AddOneArea(ele);
+
+	m_AreaComboBox.SetCurSel(0);
+
+	delete[] Buf;
+	delete[] ValueBuf;
 }
 
 

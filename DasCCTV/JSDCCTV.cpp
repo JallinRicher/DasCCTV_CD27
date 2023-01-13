@@ -1347,13 +1347,20 @@ bool JSDCCTV::DelObject(CWALKNetObjectType ObjType, const TCHAR* ObjName)
 }
 
 
-void JSDCCTV::GetOrganization(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount)
+int JSDCCTV::GetOrganization(void* Buf, int* BufLen, int* DataLen, int* OrgCount, int* DCSCount)
 {
+	if (Buf == nullptr)
+	{
+		return CWALK_NET_GetOrganization(m_LoginHandle, Buf, BufLen, DataLen, OrgCount, DCSCount);
+	}
+	
 	ErrorNum ret = CWALK_NET_GetOrganization(m_LoginHandle, Buf, BufLen, DataLen, OrgCount, DCSCount);
 	if (ret != CWALKSDK_OK)
 	{
 		InsertLog(WARN, "CWALK_NET_GetOrganization failed. Error number is %d\n", ret);
 	}
+
+	return ret;
 }
 
 

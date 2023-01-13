@@ -12,7 +12,7 @@ class JSDCCTV;
 
 #define NAME_LEN					64
 #define FILE_PATH_LEN				256
-#define RES_CODE_LEN				512
+#define RES_CODE_LEN				256
 #define MAX_COMBO_ITEM_CNT			128
 #define MAX_DISPLAY_CNT				16
 #define MAX_DISPLAYMODE_CNT			32
@@ -394,6 +394,17 @@ typedef struct _CurOpenSoundDialog
 	CWALKPLayPcmFrame m_PcmFrame;
 
 }OpenSoundDialog;
+
+
+typedef struct _Organization_
+{
+	CString id;
+	CString parentid;
+	CString name;
+	CString administrativeDivision;
+	CString description;
+
+}TypeOrg;
 
 
 

@@ -20,6 +20,8 @@ DisplayDialog::DisplayDialog(DisplayControlDialog* ParentDialog, CWnd* pParent /
 	m_DisplayState = IS_BLANK;
 	m_IsOpenSound = false;
 	m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
+	m_PlayHD = nullptr;
+	m_StreamHD = nullptr;
 }
 
 
@@ -169,7 +171,6 @@ void DisplayDialog::UpdateCurSelDialogState()
 		mainDialog->m_CameraTitleEdit.SetWindowText(m_Camera.title);
 		mainDialog->m_CameraTypeEdit.SetWindowText(m_Camera.strType);
 	}
-
 }
 
 

@@ -29,11 +29,13 @@ void BitmapComboBox::OnCbnDropdown()
 
 void BitmapComboBox::ClearAllContent()
 {
-	m_vecGateways.clear();
+	m_vecStations.clear();
+	m_vecAreas.clear();
 	m_vecDevices.clear();
 	m_vecCameras.clear();
 	m_vecMonitors.clear();
 	m_vecAudios.clear();
+	m_vecDisplayModes.clear();
 
 	CComboBox::Clear();
 }
@@ -64,10 +66,10 @@ void BitmapComboBox::DelOneData(int index)
 	switch (m_ComboBoxType)
 	{
 	case CWALKNET_TYPE_GATEWAY: 
-		size = m_vecGateways.size();
+		size = m_vecStations.size();
 		for (int i = index; i < size - 1; ++i)
-			m_vecGateways[i] = m_vecGateways[i + 1];
-		m_vecGateways.pop_back();
+			m_vecStations[i] = m_vecStations[i + 1];
+		m_vecStations.pop_back();
 		break;
 	case CWALKNET_TYPE_DEVICE: 
 		size = m_vecDevices.size();
@@ -105,10 +107,10 @@ void BitmapComboBox::DelOneData(int index)
 }
 
 
-void BitmapComboBox::AddOneGateway(const TypeGateway& Gateway)
+void BitmapComboBox::AddOneStation(const TypeOrg& Station)
 {
-	AddOneRow(Gateway.name);
-	m_vecGateways.push_back(Gateway);
+	AddOneRow(Station.name);
+	m_vecStations.push_back(Station);
 }
 
 
@@ -144,4 +146,11 @@ void BitmapComboBox::AddOneDisplayMode(const TypeDisplayMode DisplayMode)
 {
 	AddOneRow(DisplayMode.ModeName);
 	m_vecDisplayModes.push_back(DisplayMode);
+}
+
+
+void BitmapComboBox::AddOneArea(const TypeOrg& Area)
+{
+	AddOneRow(Area.name);
+	m_vecAreas.push_back(Area);
 }
