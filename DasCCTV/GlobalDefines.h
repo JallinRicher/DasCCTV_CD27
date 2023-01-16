@@ -11,20 +11,19 @@ class DisplayDialog;
 class JSDCCTV;
 
 #define NAME_LEN					64
-#define FILE_PATH_LEN				256
-#define RES_CODE_LEN				256
+#define FILE_PATH_LEN				128
+#define RES_CODE_LEN				128
 #define MAX_COMBO_ITEM_CNT			128
 #define MAX_DISPLAY_CNT				16
 #define MAX_DISPLAYMODE_CNT			32
 #define MAINDIALOG_WIDTH			1920
 #define MAINDIALOG_HEIGHT			1080
 #define DISPLAY_INTERVAL			5
-#define FILE_PATH_LEN				256
 #define IPADDR_LEN					64
 #define PASSWORD_LEN				64
-#define CAMERA_CODE_LEN				512
+#define CAMERA_CODE_LEN				128
 
-#define DEFAULT_STR_LEN				256
+#define DEFAULT_STR_LEN				128
 #define DEFAULT_STR					""
 #define DEFAULT_INT					0
 

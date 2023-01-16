@@ -2,12 +2,12 @@
 #include "afxdialogex.h"
 #include <map>
 #include "JSDCCTV.h"
-#include "MainDialog.h"
 #include "GlobalDefines.h"
 #include "BitmapComboBox.h"
 
 
 // AddDspModeDialog 对话框
+class MainDialog;
 
 class AddDspModeDialog : public CDialog
 {
@@ -34,9 +34,7 @@ public:
 	void AddOneStation(const TypeStation& Stataion);
 	void AddOneArea(const TypeArea& Area);
 	void ShowCameraList();
-	void AddOneCameraToDspMode();
-	void RemoveOneCameraFromDspMode();
-
+	
 
 public:
 	BitmapComboBox m_StationComboBox;

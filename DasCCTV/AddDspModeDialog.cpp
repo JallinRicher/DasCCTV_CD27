@@ -4,6 +4,7 @@
 #include "pch.h"
 #include "DasCCTV.h"
 #include "afxdialogex.h"
+#include "MainDialog.h"
 #include "AddDspModeDialog.h"
 
 
@@ -14,7 +15,7 @@ IMPLEMENT_DYNAMIC(AddDspModeDialog, CDialog)
 AddDspModeDialog::AddDspModeDialog(MainDialog* ParentDialog, CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_ADDDSPMODEDIALOG, pParent), m_ParentDialog(ParentDialog)
 {
-	if (m_ParentDialog)
+	if (m_ParentDialog && m_ParentDialog->m_JsdCCTV)
 	{
 		m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
 	}

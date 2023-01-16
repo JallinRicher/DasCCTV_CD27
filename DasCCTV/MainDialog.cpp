@@ -568,8 +568,18 @@ bool MainDialog::Login()
 
 void MainDialog::OnBnClickedButtonAdddspmode()
 {
-	// TODO: 在此添加控件通知处理程序代码
-	
+	AddDspModeDialog* addDspModDlg = new AddDspModeDialog(this);
+	TypeStation station;
+	std::vector<TypeArea> vecAreas;
+	station = m_StationComboBox.GetCurSelStation();
+	vecAreas = m_AreaComboBox.GetAllAreas();
+
+	addDspModDlg->AddOneStation(station);
+	for (size_t i = 0; i < vecAreas.size(); ++i)
+	{
+		addDspModDlg->AddOneArea(vecAreas[i]);
+	}
+	addDspModDlg->DoModal();
 }
 
 

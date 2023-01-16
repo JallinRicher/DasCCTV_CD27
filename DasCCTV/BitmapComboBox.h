@@ -11,13 +11,16 @@ public:
     explicit BitmapComboBox();
     ~BitmapComboBox();
     
-    TypeOrg GetCurSelStation() const { return m_vecStations[GetCurSel()]; }
-    TypeOrg GetCurSelArea() const { return m_vecAreas[GetCurSel()]; }
+    TypeStation GetCurSelStation() const { return m_vecStations[GetCurSel()]; }
+    TypeArea GetCurSelArea() const { return m_vecAreas[GetCurSel()]; }
     TypeDevice GetCurSelDevice() const { return m_vecDevices[GetCurSel()]; }
     TypeCamera GetCurSelCamera() const { return m_vecCameras[GetCurSel()]; }
     TypeMonitor GetCurSelMonitor() const { return m_vecMonitors[GetCurSel()]; }
     TypeAudio GetCurSelAudio() const { return m_vecAudios[GetCurSel()]; }
     TypeDisplayMode GetCurSelDisplayMode() const { return m_vecDisplayModes[GetCurSel()]; }
+    std::vector<TypeStation> GetAllStations() const { return m_vecStations; }
+    std::vector<TypeArea> GetAllAreas() const { return m_vecAreas; }
+    std::vector<TypeDisplayMode> GetAllDisplayMode() const { return m_vecDisplayModes; }
 
     void AddOneStation(const TypeStation& Station);
     void AddOneArea(const TypeArea& Area);
