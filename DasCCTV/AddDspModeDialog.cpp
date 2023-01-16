@@ -41,6 +41,7 @@ void AddDspModeDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_DSPMODELIST, m_DspModeList);
 	DDX_Control(pDX, IDC_BUTTON_ADDTODSPMODE, m_AddToDspModeButton);
 	DDX_Control(pDX, IDC_BUTTON_REMOVEFROMDSPMODE, m_RemoveFromDspModeButton);
+	DDX_Control(pDX, IDC_EDIT_MODENAME, m_ModeNameEdit);
 }
 
 

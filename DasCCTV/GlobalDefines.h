@@ -24,34 +24,35 @@ class JSDCCTV;
 #define CAMERA_CODE_LEN				128
 
 #define DEFAULT_STR_LEN				128
-#define DEFAULT_STR					""
+#define DEFAULT_STR					_T("")
 #define DEFAULT_INT					0
 
 
 /************************************* CCTV 配置文件信息 *************************************/
-#define CONFIG_FILE								"DasCCTV.ini"
+#define CONFIG_FILE								_T("DasCCTV.ini")
 
-#define SECTION_GLOBAL							"GLOBAL"
-#define CONFIG_KEY_DEFAULT_LAYOUT				"DefaultLayout"
+#define SECTION_GLOBAL							_T("GLOBAL")
+#define CONFIG_KEY_DEFAULT_LAYOUT				_T("DefaultLayout")
 
-#define SECTION_DCSUSERINFO						"DCSUSERINFO"
-#define SECTION_DCRUSERINFO						"DCRUSERINFO"
-#define CONFIG_KEY_USERNAME						"UserName"
-#define CONFIG_KEY_PASSWORD						"Password"
-#define CONFIG_KEY_SERVERIP						"ServerIP"
-#define CONFIG_KEY_SERVERPORT					"ServerPort"
+#define SECTION_DCSUSERINFO						_T("DCSUSERINFO")
+#define SECTION_DCRUSERINFO						_T("DCRUSERINFO")
+#define CONFIG_KEY_USERNAME						_T("UserName")
+#define CONFIG_KEY_PASSWORD						_T("Password")
+#define CONFIG_KEY_SERVERIP						_T("ServerIP")
+#define CONFIG_KEY_SERVERPORT					_T("ServerPort")
 
-#define SECTION_STORAGE							"STORAGE"
-#define CONFIG_KEY_DOWNLOADPATH					"DownloadPath"
+#define SECTION_STORAGE							_T("STORAGE")
+#define CONFIG_KEY_DOWNLOADPATH					_T("DownloadPath")
 
-#define SECTION_LASTCAMERA						"LASTCAMERA"
-#define CONFIG_KEY_LASTCAMERA_PREFIX			"LastCamera"
-#define CONFIG_KEY_LASTCAMERATYPE_PREFIX		"LastCameraType"
+#define SECTION_LASTCAMERA						_T("LASTCAMERA")
+#define CONFIG_KEY_LASTCAMERA_PREFIX			_T("LastCamera")
+#define CONFIG_KEY_LASTCAMERATYPE_PREFIX		_T("LastCameraType")
 
-#define SECTION_DISPLAYMODE						"DISPLAYMODE"
-#define CONFIG_KEY_MODECOUNT					"ModeCount"
-#define CONFIG_KEY_MODENAME_PREFIX				"ModeName"
-#define CONFIG_KEY_MODECAMERA_PREFIX			"ModeCamera"
+#define SECTION_DISPLAYMODE						_T("DISPLAYMODE")
+#define CONFIG_KEY_MODECOUNT					_T("ModeCount")
+#define CONFIG_KEY_MODENAME_PREFIX				_T("ModeName")
+#define CONFIG_KEY_MODECAMERA_PREFIX			_T("ModeCamera")
+#define CONFIG_KEY_CAMERATYPE_PREFIX			_T("CameraType")
 
 
 

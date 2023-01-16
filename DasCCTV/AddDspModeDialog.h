@@ -39,8 +39,12 @@ public:
 public:
 	BitmapComboBox m_StationComboBox;
 	BitmapComboBox m_AreaComboBox;
+
+	CEdit m_ModeNameEdit;
+
 	CListCtrl m_CameraList;
 	CListCtrl m_DspModeList;
+
 	CButton m_AddToDspModeButton;
 	CButton m_RemoveFromDspModeButton;
 
@@ -51,4 +55,5 @@ private:
 public:
 	afx_msg void OnBnClickedButtonAddtodspmode();
 	afx_msg void OnBnClickedButtonRemovefromdspmode();
+	
 };

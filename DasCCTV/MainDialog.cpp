@@ -578,7 +578,53 @@ void MainDialog::OnBnClickedButtonAdddspmode()
 	{
 		addDspModDlg->AddOneArea(vecAreas[i]);
 	}
-	addDspModDlg->DoModal();
+
+	INT_PTR Response = addDspModDlg->DoModal();
+	if (Response == IDCANCEL)
+	{
+		return;
+	}
+	else if (Response == IDOK)
+	{
+		CString _dspModName;
+		CString _dspModCameraList;
+		CString _dspModCamTypeList;
+		int nRow = addDspModDlg->m_CameraList.GetItemCount();
+		for (int i = 0; i < nRow; ++i)
+		{
+			CString CameraType = addDspModDlg->m_CameraList.GetItemText(i, 1);
+			CString CameraUrl = addDspModDlg->m_CameraList.GetItemText(i, 2);
+			if (i == nRow - 1)
+			{
+				_dspModCameraList += CameraUrl;
+				_dspModCamTypeList += CameraType;
+			}
+			else
+			{
+				_dspModCameraList += CameraUrl + ",";
+				_dspModCamTypeList += CameraType + ",";
+			}
+		}
+		addDspModDlg->m_ModeNameEdit.GetWindowText(_dspModName);
+
+		CString _dspModNameKey;
+		CString _dspModCountKey;
+		CString _dspModCameraKey;
+		CString _dspModCamTypeKey;
+
+		int _modeCount = GetPrivateProfileInt(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, DEFAULT_INT, m_ConfigFilePath);
+		_dspModCountKey.Format("%d", _modeCount + nRow);
+		_dspModNameKey.Format("%s%d", CONFIG_KEY_MODENAME_PREFIX, _modeCount);
+		_dspModCameraKey.Format("%s%d", CONFIG_KEY_MODECAMERA_PREFIX, _modeCount);
+		_dspModCamTypeKey.Format("%s%d", CONFIG_KEY_CAMERATYPE_PREFIX, _modeCount);
+
+		WritePrivateProfileString(SECTION_DISPLAYMODE, _dspModNameKey, _dspModName, m_ConfigFilePath);
+		WritePrivateProfileString(SECTION_DISPLAYMODE, _dspModCameraKey, _dspModCameraList, m_ConfigFilePath);
+		WritePrivateProfileString(SECTION_DISPLAYMODE, _dspModCamTypeKey, _dspModCamTypeList, m_ConfigFilePath);
+		WritePrivateProfileString(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, _dspModCountKey, m_ConfigFilePath);
+	}
+
+	delete addDspModDlg;
 }
 
 
@@ -676,49 +722,50 @@ void MainDialog::OnTimer(UINT_PTR nIDEvent)
 	KillTimer(1);
 	TestFlag++;
 
-	if (!m_IsLogin && m_IsFirstLogin && TestFlag > 3)
-	{
-		m_MainDialogProgress.ShowWindow(TRUE);
-		m_MainDialogProgress.SetPos(0);
-		SetProgressCtrlText(800, "登录 DCS 服务器...");
-		bool flag = Login();
-		if (flag == true)
-		{
-			SetProgressCtrlText(800, "登录成功");
-		}
-		else
-		{
-			SetProgressCtrlText(800, "登录失败");
-		}
+	// 先屏蔽下面的代码块，测试完其他功能后释放出来
+	//if (!m_IsLogin && m_IsFirstLogin && TestFlag > 3)
+	//{
+	//	m_MainDialogProgress.ShowWindow(TRUE);
+	//	m_MainDialogProgress.SetPos(0);
+	//	SetProgressCtrlText(800, "登录 DCS 服务器...");
+	//	bool flag = Login();
+	//	if (flag == true)
+	//	{
+	//		SetProgressCtrlText(800, "登录成功");
+	//	}
+	//	else
+	//	{
+	//		SetProgressCtrlText(800, "登录失败");
+	//	}
 
-		m_MainDialogProgress.SetPos(30);
-		SetProgressCtrlText(800, "获取车站列表...");
-		ShowStationList();
+	//	m_MainDialogProgress.SetPos(30);
+	//	SetProgressCtrlText(800, "获取车站列表...");
+	//	ShowStationList();
 
-		m_MainDialogProgress.SetPos(50);
-		SetProgressCtrlText(800, "获取区域列表...");
-		ShowAreaList();
+	//	m_MainDialogProgress.SetPos(50);
+	//	SetProgressCtrlText(800, "获取区域列表...");
+	//	ShowAreaList();
 
-		m_MainDialogProgress.SetPos(70);
-		SetProgressCtrlText(800, "获取摄像头列表...");
-		ShowCameraList();
+	//	m_MainDialogProgress.SetPos(70);
+	//	SetProgressCtrlText(800, "获取摄像头列表...");
+	//	ShowCameraList();
 
-		m_MainDialogProgress.SetPos(80);
-		SetProgressCtrlText(800, "读取显示模式...");
-		ShowDisplayModeList();
+	//	m_MainDialogProgress.SetPos(80);
+	//	SetProgressCtrlText(800, "读取显示模式...");
+	//	ShowDisplayModeList();
 
-		m_MainDialogProgress.SetPos(90);
-		SetProgressCtrlText(800, "获取轮切列表...");
-		ShowSwitchList();
+	//	m_MainDialogProgress.SetPos(90);
+	//	SetProgressCtrlText(800, "获取轮切列表...");
+	//	ShowSwitchList();
 
-		m_IsFirstLogin = false;
+	//	m_IsFirstLogin = false;
 
-		m_MainDialogProgress.SetPos(100);
-		SetProgressCtrlText(800, "完成");
-		SetProgressCtrlText(0, "");
-		m_MainDialogProgress.SetPos(0);
-		m_MainDialogProgress.ShowWindow(FALSE);
-	}
+	//	m_MainDialogProgress.SetPos(100);
+	//	SetProgressCtrlText(800, "完成");
+	//	SetProgressCtrlText(0, "");
+	//	m_MainDialogProgress.SetPos(0);
+	//	m_MainDialogProgress.ShowWindow(FALSE);
+	//}
 
 	SetTimer(1, 2000, nullptr);
 	CDialog::OnTimer(nIDEvent);
