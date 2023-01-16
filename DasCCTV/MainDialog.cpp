@@ -396,7 +396,6 @@ void MainDialog::InitAllComboBox()
 
 	m_SoundComboBox.SetCurSel(1);
 	m_LayoutComboBox.SetCurSel(1);
-
 }
 
 
@@ -437,7 +436,7 @@ void MainDialog::ShowStationList()
 		TypeOrg _station;
 		m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "parentId", ValueBuf, RES_CODE_LEN, nullptr);
 		_station.parentid = (TCHAR*)ValueBuf;
-		if (_station.parentid == "")		// 为车站
+		if (_station.parentid == "")			// 为车站
 		{
 			memset(ValueBuf, 0, RES_CODE_LEN);
 			m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "id", ValueBuf, RES_CODE_LEN, nullptr);
@@ -476,7 +475,7 @@ void MainDialog::ShowAreaList()
 	memset(ValueBuf, 0, RES_CODE_LEN);
 	for (int i = 0; i < OrgCount; ++i)
 	{
-		TypeOrg _area;
+		TypeArea _area;
 		m_JsdCCTV->ParseOrganizationInfo((TCHAR*)Buf, 1, i, "parentId", ValueBuf, RES_CODE_LEN, nullptr);
 		_area.parentid = (TCHAR*)ValueBuf;
 		if (_area.parentid == station.id)		// 为车站下的区域
