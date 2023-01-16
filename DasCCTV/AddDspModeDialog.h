@@ -34,8 +34,6 @@ public:
 	void AddOneStation(const TypeStation& Stataion);
 	void AddOneArea(const TypeArea& Area);
 	void ShowCameraList();
-	void AddOneCameraToDspMode();
-	void RemoveOneCameraFromDspMode();
 
 
 public:

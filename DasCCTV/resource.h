@@ -59,9 +59,10 @@
 #define IDC_STATIC_NOVIDEOPIC           231
 #define IDB_BITMAP25                    232
 #define IDB_BITMAP26                    233
-#define IDC_COMBO1                      233
+#define IDC_COMBO_SELECTSTATION         233
 #define IDB_BITMAP27                    234
 #define IDC_COMBO2                      234
+#define IDC_COMBO_SELECTAREA            234
 #define IDB_BITMAP28                    235
 #define IDB_BITMAP29                    236
 #define IDC_COMBO_SWITCHMODE            236
@@ -85,7 +86,6 @@
 #define IDC_BUTTON_DELPRESET            245
 #define IDC_BUTTON_ADDTODSPMODE         245
 #define IDD_ADDDSPMODEDIALOG            246
-#define IDC_BUTTON5                     246
 #define IDC_BUTTON_REMOVEFROMDSPMODE    246
 #define IDC_BUTTON_STARTPRESET          247
 #define IDC_STATIC_CAMERAID             248

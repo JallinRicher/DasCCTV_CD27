@@ -34,8 +34,8 @@ AddDspModeDialog::~AddDspModeDialog()
 void AddDspModeDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_COMBO1, m_StationComboBox);
-	DDX_Control(pDX, IDC_COMBO2, m_AreaComboBox);
+	DDX_Control(pDX, IDC_COMBO_SELECTSTATION, m_StationComboBox);
+	DDX_Control(pDX, IDC_COMBO_SELECTAREA, m_AreaComboBox);
 	DDX_Control(pDX, IDC_LIST_CAMERALIST, m_CameraList);
 	DDX_Control(pDX, IDC_LIST_DSPMODELIST, m_DspModeList);
 	DDX_Control(pDX, IDC_BUTTON_ADDTODSPMODE, m_AddToDspModeButton);
