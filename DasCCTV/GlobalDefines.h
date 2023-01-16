@@ -139,14 +139,13 @@ typedef struct UserInfo
 typedef struct _TypeDisplayMode_
 {
 	int CameraNumber;
-	char ModeName[NAME_LEN];
-	char ModeCamera[MAX_DISPLAY_CNT][RES_CODE_LEN];			// AvPath
-
+	CString ModeName;
+	CString ModeCamera[MAX_DISPLAY_CNT];			// AvPath
+	CString CameraType[MAX_DISPLAY_CNT];
+	
 	_TypeDisplayMode_()
 	{
 		CameraNumber = 0;
-		memset(ModeName, 0, sizeof(ModeName));
-		memset(ModeCamera, 0, sizeof(ModeCamera));
 	}
 
 }TypeDisplayMode, ModeArray[MAX_DISPLAYMODE_CNT];

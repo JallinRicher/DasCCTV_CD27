@@ -35,19 +35,21 @@ AddDspModeDialog::~AddDspModeDialog()
 void AddDspModeDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_COMBO1, m_StationComboBox);
-	DDX_Control(pDX, IDC_COMBO2, m_AreaComboBox);
 	DDX_Control(pDX, IDC_LIST_CAMERALIST, m_CameraList);
 	DDX_Control(pDX, IDC_LIST_DSPMODELIST, m_DspModeList);
 	DDX_Control(pDX, IDC_BUTTON_ADDTODSPMODE, m_AddToDspModeButton);
 	DDX_Control(pDX, IDC_BUTTON_REMOVEFROMDSPMODE, m_RemoveFromDspModeButton);
 	DDX_Control(pDX, IDC_EDIT_MODENAME, m_ModeNameEdit);
+	DDX_Control(pDX, IDC_STATIC_TIPS, m_TipsStatic);
+	DDX_Control(pDX, IDC_COMBO1, m_StationComboBox);
+	DDX_Control(pDX, IDC_COMBO2, m_AreaComboBox);
 }
 
 
 BEGIN_MESSAGE_MAP(AddDspModeDialog, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_ADDTODSPMODE, &AddDspModeDialog::OnBnClickedButtonAddtodspmode)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVEFROMDSPMODE, &AddDspModeDialog::OnBnClickedButtonRemovefromdspmode)
+	ON_BN_CLICKED(IDOK, &AddDspModeDialog::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -103,6 +105,9 @@ BOOL AddDspModeDialog::OnInitDialog()
 
 void AddDspModeDialog::InitUIFrame()
 {
+
+
+
 	m_CameraList.InsertColumn(0, _T("摄像头标题"), LVCFMT_CENTER, 40);
 	m_CameraList.InsertColumn(1, _T("摄像头类型"), LVCFMT_CENTER, 80);
 	m_CameraList.InsertColumn(2, _T("资源编码"), LVCFMT_CENTER, 40);
@@ -163,4 +168,26 @@ void AddDspModeDialog::OnBnClickedButtonRemovefromdspmode()
 {
 	int SelectRow = m_DspModeList.GetSelectionMark();
 	m_DspModeList.DeleteItem(SelectRow);
+}
+
+
+void AddDspModeDialog::OnBnClickedOk()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString _modeName;
+	m_ModeNameEdit.GetWindowTextA(_modeName);
+	if (_modeName.IsEmpty())
+	{
+		m_TipsStatic.SetWindowTextA(_T("提示：请输入模式名"));
+		return;
+	}
+
+	if (m_DspModeList.GetItemCount() == 0)
+	{
+		m_TipsStatic.SetWindowTextA(_T("提示：请选择要加入模式的摄像机"));
+		return;
+	}
+
+	m_TipsStatic.SetWindowTextA(_T(""));
+	CDialog::OnOK();
 }

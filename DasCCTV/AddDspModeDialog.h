@@ -42,6 +42,8 @@ public:
 
 	CEdit m_ModeNameEdit;
 
+	CStatic m_TipsStatic;
+
 	CListCtrl m_CameraList;
 	CListCtrl m_DspModeList;
 
@@ -55,5 +57,5 @@ private:
 public:
 	afx_msg void OnBnClickedButtonAddtodspmode();
 	afx_msg void OnBnClickedButtonRemovefromdspmode();
-	
+	afx_msg void OnBnClickedOk();
 };

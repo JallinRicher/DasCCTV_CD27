@@ -522,23 +522,29 @@ void MainDialog::ShowDisplayModeList()
 	int ModeCount = _modeCount > MAX_DISPLAYMODE_CNT ? MAX_DISPLAYMODE_CNT : _modeCount;
 	for (int i = 0; i < ModeCount; ++i)
 	{
-		CString tempKeyName, tempKeyCamera;
+		CString tempKeyName, tempKeyCamera, tempKeyCameraType;
 		TCHAR tempName[NAME_LEN] = { 0 };
 		TCHAR tempCamera[RES_CODE_LEN] = { 0 };
+		TCHAR tempCameraType[RES_CODE_LEN] = { 0 };
 		TypeDisplayMode* _displayMode = new TypeDisplayMode;
 		tempKeyName.Format("%s%d", CONFIG_KEY_MODENAME_PREFIX, i);
 		tempKeyCamera.Format("%s%d", CONFIG_KEY_MODECAMERA_PREFIX, i);
+		tempKeyCameraType.Format("%s%d", CONFIG_KEY_CAMERATYPE_PREFIX, i);
 
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyName, DEFAULT_STR, tempName, sizeof(tempName), m_ConfigFilePath);
-		strcpy_s(_displayMode->ModeName, NAME_LEN, tempName);
+		_displayMode->ModeName = tempName;
 
 		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCamera, DEFAULT_STR, tempCamera, sizeof(tempCamera), m_ConfigFilePath);
 		std::vector<std::string> vecCameraList = SplitString(tempCamera, ',');
 
+		GetPrivateProfileString(SECTION_DISPLAYMODE, tempKeyCameraType, DEFAULT_STR, tempCameraType, sizeof(tempCameraType), m_ConfigFilePath);
+		std::vector<std::string> vecCameraTypeList = SplitString(tempCameraType, ',');
+
 		int CameraNum = vecCameraList.size() > MAX_DISPLAY_CNT ? MAX_DISPLAY_CNT : vecCameraList.size();
 		for (int j = 0; j < CameraNum; ++j)
 		{
-			strcpy_s(_displayMode->ModeCamera[j], RES_CODE_LEN, vecCameraList[j].c_str());
+			_displayMode->ModeCamera[j] = vecCameraList[j].c_str();
+			_displayMode->CameraType[j] = vecCameraTypeList[j].c_str();
 		}
 		_displayMode->CameraNumber = CameraNum;
 
@@ -568,10 +574,19 @@ bool MainDialog::Login()
 void MainDialog::OnBnClickedButtonAdddspmode()
 {
 	AddDspModeDialog* addDspModDlg = new AddDspModeDialog(this);
+
 	TypeStation station;
 	std::vector<TypeArea> vecAreas;
-	station = m_StationComboBox.GetCurSelStation();
-	vecAreas = m_AreaComboBox.GetAllAreas();
+	// 暂时屏蔽下面语句，测试
+	//station = m_StationComboBox.GetCurSelStation();
+	//vecAreas = m_AreaComboBox.GetAllAreas();
+
+	station.name = "深圳地铁";
+	for (int i = 0; i < 10; ++i)
+	{
+		TypeArea _area;
+		_area.name.Format("AreaName%d", i);
+	}
 
 	addDspModDlg->AddOneStation(station);
 	for (size_t i = 0; i < vecAreas.size(); ++i)
@@ -676,7 +691,7 @@ void MainDialog::OnBnClickedButtonStartdspmode()
 	for (int i = 0; i < _cameraNum; ++i)
 	{
 		Pos += Step;
-		TCHAR* AvPath = _curMode.ModeCamera[i];
+		TCHAR* AvPath = _curMode.ModeCamera[i].GetBuffer(0);
 		m_DisplayControl->StopMonitor(i);
 		if (!m_DisplayControl->StartMonitor(AvPath, i))
 		{
