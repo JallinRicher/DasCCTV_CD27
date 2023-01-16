@@ -19,8 +19,8 @@ public:
     TypeAudio GetCurSelAudio() const { return m_vecAudios[GetCurSel()]; }
     TypeDisplayMode GetCurSelDisplayMode() const { return m_vecDisplayModes[GetCurSel()]; }
 
-    void AddOneStation(const TypeOrg& Station);
-    void AddOneArea(const TypeOrg& Area);
+    void AddOneStation(const TypeStation& Station);
+    void AddOneArea(const TypeArea& Area);
     void AddOneDevice(const TypeDevice& Device);
     void AddOneCamera(const TypeCamera& Camera);
     void AddOneMonitor(const TypeMonitor& Monitor);
@@ -45,8 +45,8 @@ private:
     int m_ComboBoxType;
 
 
-    std::vector<TypeOrg> m_vecStations;
-    std::vector<TypeOrg> m_vecAreas;
+    std::vector<TypeStation> m_vecStations;
+    std::vector<TypeArea> m_vecAreas;
     std::vector<TypeDevice> m_vecDevices;
     std::vector<TypeCamera> m_vecCameras;
     std::vector<TypeMonitor> m_vecMonitors;

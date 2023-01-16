@@ -100,6 +100,7 @@ int CameraCallBack::Parse(void* UserParam, CWALK_NET_HD UserHD, CWALKNetObjectTy
 
 		TypeCamera camera;
 		camera.SetData(TypeBuf, IdBuf, NameBuf, ParentIdBuf, BelongIdBuf, NodeIdBuf, RtspUrlBuf, PtzEnableBuf);
+		stCameraCallback->m_vecCameras.push_back(camera);
 	}
 
 	return CWALKSDK_OK;

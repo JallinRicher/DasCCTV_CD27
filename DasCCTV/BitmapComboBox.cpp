@@ -107,7 +107,7 @@ void BitmapComboBox::DelOneData(int index)
 }
 
 
-void BitmapComboBox::AddOneStation(const TypeOrg& Station)
+void BitmapComboBox::AddOneStation(const TypeStation& Station)
 {
 	AddOneRow(Station.name);
 	m_vecStations.push_back(Station);
@@ -149,7 +149,7 @@ void BitmapComboBox::AddOneDisplayMode(const TypeDisplayMode DisplayMode)
 }
 
 
-void BitmapComboBox::AddOneArea(const TypeOrg& Area)
+void BitmapComboBox::AddOneArea(const TypeArea& Area)
 {
 	AddOneRow(Area.name);
 	m_vecAreas.push_back(Area);
