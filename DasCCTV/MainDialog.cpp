@@ -568,8 +568,7 @@ bool MainDialog::Login()
 
 void MainDialog::OnBnClickedButtonAdddspmode()
 {
-	AddDspModeDialog* addDspModeDlg = new AddDspModeDialog(this);
-
+	// TODO: 在此添加控件通知处理程序代码
 	
 }
 

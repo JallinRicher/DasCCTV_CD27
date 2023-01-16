@@ -2,7 +2,6 @@
 #include "afxdialogex.h"
 #include "GlobalDefines.h"
 #include "BitmapComboBox.h"
-#include "AddDspModeDialog.h"
 #include "PtzControlButton.h"
 #include "DisplayControlDialog.h"
 #include "resource.h"
