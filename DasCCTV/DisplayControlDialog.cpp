@@ -234,7 +234,6 @@ bool DisplayControlDialog::StartMonitor(const TCHAR* AvPath, int Index)
 {
 	if (m_DisplayDialogs[Index]->GetDisplayState() == IS_LIVING)
 	{
-		// LOG —— 显示信息到屏幕上
 		return false;
 	}
 

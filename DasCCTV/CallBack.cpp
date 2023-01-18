@@ -140,7 +140,7 @@ void CWALK_SDK_CALLBACK StreamData_CallBack(void* UserParam, CWALK_NET_HD Stream
 	RealPlay* _realPlay = (pRealPlay)UserParam;
 	if (!_realPlay->m_JsdCCTV->InputData(_realPlay->m_PlayHD, Data, DataLen))
 	{
-		// LOG ║╙║╙ отй╬тзфад╩ио
+		return;
 	}
 }
 

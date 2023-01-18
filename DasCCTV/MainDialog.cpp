@@ -825,8 +825,9 @@ void MainDialog::SetProgressCtrlText(int HoldMiliseconds, const char* const _For
 	vsnprintf(_buffer, _len * sizeof(char), _Format, _args);
 	va_end(_args);
 
-	m_MainDialogProgressText.SetWindowText(_buffer);
+	m_MainDialogProgressText.SetWindowTextA(_buffer);
 	Sleep(HoldMiliseconds); 
+	m_MainDialogProgressText.SetWindowTextA("");
 
 	delete[] _buffer;
 }

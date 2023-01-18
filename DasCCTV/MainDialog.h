@@ -33,6 +33,9 @@ public:
 	void ShowDisplayModeList();
 	void ShowSwitchList();
 
+	void SetProgressCtrlText(int HoldMiliseconds, const char* const _Format, ...);
+	void SetProgressPos(int Pos) { m_MainDialogProgress.SetPos(Pos); }
+
 private:
 	void InitCCTV();
 	void InitFilePath();
@@ -42,10 +45,6 @@ private:
 	void InitAllComboBox();
 	void InitButton();
 	void InitPtzControlButton();
-
-	void SetProgressCtrlText(int HoldMiliseconds, const char* const _Format, ...);
-	void SetProgressPos(int Pos) { m_MainDialogProgress.SetPos(Pos); }
-
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
