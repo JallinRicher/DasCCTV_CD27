@@ -39,3 +39,4 @@
 #include "CWALKSDKDefines.h"
 #include "CWALKSDKErrors.h"
 #include "common/common.h"
+#include "resource.h"

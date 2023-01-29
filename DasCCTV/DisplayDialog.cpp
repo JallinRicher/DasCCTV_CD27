@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(DisplayDialog, CDialog)
 	ON_WM_LBUTTONUP()
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -171,6 +172,8 @@ void DisplayDialog::UpdateCurSelDialogState()
 		mainDialog->m_CameraTitleEdit.SetWindowText(m_Camera.name);
 		mainDialog->m_CameraTypeEdit.SetWindowText(m_Camera.type);
 	}
+
+	DrawBorder();
 }
 
 
@@ -181,4 +184,74 @@ void DisplayDialog::FlashSelf()
 
 	m_DisplayState = IS_BLANK;
 	m_IsOpenSound = false;
+}
+
+
+void DisplayDialog::DrawBorder()
+{
+	if (!IsWindowVisible()) return;
+
+	CPen* pOldPen = nullptr;
+	CPen* pPen = nullptr;
+
+	CRect rc(0, 0, 0, 0);
+	GetClientRect(&rc);
+
+	if(m_ParentDialog->m_CurSelDisplayDialog == this)
+	{
+		pPen = &m_FocusPen;
+	}
+	else
+	{
+		pPen = &m_FocusNotPen;
+	}
+
+	rc.right += DISPLAY_INTERVAL / 2;
+	rc.bottom += DISPLAY_INTERVAL / 2;
+
+	CDC* pDC = GetDC();
+	ASSERT(pDC);
+
+	pDC->SelectStockObject(NULL_BRUSH);
+	pOldPen = pDC->SelectObject(pPen);
+	pDC->Rectangle(&rc);
+
+	if (pOldPen)
+	{
+		pDC->SelectObject(pOldPen);
+	}
+
+	ReleaseDC(pDC);
+}
+
+
+void DisplayDialog::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO: 在此处添加消息处理程序代码
+	// 不为绘图消息调用 CDialog::OnPaint()
+
+	DrawBorder();
+
+	BOOL bRetVal = FALSE;
+	CDC bmpDC;
+	CBitmap* pOldBitmap = nullptr;
+	BITMAP stBmp;
+
+	if (m_DisplayState == IS_BLANK)
+	{
+		m_ParentDialog->m_bmpBackground.GetBitmap(&stBmp);
+
+		bRetVal = bmpDC.CreateCompatibleDC(nullptr);
+		if (FALSE == bRetVal)
+		{
+			return;
+		}
+
+		pOldBitmap = bmpDC.SelectObject(&m_ParentDialog->m_bmpBackground);
+		//dc.BitBlt((m_width / 2), )
+
+		bmpDC.SelectObject(pOldBitmap);
+		bmpDC.DeleteDC();
+	}
 }

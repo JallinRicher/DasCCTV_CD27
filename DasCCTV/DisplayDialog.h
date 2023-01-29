@@ -29,13 +29,17 @@ public:
 	void EnableSound(bool Flag);
 	bool IsOpenSound() const;
 
-public:
 	virtual BOOL OnInitDialog();
+	afx_msg void OnPaint();
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+
+private:
+	void DrawBorder();
+
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -58,4 +62,9 @@ private:
 
 	DisplayState m_DisplayState;			// 窗口的播放状态
 	bool m_IsOpenSound;						// 是否打开声音
+
+	CBrush m_BackgroundBrush;
+	CPen m_FocusPen;
+	CPen m_FocusNotPen;
+
 };

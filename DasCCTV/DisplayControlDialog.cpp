@@ -7,7 +7,6 @@
 #include "afxdialogex.h"
 #include "DisplayControlDialog.h"
 
-
 // DisplayControlDialog 对话框
 
 IMPLEMENT_DYNAMIC(DisplayControlDialog, CDialog)
@@ -68,6 +67,8 @@ BOOL DisplayControlDialog::OnInitDialog()
 		m_DisplayDialogs[i]->Create(IDD_DISPLATCONTROLDIALOG, this);
 		m_DisplayDialogs[i]->ShowWindow(SW_HIDE);
 	}
+
+	m_bmpBackground.LoadBitmap(IDB_BITMAP_DISPLAYBG);		// 先这样
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE

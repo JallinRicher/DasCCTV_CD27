@@ -39,6 +39,8 @@ public:
 	int GetLayoutState() const;
 	DisplayDialog* GetCurSelDisplayDialog() const;
 
+	virtual BOOL OnInitDialog();
+
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DISPLATCONTROLDIALOG };
@@ -50,15 +52,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
-	virtual BOOL OnInitDialog();
-
-public:
 	MainDialog* m_ParentDialog;
 	JSDCCTV* m_JsdCCTV;
+	DisplayDialog* m_CurSelDisplayDialog;
+
+	CBitmap m_bmpBackground;
 
 private:
 	DisplayDialog* m_DisplayDialogs[MAX_DISPLAY_CNT];
-	DisplayDialog* m_CurSelDisplayDialog;
 	OpenSoundDialog m_SoundDialog;
 
 	int m_LayoutState;
