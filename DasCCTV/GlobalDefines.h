@@ -18,7 +18,7 @@ class JSDCCTV;
 #define MAX_DISPLAYMODE_CNT			32
 #define MAINDIALOG_WIDTH			1920
 #define MAINDIALOG_HEIGHT			1080
-#define DISPLAY_INTERVAL			5
+#define DISPLAY_INTERVAL			6
 #define IPADDR_LEN					64
 #define PASSWORD_LEN				64
 #define CAMERA_CODE_LEN				128
@@ -83,7 +83,8 @@ typedef enum
 
 typedef enum
 {
-	FULLSCREEN = 1,
+	FULLSCREEN = 0,
+	ONE_DIALOG = 1,
 	FOUR_DIALOG = 4,
 	NINE_DIALOG = 9,
 	SIXTEEN_DIALOG = 16
@@ -415,6 +416,15 @@ typedef struct _Camera_Callback_
 
 }TypeCameraCallback;
 
+
+typedef struct _DspCtlDlgAttibute
+{
+	int m_X;
+	int m_Y;
+	int m_Width;
+	int m_Height;
+
+}DspCtlDlgAttibute;
 
 
 void CharToWideChar(LPSTR pChar, ULONG ulCharSize, BOOL bIsUTF8, LPCWSTR pWideChar);

@@ -27,8 +27,9 @@ DisplayDialog::DisplayDialog(DisplayControlDialog* ParentDialog, CWnd* pParent /
 
 DisplayDialog::~DisplayDialog()
 {
-	m_ParentDialog = nullptr;
 	m_ParentDialog->m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_PlayHD);
+
+	m_ParentDialog = nullptr;
 }
 
 

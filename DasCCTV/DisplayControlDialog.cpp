@@ -31,9 +31,6 @@ DisplayControlDialog::DisplayControlDialog(MainDialog* ParentDialog, CWnd* pPare
 
 DisplayControlDialog::~DisplayControlDialog()
 {
-	m_ParentDialog = nullptr;
-	m_CurSelDisplayDialog = nullptr;
-
 	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
 	{
 		if (m_DisplayDialogs[i])
@@ -42,6 +39,9 @@ DisplayControlDialog::~DisplayControlDialog()
 			m_DisplayDialogs[i] = nullptr;
 		}
 	}
+
+	m_ParentDialog = nullptr;
+	m_CurSelDisplayDialog = nullptr;
 }
 
 void DisplayControlDialog::DoDataExchange(CDataExchange* pDX)
@@ -88,13 +88,26 @@ void DisplayControlDialog::FullScreen()
 		m_DisplayDialogs[i]->ShowWindow(FALSE);
 	}
 
-	m_LayoutState = FULLSCREEN;
-	int x = DISPLAY_INTERVAL;
-	int y = DISPLAY_INTERVAL;;
-	int Width = (m_Width - (2 * DISPLAY_INTERVAL));
-	int Height = (m_Height - (2 * DISPLAY_INTERVAL));
-	m_CurSelDisplayDialog->MoveWindow(x, y, Width, Height, TRUE);
-	m_CurSelDisplayDialog->ShowWindow(SW_SHOW);
+	if (m_LayoutState == FULLSCREEN)
+	{
+		// 退出全屏
+
+		return;
+	}
+	else
+	{
+		m_LayoutState = FULLSCREEN;
+		int cx, cy;
+		cx = GetSystemMetrics(SM_CXSCREEN);
+		cy = GetSystemMetrics(SM_CYSCREEN);
+
+		CRect WindowRect;
+		WindowRect.BottomRight() = CPoint(cx, cy);
+		WindowRect.TopLeft() = CPoint(0, 0);
+
+		m_CurSelDisplayDialog->MoveWindow(&WindowRect);
+		m_CurSelDisplayDialog->ShowWindow(SW_SHOW);
+	}
 }
 
 
@@ -105,7 +118,7 @@ void DisplayControlDialog::OneDisplayLayout()
 		m_DisplayDialogs[i]->ShowWindow(FALSE);
 	}
 
-	m_LayoutState = FULLSCREEN;
+	m_LayoutState = ONE_DIALOG;
 	int x = DISPLAY_INTERVAL;
 	int y = DISPLAY_INTERVAL;;
 	int Width = (m_Width - (2 * DISPLAY_INTERVAL));

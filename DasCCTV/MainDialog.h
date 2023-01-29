@@ -36,6 +36,32 @@ public:
 	void SetProgressCtrlText(int HoldMiliseconds, const char* const _Format, ...);
 	void SetProgressPos(int Pos) { m_MainDialogProgress.SetPos(Pos); }
 
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnCbnSelchangeComboLayout();
+	afx_msg void OnCbnSelchangeComboStation();
+	afx_msg void OnCbnSelchangeComboArea();
+	afx_msg void OnCbnSelchangeComboCamera();
+	afx_msg void OnCbnSelchangeComboSound();
+	afx_msg void OnBnClickedButtonFullscreen();
+	afx_msg void OnCbnSelchangeComboDisplaymode();
+
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult);
+
+	afx_msg void OnBnClickedButtonAdddspmode();
+	afx_msg void OnBnClickedButtonDeldspmode();
+	afx_msg void OnBnClickedButtonModifydspmode();
+	afx_msg void OnBnClickedButtonStartdspmode();
+	afx_msg void OnBnClickedButtonAddswitchmode();
+	afx_msg void OnBnClickedButtonDelswitchmode();
+	afx_msg void OnBnClickedButtonModifyswitchmode();
+	afx_msg void OnBnClickedButtonStartswitchmode();
+
+	afx_msg void OnPaint();
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+
+	virtual BOOL OnInitDialog();
+
 private:
 	void InitCCTV();
 	void InitFilePath();
@@ -45,6 +71,9 @@ private:
 	void InitAllComboBox();
 	void InitButton();
 	void InitPtzControlButton();
+
+	void LoadBackground();
+	HBRUSH SetStaticTextBG(CDC* pDC);
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
@@ -78,29 +107,6 @@ public:
 	CStatic m_MainDialogProgressText;
 	CProgressCtrl m_MainDialogProgress;
 
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	afx_msg void OnCbnSelchangeComboLayout();
-	afx_msg void OnCbnSelchangeComboStation();
-	afx_msg void OnCbnSelchangeComboArea();
-	afx_msg void OnCbnSelchangeComboCamera();
-	afx_msg void OnCbnSelchangeComboSound();
-	afx_msg void OnBnClickedButtonFullscreen();
-	afx_msg void OnCbnSelchangeComboDisplaymode();
-
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult);
-
-	afx_msg void OnBnClickedButtonAdddspmode();
-	afx_msg void OnBnClickedButtonDeldspmode();
-	afx_msg void OnBnClickedButtonModifydspmode();
-	afx_msg void OnBnClickedButtonStartdspmode();
-	afx_msg void OnBnClickedButtonAddswitchmode();
-	afx_msg void OnBnClickedButtonDelswitchmode();
-	afx_msg void OnBnClickedButtonModifyswitchmode();
-	afx_msg void OnBnClickedButtonStartswitchmode();
-
-	virtual BOOL OnInitDialog();
-
 private:
 	bool m_IsLogin;
 	bool m_IsFirstLogin;
@@ -116,6 +122,11 @@ private:
 	UserInfo m_DCRUserInfo;
 	DisplayControlDialog* m_DisplayControl;
 	
+	CBrush m_BackgroundBrush;
+	CBitmap m_BackgroundBitmap;
+	CDC m_BackgroundDC;
+
+	DspCtlDlgAttibute m_dspCtlDlgAttr;
 
 	int TestFlag{ 0 };
 

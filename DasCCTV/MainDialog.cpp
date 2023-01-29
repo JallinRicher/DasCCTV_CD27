@@ -209,6 +209,8 @@ BEGIN_MESSAGE_MAP(MainDialog, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_STARTSWITCHMODE, &MainDialog::OnBnClickedButtonStartswitchmode)
 	ON_WM_TIMER()
 	ON_CBN_SELCHANGE(IDC_COMBO_DISPLAYMODE, &MainDialog::OnCbnSelchangeComboDisplaymode)
+	ON_WM_PAINT()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -342,8 +344,13 @@ void MainDialog::InitDisplayControlDialog()
 
 	CRect oRect;
 	GetClientRect(&oRect);
-	m_DisplayControl->MoveWindow(35, 27, oRect.Width() - 640, oRect.Height() - 300, TRUE);
-	m_DisplayControl->SetDialogRect(35, 27, oRect.Width() - 640, oRect.Height() - 320);
+	m_dspCtlDlgAttr.m_X = oRect.Width() / 60;
+	m_dspCtlDlgAttr.m_Y = oRect.Height() / 50;
+	m_dspCtlDlgAttr.m_Width = (oRect.Width() * 2 / 3) * (8 / 5);
+	m_dspCtlDlgAttr.m_Height = (oRect.Height() * 3 / 4) * (8 / 5);
+
+	m_DisplayControl->MoveWindow(m_dspCtlDlgAttr.m_X, m_dspCtlDlgAttr.m_Y, m_dspCtlDlgAttr.m_Width, m_dspCtlDlgAttr.m_Height, TRUE);
+	m_DisplayControl->SetDialogRect(m_dspCtlDlgAttr.m_X, m_dspCtlDlgAttr.m_Y, m_dspCtlDlgAttr.m_Width, m_dspCtlDlgAttr.m_Height);
 	m_DisplayControl->DefaultDisplayLayout();
 	m_DisplayControl->ShowWindow(SW_SHOW);
 	m_DisplayControl->EnableWindow(TRUE);
@@ -356,6 +363,7 @@ void MainDialog::InitUIFrame()
 	InitButton();
 	InitAllComboBox();
 	InitDisplayControlDialog();
+	LoadBackground();
 	
 	m_MainDialogProgress.SetPos(0);
 	m_MainDialogProgress.ShowWindow(FALSE);
@@ -830,4 +838,82 @@ void MainDialog::SetProgressCtrlText(int HoldMiliseconds, const char* const _For
 	m_MainDialogProgressText.SetWindowTextA("");
 
 	delete[] _buffer;
+}
+
+
+void MainDialog::LoadBackground()
+{
+	CBitmap tempBitmap;
+	tempBitmap.LoadBitmap(IDB_BITMAP_MAINBG);
+
+	m_BackgroundBitmap.Attach(tempBitmap);
+
+	CDC* pDC = GetDC();
+	m_BackgroundDC.CreateCompatibleDC(pDC);
+	ReleaseDC(pDC);
+
+	m_BackgroundDC.SelectObject(&m_BackgroundBitmap);
+}
+
+
+void MainDialog::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO: 在此处添加消息处理程序代码
+	// 不为绘图消息调用 CDialog::OnPaint()
+
+	CRect rect{ 0, 0, 0, 0 };
+	GetClientRect(&rect);
+	BITMAP tempBmp;
+	m_BackgroundBitmap.GetBitmap(&tempBmp);
+	dc.StretchBlt(0, 0, rect.Width(), rect.Height(), &m_BackgroundDC,
+				  0, 0, tempBmp.bmWidth, tempBmp.bmHeight, SRCCOPY);
+}
+
+
+HBRUSH MainDialog::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  在此更改 DC 的任何特性
+	int CtrlID = pWnd->GetDlgCtrlID();
+	switch (CtrlID)
+	{
+	case IDC_STATIC_AREA:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_CAMERA:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_CAMERAID:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_CAMERATYPE:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_DISPLAYMODE:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_LAYOUT:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_MAINPROGRESSINFO:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_NOVIDEOPIC:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_PRESET:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_SOUND:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_STATION:
+		return SetStaticTextBG(pDC);
+	case IDC_STATIC_SWITCHMODE:
+		return SetStaticTextBG(pDC);
+	default: break;
+	}
+
+	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
+	return hbr;
+}
+
+
+HBRUSH MainDialog::SetStaticTextBG(CDC* pDC)
+{
+	pDC->SetBkMode(TRANSPARENT);
+	pDC->SetTextColor(RGB(0, 0, 0));
+	return (HBRUSH)GetStockObject(HOLLOW_BRUSH);
 }
