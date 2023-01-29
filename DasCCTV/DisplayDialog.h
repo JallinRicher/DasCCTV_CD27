@@ -63,8 +63,5 @@ private:
 	DisplayState m_DisplayState;			// 窗口的播放状态
 	bool m_IsOpenSound;						// 是否打开声音
 
-	CBrush m_BackgroundBrush;
-	CPen m_FocusPen;
-	CPen m_FocusNotPen;
-
+	CBitmap m_NoVideoBitmap;
 };

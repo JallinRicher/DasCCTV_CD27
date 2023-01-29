@@ -83,32 +83,34 @@ void DisplayControlDialog::FullScreen()
 		return;
 	}
 
-	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
-	{
-		m_DisplayDialogs[i]->ShowWindow(FALSE);
-	}
+	//for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
+	//{
+	//	m_DisplayDialogs[i]->ShowWindow(FALSE);
+	//}
 
-	if (m_LayoutState == FULLSCREEN)
-	{
-		// 退出全屏
+	//if (m_LayoutState == FULLSCREEN)
+	//{
+	//	// 退出全屏
 
-		return;
-	}
-	else
-	{
-		CRect WindowRect;
-		CRect ClientRect;
-		GetWindowRect(&WindowRect);
-		m_ParentDialog->ScreenToClient(&WindowRect);
-		CWnd* pDeskWnd = GetDesktopWindow();
-		pDeskWnd->GetClientRect(&ClientRect);
+	//	return;
+	//}
+	//else
+	//{
+	//	CRect WindowRect;
+	//	CRect ClientRect;
+	//	GetWindowRect(&WindowRect);
+	//	m_ParentDialog->ScreenToClient(&WindowRect);
+	//	CWnd* pDeskWnd = GetDesktopWindow();
+	//	pDeskWnd->GetClientRect(&ClientRect);
 
-		SetParent(pDeskWnd);
-		ClientRect.left += ClientRect.Width();
-		ClientRect.right += ClientRect.Width();
-		MoveWindow(ClientRect, TRUE);
-		m_LayoutState = FULLSCREEN;
-	}
+	//	SetParent(pDeskWnd);
+	//	ClientRect.left += ClientRect.Width();
+	//	ClientRect.right += ClientRect.Width();
+	//	MoveWindow(ClientRect, TRUE);
+	//	m_LayoutState = FULLSCREEN;
+	//}
+
+	OneDisplayLayout();
 }
 
 
@@ -129,21 +131,23 @@ void DisplayControlDialog::OneDisplayLayout()
 }
 
 
-void DisplayControlDialog::FourDisplayLayout()
+void DisplayControlDialog::ChangeLayout(int Layout)
 {
 	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
 	{
 		m_DisplayDialogs[i]->ShowWindow(FALSE);
 	}
 
-	m_LayoutState = FOUR_DIALOG;
+	CRect WindowRect;
+	GetClientRect(&WindowRect);
+
 	int _index = 0;
 	int x = 0;
 	int y = DISPLAY_INTERVAL;
-	int Row = (int)sqrt(m_LayoutState);
+	int Row = (int)sqrt(Layout);
 	int Column = Row;
-	int Width = (m_Width - ((Row + 1) * DISPLAY_INTERVAL)) / Row;
-	int Height = (m_Height - ((Row + 1) * DISPLAY_INTERVAL)) / Row;
+	int Width = (WindowRect.Width() - ((Row + 1) * DISPLAY_INTERVAL)) / Row;
+	int Height = (WindowRect.Height() - ((Row + 1) * DISPLAY_INTERVAL)) / Row;
 	for (int i = 0; i < Row; ++i)
 	{
 		x = DISPLAY_INTERVAL;
@@ -156,66 +160,26 @@ void DisplayControlDialog::FourDisplayLayout()
 		}
 		y += Height + DISPLAY_INTERVAL;
 	}
+
+	m_LayoutState = Layout;
+}
+
+
+void DisplayControlDialog::FourDisplayLayout()
+{
+	ChangeLayout(FOUR_DIALOG);
 }
 
 
 void DisplayControlDialog::NineDisplayLayout()
 {
-	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
-	{
-		m_DisplayDialogs[i]->ShowWindow(FALSE);
-	}
-
-	m_LayoutState = NINE_DIALOG;
-	int _index = 0;
-	int x = 0;
-	int y = DISPLAY_INTERVAL;
-	int Row = (int)sqrt(m_LayoutState);
-	int Column = Row;
-	int Width = (m_Width - ((Row + 1) * DISPLAY_INTERVAL)) / Row;
-	int Height = (m_Height - ((Row + 1) * DISPLAY_INTERVAL)) / Row;
-	for (int i = 0; i < Row; ++i)
-	{
-		x = DISPLAY_INTERVAL;
-		for (int j = 0; j < Column; j++)
-		{
-			m_DisplayDialogs[_index]->MoveWindow(x, y, Width, Height, TRUE);
-			m_DisplayDialogs[_index]->ShowWindow(SW_SHOW);
-			x += Width + DISPLAY_INTERVAL;
-			_index++;
-		}
-		y += Height + DISPLAY_INTERVAL;
-	}
+	ChangeLayout(NINE_DIALOG);
 }
 
 
 void DisplayControlDialog::SixteenDisplayLayout()
 {
-	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
-	{
-		m_DisplayDialogs[i]->ShowWindow(FALSE);
-	}
-
-	m_LayoutState = SIXTEEN_DIALOG;
-	int _index = 0;
-	int x = 0;
-	int y = DISPLAY_INTERVAL;
-	int Row = (int)sqrt(m_LayoutState);
-	int Column = Row;
-	int Width = (m_Width - ((Row + 1) * DISPLAY_INTERVAL)) / Row;
-	int Height = (m_Height - ((Row + 1) * DISPLAY_INTERVAL)) / Row;
-	for (int i = 0; i < Row; ++i)
-	{
-		x = DISPLAY_INTERVAL;
-		for (int j = 0; j < Column; j++)
-		{
-			m_DisplayDialogs[_index]->MoveWindow(x, y, Width, Height, TRUE);
-			m_DisplayDialogs[_index]->ShowWindow(SW_SHOW);
-			x += Width + DISPLAY_INTERVAL;
-			_index++;
-		}
-		y += Height + DISPLAY_INTERVAL;
-	}
+	ChangeLayout(SIXTEEN_DIALOG);
 }
 
 

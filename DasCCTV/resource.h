@@ -49,14 +49,18 @@
 #define IDB_BITMAP17                    224
 #define IDB_BITMAP18                    225
 #define IDB_BITMAP19                    226
+#define IDB_BITMAP_SWITCH               226
 #define IDB_BITMAP20                    227
+#define IDB_BITMAP_STATION              227
 #define IDB_BITMAP21                    228
 #define IDC_MAINPROGRESS                228
 #define IDB_BITMAP22                    229
 #define IDB_BITMAP23                    230
 #define IDC_STATIC_MAINPROGRESSINFO     230
+#define IDB_BITMAP_CLOSESOUND           230
 #define IDB_BITMAP24                    231
 #define IDC_STATIC_NOVIDEOPIC           231
+#define IDB_BITMAP_OPENSOUND            231
 #define IDB_BITMAP25                    232
 #define IDB_BITMAP26                    233
 #define IDC_COMBO1                      233
@@ -92,8 +96,10 @@
 #define IDC_STATIC_CAMERAID             248
 #define IDC_STATIC_TIPS                 248
 #define IDB_BITMAP_DISPLAYBG            248
+#define IDB_BITMAP_NOVIDEO              248
 #define IDC_EDIT_CAMERATYPE             249
 #define IDB_BITMAP_MAINBG               249
+#define IDC_STATIC_NOVIDEO              249
 #define IDC_STATIC_CAMERATYPE           250
 #define IDB_BITMAP_PTZDOWN              250
 #define IDB_BITMAP_PTZUPMASK            251
@@ -107,7 +113,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        255
 #define _APS_NEXT_COMMAND_VALUE         32768
-#define _APS_NEXT_CONTROL_VALUE         249
+#define _APS_NEXT_CONTROL_VALUE         250
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

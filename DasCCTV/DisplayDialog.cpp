@@ -99,6 +99,7 @@ void DisplayDialog::OnLButtonDblClk(UINT nFlags, CPoint point)
 			break;
 		}
 	}
+
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
 
@@ -140,6 +141,26 @@ BOOL DisplayDialog::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
+	CRect WindowRect(0, 0, 0, 0);
+	GetClientRect(&WindowRect);
+	WindowRect.right += DISPLAY_INTERVAL / 2;
+	WindowRect.bottom += DISPLAY_INTERVAL / 2;
+
+	CBrush BackgroundBrush{ RGB(202, 64, 128) };
+	CBrush* pOldBrush = nullptr;
+
+	CDC* pDC = GetDC();
+	ASSERT(pDC);
+
+	pDC->SelectStockObject(BLACK_BRUSH);
+	 //pDC->SelectObject(&BackgroundBrush);
+	pDC->Rectangle(&WindowRect);
+
+	if (pOldBrush)
+	{
+		pDC->SelectObject(pOldBrush);
+	}
+	ReleaseDC(pDC);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -192,37 +213,30 @@ void DisplayDialog::DrawBorder()
 {
 	if (!IsWindowVisible()) return;
 
-	CPen* pOldPen = nullptr;
-	CPen* pPen = nullptr;
-
-	CRect rc(0, 0, 0, 0);
-	GetClientRect(&rc);
-
-	if(m_ParentDialog->m_CurSelDisplayDialog == this)
+	if (m_ParentDialog->m_CurSelDisplayDialog == this)
 	{
-		pPen = &m_FocusPen;
+		CBrush BorderBrush{ RGB(101, 64, 128) };
+		CBrush* pOldBrush = nullptr;
+
+		CRect rc(0, 0, 0, 0);
+		GetClientRect(&rc);
+
+		rc.right += DISPLAY_INTERVAL / 2;
+		rc.bottom += DISPLAY_INTERVAL / 2;
+
+		CDC* pDC = GetDC();
+		ASSERT(pDC);
+
+		pOldBrush = pDC->SelectObject(&BorderBrush);
+		pDC->Rectangle(&rc);
+
+		if (pOldBrush)
+		{
+			pDC->SelectObject(pOldBrush);
+		}
+
+		ReleaseDC(pDC);
 	}
-	else
-	{
-		pPen = &m_FocusNotPen;
-	}
-
-	rc.right += DISPLAY_INTERVAL / 2;
-	rc.bottom += DISPLAY_INTERVAL / 2;
-
-	CDC* pDC = GetDC();
-	ASSERT(pDC);
-
-	pDC->SelectStockObject(NULL_BRUSH);
-	pOldPen = pDC->SelectObject(pPen);
-	pDC->Rectangle(&rc);
-
-	if (pOldPen)
-	{
-		pDC->SelectObject(pOldPen);
-	}
-
-	ReleaseDC(pDC);
 }
 
 
