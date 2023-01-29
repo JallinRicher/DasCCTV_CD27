@@ -410,6 +410,7 @@ void MainDialog::InitAllComboBox()
 void MainDialog::InitButton()
 {
 	InitPtzControlButton();
+	m_FullScreenButton.EnableWindow(FALSE);			// 暂时禁用全屏功能
 }
 
 

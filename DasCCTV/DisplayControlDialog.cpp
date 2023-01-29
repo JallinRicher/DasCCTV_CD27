@@ -96,17 +96,18 @@ void DisplayControlDialog::FullScreen()
 	}
 	else
 	{
-		m_LayoutState = FULLSCREEN;
-		int cx, cy;
-		cx = GetSystemMetrics(SM_CXSCREEN);
-		cy = GetSystemMetrics(SM_CYSCREEN);
-
 		CRect WindowRect;
-		WindowRect.BottomRight() = CPoint(cx, cy);
-		WindowRect.TopLeft() = CPoint(0, 0);
+		CRect ClientRect;
+		GetWindowRect(&WindowRect);
+		m_ParentDialog->ScreenToClient(&WindowRect);
+		CWnd* pDeskWnd = GetDesktopWindow();
+		pDeskWnd->GetClientRect(&ClientRect);
 
-		m_CurSelDisplayDialog->MoveWindow(&WindowRect);
-		m_CurSelDisplayDialog->ShowWindow(SW_SHOW);
+		SetParent(pDeskWnd);
+		ClientRect.left += ClientRect.Width();
+		ClientRect.right += ClientRect.Width();
+		MoveWindow(ClientRect, TRUE);
+		m_LayoutState = FULLSCREEN;
 	}
 }
 
