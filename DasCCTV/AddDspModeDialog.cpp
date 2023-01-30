@@ -41,8 +41,8 @@ void AddDspModeDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_REMOVEFROMDSPMODE, m_RemoveFromDspModeButton);
 	DDX_Control(pDX, IDC_EDIT_MODENAME, m_ModeNameEdit);
 	DDX_Control(pDX, IDC_STATIC_TIPS, m_TipsStatic);
-	DDX_Control(pDX, IDC_COMBO1, m_StationComboBox);
-	DDX_Control(pDX, IDC_COMBO2, m_AreaComboBox);
+	DDX_Control(pDX, IDC_COMBO_ADDDSP_STATION, m_StationComboBox);
+	DDX_Control(pDX, IDC_COMBO_ADDDSP_AREA, m_AreaComboBox);
 }
 
 

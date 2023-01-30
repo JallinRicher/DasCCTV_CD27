@@ -47,7 +47,7 @@ void BitmapComboBox::AddOneRow(LPCTSTR RowName)
 	{
 		return;
 	}
-
+	
 	AddString(RowName);
 }
 

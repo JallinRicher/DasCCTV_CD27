@@ -590,7 +590,7 @@ void MainDialog::OnBnClickedButtonAdddspmode()
 	//station = m_StationComboBox.GetCurSelStation();
 	//vecAreas = m_AreaComboBox.GetAllAreas();
 
-	station.name = "深圳地铁";
+	station.name = "Station";
 	for (int i = 0; i < 10; ++i)
 	{
 		TypeArea _area;
@@ -625,8 +625,8 @@ void MainDialog::OnBnClickedButtonAdddspmode()
 			}
 			else
 			{
-				_dspModCameraList += CameraUrl + ",";
-				_dspModCamTypeList += CameraType + ",";
+				_dspModCameraList += CameraUrl + _T(",");
+				_dspModCamTypeList += CameraType + _T(",");
 			}
 		}
 		addDspModDlg->m_ModeNameEdit.GetWindowText(_dspModName);
@@ -662,7 +662,6 @@ void MainDialog::OnBnClickedButtonDeldspmode()
 	}
 	if (MessageBox(_T("确认删除当前显示模式 ? "), _T("DasCCTV"), MB_ICONASTERISK | MB_OKCANCEL) == IDOK)
 	{
-		// 删除模式
 		CString _dspModNameKey;
 		CString _dspModCameraKey;
 		CString _dspModCamTypeKey;

@@ -58,4 +58,5 @@ public:
 private:
 	JSDCCTV* m_JsdCCTV;
 	MainDialog* m_ParentDialog;
+
 };

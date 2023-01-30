@@ -68,8 +68,6 @@ BOOL DisplayControlDialog::OnInitDialog()
 		m_DisplayDialogs[i]->ShowWindow(SW_HIDE);
 	}
 
-	m_bmpBackground.LoadBitmap(IDB_BITMAP_DISPLAYBG);		// 先这样
-
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
 }

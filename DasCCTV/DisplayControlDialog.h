@@ -59,8 +59,6 @@ public:
 	JSDCCTV* m_JsdCCTV;
 	DisplayDialog* m_CurSelDisplayDialog;
 
-	CBitmap m_bmpBackground;
-
 private:
 	DisplayDialog* m_DisplayDialogs[MAX_DISPLAY_CNT];
 	OpenSoundDialog m_SoundDialog;
