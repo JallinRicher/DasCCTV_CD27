@@ -328,7 +328,7 @@ BOOL MainDialog::OnInitDialog()
 	CString CCTVLogFile = m_LogFilePath;
 	CCTVLogFile.Append("\\DasCCTV_LOG.LOG");
 	SetLogFile(CCTVLogFile);
-
+	
 	SetTimer(1, 2000, nullptr);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -655,7 +655,65 @@ void MainDialog::OnBnClickedButtonAdddspmode()
 void MainDialog::OnBnClickedButtonDeldspmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	
+	if (m_DisplayComboBox.GetCurSel() == -1)
+	{
+		MessageBox(_T("当前未选择显示模式"), _T("DasCCTV"), MB_ICONEXCLAMATION | MB_OK);
+		return;
+	}
+	if (MessageBox(_T("确认删除当前显示模式 ? "), _T("DasCCTV"), MB_ICONASTERISK | MB_OKCANCEL) == IDOK)
+	{
+		// 删除模式
+		CString _dspModNameKey;
+		CString _dspModCameraKey;
+		CString _dspModCamTypeKey;
+
+		int CurSelIndex = m_DisplayComboBox.GetCurSel();
+		int ModeCount = m_DisplayComboBox.GetCount();
+		for (int i = 0; i < ModeCount - 1; ++i)
+		{
+			if (i < CurSelIndex)
+			{
+				continue;
+			}
+
+			TypeDisplayMode _DisplayMode = m_DisplayComboBox.GetDisplayMode(i + 1);
+
+			_dspModNameKey.Format("ModeName%d", i);
+			WritePrivateProfileString(SECTION_DISPLAYMODE, _dspModNameKey, _DisplayMode.ModeName, m_ConfigFilePath);
+
+			CString tempModCameras;
+			for (int j = 0; j < _DisplayMode.CameraNumber; ++j)
+			{
+				if (j == _DisplayMode.CameraNumber - 1)
+				{
+					tempModCameras += _DisplayMode.ModeCamera[j];
+					break;
+				}
+				tempModCameras += _DisplayMode.ModeCamera[j] + _T(",");
+			}
+
+			_dspModCameraKey.Format("ModeCamera%d", i);
+			WritePrivateProfileString(SECTION_DISPLAYMODE, _dspModCameraKey, tempModCameras, m_ConfigFilePath);
+
+			CString tempCamTypes;
+			for (int j = 0; j < _DisplayMode.CameraNumber; ++j)
+			{
+				if (j == _DisplayMode.CameraNumber - 1)
+				{
+					tempCamTypes += _DisplayMode.CameraType[j];
+					break;
+				}
+				tempCamTypes += _DisplayMode.CameraType[j] + _T(",");
+			}
+
+			_dspModCamTypeKey.Format("CameraType%d", i);
+			WritePrivateProfileString(SECTION_DISPLAYMODE, _dspModCamTypeKey, tempCamTypes, m_ConfigFilePath);
+		}
+
+		CString ModeCnt;
+		ModeCnt.Format("%d", ModeCount - 1);
+		WritePrivateProfileString(SECTION_DISPLAYMODE, CONFIG_KEY_MODECOUNT, ModeCnt, m_ConfigFilePath);
+	}
 }
 
 
@@ -674,7 +732,7 @@ void MainDialog::OnBnClickedButtonStartdspmode()
 
 	m_MainDialogProgress.SetPos(0);
 	m_MainDialogProgress.ShowWindow(TRUE);
-	SetProgressCtrlText(800, "正在调用显示模式【%s】，摄像头总数：%d", _curMode.ModeName, _cameraNum);
+	SetProgressCtrlText(800, _T("正在调用显示模式【%s】，摄像头总数：%d"), _curMode.ModeName, _cameraNum);
 
 	if (_cameraNum == 1)
 	{
@@ -704,13 +762,13 @@ void MainDialog::OnBnClickedButtonStartdspmode()
 		m_DisplayControl->StopMonitor(i);
 		if (!m_DisplayControl->StartMonitor(AvPath, i))
 		{
-			// LOG
+			InsertLog(LOGLEVEL::FATAL, "Start monitor failed. AvPath = %s, mode number = %d", AvPath, i);
 		}
 		m_MainDialogProgress.SetPos(Pos);
 	}
 
 	m_MainDialogProgress.SetPos(100);
-	SetProgressCtrlText(500, "显示模式调用完成");
+	SetProgressCtrlText(500, _T("显示模式调用完成"));
 	m_MainDialogProgress.ShowWindow(FALSE);
 }
 

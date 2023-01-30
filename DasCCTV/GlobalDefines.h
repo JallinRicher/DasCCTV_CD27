@@ -417,14 +417,14 @@ typedef struct _Camera_Callback_
 }TypeCameraCallback;
 
 
-typedef struct _DspCtlDlgAttibute
+typedef struct _DspCtlDlgAttribute
 {
 	int m_X;
 	int m_Y;
 	int m_Width;
 	int m_Height;
 
-}DspCtlDlgAttibute;
+}DspCtlDlgAttribute;
 
 
 void CharToWideChar(LPSTR pChar, ULONG ulCharSize, BOOL bIsUTF8, LPCWSTR pWideChar);

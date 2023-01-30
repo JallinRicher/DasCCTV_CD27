@@ -18,6 +18,7 @@ public:
     TypeMonitor GetCurSelMonitor() const { return m_vecMonitors[GetCurSel()]; }
     TypeAudio GetCurSelAudio() const { return m_vecAudios[GetCurSel()]; }
     TypeDisplayMode GetCurSelDisplayMode() const { return m_vecDisplayModes[GetCurSel()]; }
+    TypeDisplayMode GetDisplayMode(int index) const { return m_vecDisplayModes[index]; }
     std::vector<TypeStation> GetAllStations() const { return m_vecStations; }
     std::vector<TypeArea> GetAllAreas() const { return m_vecAreas; }
     std::vector<TypeDisplayMode> GetAllDisplayMode() const { return m_vecDisplayModes; }

@@ -45,9 +45,6 @@ public:
 	afx_msg void OnBnClickedButtonFullscreen();
 	afx_msg void OnCbnSelchangeComboDisplaymode();
 
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult);
-
 	afx_msg void OnBnClickedButtonAdddspmode();
 	afx_msg void OnBnClickedButtonDeldspmode();
 	afx_msg void OnBnClickedButtonModifydspmode();
@@ -57,6 +54,8 @@ public:
 	afx_msg void OnBnClickedButtonModifyswitchmode();
 	afx_msg void OnBnClickedButtonStartswitchmode();
 
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnNMCustomdrawMainprogress(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnPaint();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 
@@ -126,7 +125,7 @@ private:
 	CBitmap m_BackgroundBitmap;
 	CDC m_BackgroundDC;
 
-	DspCtlDlgAttibute m_dspCtlDlgAttr;
+	DspCtlDlgAttribute m_dspCtlDlgAttr;
 
 	int TestFlag{ 0 };
 
