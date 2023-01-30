@@ -141,26 +141,7 @@ BOOL DisplayDialog::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
-	CRect WindowRect(0, 0, 0, 0);
-	GetClientRect(&WindowRect);
-	WindowRect.right += DISPLAY_INTERVAL / 2;
-	WindowRect.bottom += DISPLAY_INTERVAL / 2;
-
-	CBrush BackgroundBrush{ RGB(202, 64, 128) };
-	CBrush* pOldBrush = nullptr;
-
-	CDC* pDC = GetDC();
-	ASSERT(pDC);
-
-	pDC->SelectStockObject(BLACK_BRUSH);
-	 //pDC->SelectObject(&BackgroundBrush);
-	pDC->Rectangle(&WindowRect);
-
-	if (pOldBrush)
-	{
-		pDC->SelectObject(pOldBrush);
-	}
-	ReleaseDC(pDC);
+	m_NoVideoBitmap.LoadBitmap(IDB_BITMAP_NOVIDEO);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -218,17 +199,17 @@ void DisplayDialog::DrawBorder()
 		CBrush BorderBrush{ RGB(101, 64, 128) };
 		CBrush* pOldBrush = nullptr;
 
-		CRect rc(0, 0, 0, 0);
-		GetClientRect(&rc);
+		CRect DspDlgRect(0, 0, 0, 0);
+		GetClientRect(&DspDlgRect);
 
-		rc.right += DISPLAY_INTERVAL / 2;
-		rc.bottom += DISPLAY_INTERVAL / 2;
+		DspDlgRect.right += DISPLAY_INTERVAL / 2;
+		DspDlgRect.bottom += DISPLAY_INTERVAL / 2;
 
 		CDC* pDC = GetDC();
 		ASSERT(pDC);
 
 		pOldBrush = pDC->SelectObject(&BorderBrush);
-		pDC->Rectangle(&rc);
+		pDC->DrawEdge(&DspDlgRect, BDR_SUNKENINNER | BDR_RAISEDOUTER, BF_RECT);
 
 		if (pOldBrush)
 		{
@@ -248,25 +229,33 @@ void DisplayDialog::OnPaint()
 
 	DrawBorder();
 
-	BOOL bRetVal = FALSE;
-	CDC bmpDC;
-	CBitmap* pOldBitmap = nullptr;
-	BITMAP stBmp;
 
 	if (m_DisplayState == IS_BLANK)
 	{
-		m_ParentDialog->m_bmpBackground.GetBitmap(&stBmp);
+		CRect DialogRect;
+		GetClientRect(&DialogRect);
 
-		bRetVal = bmpDC.CreateCompatibleDC(nullptr);
-		if (FALSE == bRetVal)
-		{
-			return;
-		}
+		CDC DialogDC;
+		DialogDC.CreateCompatibleDC(&dc);
 
-		pOldBitmap = bmpDC.SelectObject(&m_ParentDialog->m_bmpBackground);
-		//dc.BitBlt((m_width / 2), )
+		BITMAP NoVideoBitmap;
+		m_NoVideoBitmap.GetBitmap(&NoVideoBitmap);
+		
+		CBitmap* pOldBitmap = DialogDC.SelectObject(&m_NoVideoBitmap);
+		dc.StretchBlt(0, 0, DialogRect.Width(), DialogRect.Height(), &DialogDC, 
+					  0, 0, NoVideoBitmap.bmWidth, NoVideoBitmap.bmHeight, SRCCOPY);
 
-		bmpDC.SelectObject(pOldBitmap);
-		bmpDC.DeleteDC();
+		DialogDC.SelectObject(pOldBitmap);
+		DialogDC.DeleteDC();
 	}
+}
+
+
+void DisplayDialog::DeleteBorder()
+{
+	CDC* pDC = GetDC();
+	ASSERT(pDC);
+
+	pDC->SelectStockObject(BLACK_BRUSH);
+
 }

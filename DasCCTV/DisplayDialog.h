@@ -39,6 +39,7 @@ public:
 
 private:
 	void DrawBorder();
+	void DeleteBorder();
 
 
 // 对话框数据
