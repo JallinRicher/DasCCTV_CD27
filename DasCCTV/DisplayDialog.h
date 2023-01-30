@@ -25,6 +25,8 @@ public:
 	DisplayState GetDisplayState() const;
 	void UpdateCurSelDialogState();
 	void FlashSelf();
+	void DrawBorder();
+	void DeleteBorder();
 
 	void EnableSound(bool Flag);
 	bool IsOpenSound() const;
@@ -36,10 +38,6 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-
-private:
-	void DrawBorder();
-	void DeleteBorder();
 
 
 // 对话框数据

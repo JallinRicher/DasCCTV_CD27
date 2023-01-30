@@ -106,8 +106,14 @@ void DisplayDialog::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void DisplayDialog::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	UpdateCurSelDialogState();
+	if (m_ParentDialog->m_CurSelDisplayDialog && m_ParentDialog->m_CurSelDisplayDialog != this)
+	{
+		m_ParentDialog->m_CurSelDisplayDialog->DeleteBorder();
+		DrawBorder();
+	}
 
+	UpdateCurSelDialogState();
+	
 	CDialog::OnLButtonDown(nFlags, point);
 }
 
@@ -122,6 +128,11 @@ void DisplayDialog::OnLButtonUp(UINT nFlags, CPoint point)
 
 void DisplayDialog::OnRButtonDown(UINT nFlags, CPoint point)
 {
+	if (m_ParentDialog->m_CurSelDisplayDialog && m_ParentDialog->m_CurSelDisplayDialog != this)
+	{
+		m_ParentDialog->m_CurSelDisplayDialog->DeleteBorder();
+		DrawBorder();
+	}
 	UpdateCurSelDialogState();
 
 	CDialog::OnRButtonDown(nFlags, point);
@@ -175,8 +186,6 @@ void DisplayDialog::UpdateCurSelDialogState()
 		mainDialog->m_CameraTitleEdit.SetWindowText(m_Camera.name);
 		mainDialog->m_CameraTypeEdit.SetWindowText(m_Camera.type);
 	}
-
-	DrawBorder();
 }
 
 
@@ -194,30 +203,18 @@ void DisplayDialog::DrawBorder()
 {
 	if (!IsWindowVisible()) return;
 
-	if (m_ParentDialog->m_CurSelDisplayDialog == this)
-	{
-		CBrush BorderBrush{ RGB(101, 64, 128) };
-		CBrush* pOldBrush = nullptr;
+	CDC* pDC = GetDC();
+	ASSERT(pDC);
 
-		CRect DspDlgRect(0, 0, 0, 0);
-		GetClientRect(&DspDlgRect);
+	CRect DspDlgRect(0, 0, 0, 0);
+	GetClientRect(&DspDlgRect);
 
-		DspDlgRect.right += DISPLAY_INTERVAL / 2;
-		DspDlgRect.bottom += DISPLAY_INTERVAL / 2;
+	CPen BorderPen(PS_SOLID, 4, RGB(128, 70, 210));
+	CPen* pOldPen = pDC->SelectObject(&BorderPen);
+	pDC->DrawEdge(&DspDlgRect, BDR_SUNKENINNER | BDR_RAISEDOUTER, BF_RECT);
 
-		CDC* pDC = GetDC();
-		ASSERT(pDC);
-
-		pOldBrush = pDC->SelectObject(&BorderBrush);
-		pDC->DrawEdge(&DspDlgRect, BDR_SUNKENINNER | BDR_RAISEDOUTER, BF_RECT);
-
-		if (pOldBrush)
-		{
-			pDC->SelectObject(pOldBrush);
-		}
-
-		ReleaseDC(pDC);
-	}
+	pDC->SelectObject(pOldPen);
+	ReleaseDC(pDC);
 }
 
 
@@ -227,8 +224,10 @@ void DisplayDialog::OnPaint()
 	// TODO: 在此处添加消息处理程序代码
 	// 不为绘图消息调用 CDialog::OnPaint()
 
-	DrawBorder();
-
+	if (m_ParentDialog->m_CurSelDisplayDialog == this)
+	{
+		DrawBorder();
+	}
 
 	if (m_DisplayState == IS_BLANK)
 	{
