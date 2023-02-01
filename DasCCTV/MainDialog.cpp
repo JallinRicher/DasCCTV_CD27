@@ -267,7 +267,7 @@ void MainDialog::OnCbnSelchangeComboCamera()
 	m_DisplayControl->StopMonitorBasedCurSelDlg();
 	if (!m_DisplayControl->StartMonitorBasedCurSelDlg(_camera.rtspUrl))
 	{
-		InsertLog(FATAL, "Start monitor failed. AvPath is %s\n", _camera.rtspUrl);
+		InsertLog(FATAL, "Start monitor failed. AvPath = %s\n", _camera.rtspUrl);
 	}
 }
 

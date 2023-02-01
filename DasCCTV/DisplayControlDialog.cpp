@@ -185,6 +185,7 @@ bool DisplayControlDialog::StartMonitorBasedCurSelDlg(const TCHAR* AvPath)
 {
 	if (m_CurSelDisplayDialog == nullptr)
 	{
+		m_ParentDialog->InsertLog(LOGLEVEL::WARN, "In function [ %s ], m_CurSelDisplayDialog is nullptr.\n", __FUNCTION__);
 		return false;
 	}
 
@@ -250,7 +251,7 @@ void DisplayControlDialog::StopMonitorBasedCurSelDlg()
 {
 	if (m_CurSelDisplayDialog == nullptr)
 	{
-		// LOG
+		m_ParentDialog->InsertLog(LOGLEVEL::WARN, "In function [ %s ], m_CurSelDisplayDialog is nullptr.\n", __FUNCTION__);
 		return;
 	}
 
