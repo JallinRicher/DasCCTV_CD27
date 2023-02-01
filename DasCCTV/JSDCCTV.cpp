@@ -75,7 +75,7 @@ bool JSDCCTV::InitNetSDK()
 bool JSDCCTV::InitSDK()
 {
 	InitPlaySDK();
-
+	
 	if (!InitFileSDK())
 		return false;
 
