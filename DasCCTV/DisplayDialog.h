@@ -18,14 +18,14 @@ class DisplayDialog : public CDialog
 	DECLARE_DYNAMIC(DisplayDialog)
 
 public:
-	DisplayDialog(DisplayControlDialog* ParentDialog, CWnd* pParent = nullptr);   // 标准构造函数
+	DisplayDialog(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~DisplayDialog();
 
-	void SetDisplayState(DisplayState State);
-	DisplayState GetDisplayState() const;
+	void SetDisplayState(int State);
+	
 	void UpdateCurSelDialogState();
 	void FlashSelf();
-	void DrawBorder();
+	void DrawBorder();				// 暂未实现
 	void DeleteBorder();
 
 	void EnableSound(bool Flag);
@@ -39,6 +39,20 @@ public:
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 
+public:
+	TypeCamera& CamerType()
+	{ return m_Camera; }
+
+	CWALK_PLAY_HD& PlayHD()
+	{ return m_PlayHD; }
+
+	CWALK_NET_HD& StreamHD()
+	{ return m_StreamHD; }
+
+	int& DisplayState()
+	{ return m_DisplayState; }
+
+
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -50,17 +64,18 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-public:
-	CWALK_PLAY_HD m_PlayHD;
-	CWALK_NET_HD m_StreamHD;
-	TypeCamera m_Camera;
-
 private:
 	DisplayControlDialog* m_ParentDialog;
 	JSDCCTV* m_JsdCCTV;
 
-	DisplayState m_DisplayState;			// 窗口的播放状态
-	bool m_IsOpenSound;						// 是否打开声音
+	int m_DisplayState;
+	
+	CWALK_PLAY_HD m_PlayHD;
+	CWALK_NET_HD m_StreamHD;
+
+	TypeCamera m_Camera;
 
 	CBitmap m_NoVideoBitmap;
+
+	bool m_IsOpenSound;
 };

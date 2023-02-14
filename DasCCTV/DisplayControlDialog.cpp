@@ -11,8 +11,8 @@
 
 IMPLEMENT_DYNAMIC(DisplayControlDialog, CDialog)
 
-DisplayControlDialog::DisplayControlDialog(MainDialog* ParentDialog, CWnd* pParent /*=nullptr*/)
-	: CDialog(IDD_DISPLATCONTROLDIALOG, pParent), m_ParentDialog(ParentDialog)
+DisplayControlDialog::DisplayControlDialog(CWnd* pParent /*=nullptr*/)
+	: CDialog(IDD_DISPLATCONTROLDIALOG, pParent)
 {
 	m_X = 0;
 	m_Y = 0;
@@ -21,6 +21,8 @@ DisplayControlDialog::DisplayControlDialog(MainDialog* ParentDialog, CWnd* pPare
 	m_CurSelDisplayDialog = nullptr;
 	m_LayoutState = INVALID_VALUE;
 	m_LastLayoutState = INVALID_VALUE;
+
+	m_ParentDialog = (MainDialog*)GetParent();
 	m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
 
 	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
@@ -40,7 +42,6 @@ DisplayControlDialog::~DisplayControlDialog()
 		}
 	}
 
-	m_ParentDialog = nullptr;
 	m_CurSelDisplayDialog = nullptr;
 }
 
@@ -81,34 +82,32 @@ void DisplayControlDialog::FullScreen()
 		return;
 	}
 
-	//for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
-	//{
-	//	m_DisplayDialogs[i]->ShowWindow(FALSE);
-	//}
+	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
+	{
+		m_DisplayDialogs[i]->ShowWindow(FALSE);
+	}
 
-	//if (m_LayoutState == FULLSCREEN)
-	//{
-	//	// 退出全屏
+	if (m_LayoutState == FULLSCREEN)
+	{
+		// 退出全屏
 
-	//	return;
-	//}
-	//else
-	//{
-	//	CRect WindowRect;
-	//	CRect ClientRect;
-	//	GetWindowRect(&WindowRect);
-	//	m_ParentDialog->ScreenToClient(&WindowRect);
-	//	CWnd* pDeskWnd = GetDesktopWindow();
-	//	pDeskWnd->GetClientRect(&ClientRect);
+		return;
+	}
+	else
+	{
+		CRect WindowRect;
+		CRect ClientRect;
+		GetWindowRect(&WindowRect);
+		m_ParentDialog->ScreenToClient(&WindowRect);
+		CWnd* pDeskWnd = GetDesktopWindow();
+		pDeskWnd->GetClientRect(&ClientRect);
 
-	//	SetParent(pDeskWnd);
-	//	ClientRect.left += ClientRect.Width();
-	//	ClientRect.right += ClientRect.Width();
-	//	MoveWindow(ClientRect, TRUE);
-	//	m_LayoutState = FULLSCREEN;
-	//}
-
-	OneDisplayLayout();
+		SetParent(pDeskWnd);
+		ClientRect.left += ClientRect.Width();
+		ClientRect.right += ClientRect.Width();
+		MoveWindow(ClientRect, TRUE);
+		m_LayoutState = FULLSCREEN;
+	}
 }
 
 
@@ -193,36 +192,36 @@ bool DisplayControlDialog::StartMonitorBasedCurSelDlg(const TCHAR* AvPath)
 	RealPlay _realPlay;
 	_realPlay.m_JsdCCTV = m_JsdCCTV;
 
-	flag = m_JsdCCTV->CreatePlayer(&m_CurSelDisplayDialog->m_PlayHD, m_CurSelDisplayDialog->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
+	flag = m_JsdCCTV->CreatePlayer(&m_CurSelDisplayDialog->PlayHD(), m_CurSelDisplayDialog->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
 	if (!flag)
 	{
 		m_ParentDialog->InsertLog(LOGLEVEL::FATAL, "In function [ %s ], Jsd create player failed.\n", __FUNCTION__);
-		m_CurSelDisplayDialog->m_PlayHD = nullptr;
+		m_CurSelDisplayDialog->PlayHD() = nullptr;
 		return flag;
 	}
 
-	m_JsdCCTV->SoundEnable(m_CurSelDisplayDialog->m_PlayHD, FALSE);				// 默认不播放声音
-	_realPlay.m_PlayHD = m_CurSelDisplayDialog->m_PlayHD;
+	m_JsdCCTV->SoundEnable(m_CurSelDisplayDialog->PlayHD(), FALSE);				// 默认不播放声音
+	_realPlay.m_PlayHD = m_CurSelDisplayDialog->PlayHD();
 
-	flag = m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->m_StreamHD, AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
+	flag = m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->StreamHD(), AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
 	if (!flag)
 	{
 		m_ParentDialog->InsertLog(LOGLEVEL::FATAL, "In function [ %s ], Jsd start stream failed.\n", __FUNCTION__);
-		m_JsdCCTV->ReleasePlayer(m_CurSelDisplayDialog->m_PlayHD);
-		m_CurSelDisplayDialog->m_PlayHD = nullptr;
-		m_CurSelDisplayDialog->m_StreamHD = nullptr;
+		m_JsdCCTV->ReleasePlayer(m_CurSelDisplayDialog->PlayHD());
+		m_CurSelDisplayDialog->PlayHD() = nullptr;
+		m_CurSelDisplayDialog->StreamHD() = nullptr;
 		return flag;
 	}
-	_realPlay.m_StreamHD = m_CurSelDisplayDialog->m_StreamHD;
+	_realPlay.m_StreamHD = m_CurSelDisplayDialog->StreamHD();
 
-	flag = m_JsdCCTV->StreamRequestIFrame(m_CurSelDisplayDialog->m_StreamHD);
+	flag = m_JsdCCTV->StreamRequestIFrame(m_CurSelDisplayDialog->StreamHD());
 	if (!flag)
 	{
 		m_ParentDialog->InsertLog(LOGLEVEL::FATAL, "In function [ %s ], Jsd stream request I frame failed.\n", __FUNCTION__);
-		m_JsdCCTV->ReleasePlayer(m_CurSelDisplayDialog->m_PlayHD);
-		m_JsdCCTV->StopStream(m_CurSelDisplayDialog->m_StreamHD);
-		m_CurSelDisplayDialog->m_PlayHD = nullptr;
-		m_CurSelDisplayDialog->m_StreamHD = nullptr;
+		m_JsdCCTV->ReleasePlayer(m_CurSelDisplayDialog->PlayHD());
+		m_JsdCCTV->StopStream(m_CurSelDisplayDialog->StreamHD());
+		m_CurSelDisplayDialog->PlayHD() = nullptr;
+		m_CurSelDisplayDialog->StreamHD() = nullptr;
 		return flag;
 	}
 
@@ -235,7 +234,7 @@ bool DisplayControlDialog::StartMonitorBasedCurSelDlg(const TCHAR* AvPath)
 
 bool DisplayControlDialog::StartMonitor(const TCHAR* AvPath, int Index)
 {
-	if (m_DisplayDialogs[Index]->GetDisplayState() == IS_LIVING)
+	if (m_DisplayDialogs[Index]->DisplayState() == IS_LIVING)
 	{
 		return false;
 	}
@@ -244,37 +243,37 @@ bool DisplayControlDialog::StartMonitor(const TCHAR* AvPath, int Index)
 	RealPlay _realPlay;
 	_realPlay.m_JsdCCTV = m_JsdCCTV;
 
-	flag = m_JsdCCTV->CreatePlayer(&m_DisplayDialogs[Index]->m_PlayHD, m_DisplayDialogs[Index]->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
+	flag = m_JsdCCTV->CreatePlayer(&m_DisplayDialogs[Index]->PlayHD(), m_DisplayDialogs[Index]->GetSafeHwnd(), CWALKPLAY_STREAMTYPE_REALSTREAM, nullptr, nullptr);
 	if (!flag)
 	{
 		m_ParentDialog->InsertLog(LOGLEVEL::FATAL, "In function [ %s ], Jsd create player failed.\n", __FUNCTION__);
-		m_DisplayDialogs[Index]->m_PlayHD = nullptr;
+		m_DisplayDialogs[Index]->PlayHD() = nullptr;
 		return flag;
 	}
 
-	m_JsdCCTV->SoundEnable(m_DisplayDialogs[Index]->m_PlayHD, FALSE);		// 默认不播放声音
-	_realPlay.m_PlayHD = m_DisplayDialogs[Index]->m_PlayHD;
+	m_JsdCCTV->SoundEnable(m_DisplayDialogs[Index]->PlayHD(), FALSE);		// 默认不播放声音
+	_realPlay.m_PlayHD = m_DisplayDialogs[Index]->PlayHD();
 
-	flag = m_JsdCCTV->StartStream(&m_DisplayDialogs[Index]->m_StreamHD, AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
+	flag = m_JsdCCTV->StartStream(&m_DisplayDialogs[Index]->StreamHD(), AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
 	if (!flag)
 	{
 		m_ParentDialog->InsertLog(LOGLEVEL::FATAL, "In function [ %s ], Jsd start stream failed.\n", __FUNCTION__);
-		m_JsdCCTV->ReleasePlayer(m_DisplayDialogs[Index]->m_PlayHD);
-		m_DisplayDialogs[Index]->m_PlayHD = nullptr;
-		m_DisplayDialogs[Index]->m_StreamHD = nullptr;
+		m_JsdCCTV->ReleasePlayer(m_DisplayDialogs[Index]->PlayHD());
+		m_DisplayDialogs[Index]->PlayHD() = nullptr;
+		m_DisplayDialogs[Index]->StreamHD() = nullptr;
 		return flag;
 	}
 
-	_realPlay.m_StreamHD = m_DisplayDialogs[Index]->m_StreamHD;
+	_realPlay.m_StreamHD = m_DisplayDialogs[Index]->StreamHD();
 
-	flag = m_JsdCCTV->StreamRequestIFrame(m_DisplayDialogs[Index]->m_StreamHD);
+	flag = m_JsdCCTV->StreamRequestIFrame(m_DisplayDialogs[Index]->StreamHD());
 	if (!flag)
 	{
 		m_ParentDialog->InsertLog(LOGLEVEL::FATAL, "In function [ %s ], Jsd stream request I frame failed.\n", __FUNCTION__);
-		m_JsdCCTV->ReleasePlayer(m_DisplayDialogs[Index]->m_PlayHD);
-		m_JsdCCTV->StopStream(m_DisplayDialogs[Index]->m_StreamHD);
-		m_DisplayDialogs[Index]->m_PlayHD = nullptr;
-		m_DisplayDialogs[Index]->m_StreamHD = nullptr;
+		m_JsdCCTV->ReleasePlayer(m_DisplayDialogs[Index]->PlayHD());
+		m_JsdCCTV->StopStream(m_DisplayDialogs[Index]->StreamHD());
+		m_DisplayDialogs[Index]->PlayHD() = nullptr;
+		m_DisplayDialogs[Index]->StreamHD() = nullptr;
 		return flag;
 	}
 
@@ -287,13 +286,13 @@ bool DisplayControlDialog::StartMonitor(const TCHAR* AvPath, int Index)
 
 void DisplayControlDialog::StopMonitor(int Index)
 {
-	if (m_DisplayDialogs[Index]->GetDisplayState() == IS_BLANK)
+	if (m_DisplayDialogs[Index]->DisplayState() == IS_BLANK)
 	{
 		return;
 	}
 
-	m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_DisplayDialogs[Index]->m_PlayHD);
-	m_ParentDialog->m_JsdCCTV->StopStream(m_DisplayDialogs[Index]->m_StreamHD);
+	m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_DisplayDialogs[Index]->PlayHD());
+	m_ParentDialog->m_JsdCCTV->StopStream(m_DisplayDialogs[Index]->StreamHD());
 	m_DisplayDialogs[Index]->FlashSelf();
 }
 
@@ -306,13 +305,13 @@ void DisplayControlDialog::StopMonitorBasedCurSelDlg()
 		return;
 	}
 
-	if (m_CurSelDisplayDialog->GetDisplayState() == IS_BLANK)
+	if (m_CurSelDisplayDialog->DisplayState() == IS_BLANK)
 	{
 		return;
 	}
 
-	m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_CurSelDisplayDialog->m_PlayHD);
-	m_ParentDialog->m_JsdCCTV->StopStream(m_CurSelDisplayDialog->m_StreamHD);
+	m_ParentDialog->m_JsdCCTV->ReleasePlayer(m_CurSelDisplayDialog->PlayHD());
+	m_ParentDialog->m_JsdCCTV->StopStream(m_CurSelDisplayDialog->StreamHD());
 	m_CurSelDisplayDialog->FlashSelf();
 }
 
@@ -354,7 +353,7 @@ void DisplayControlDialog::StartSound()
 		StopSound();
 	}
 
-	m_JsdCCTV->SoundEnable(m_CurSelDisplayDialog->m_PlayHD, TRUE);
+	m_JsdCCTV->SoundEnable(m_CurSelDisplayDialog->PlayHD(), TRUE);
 	m_SoundDialog.m_CurOpenSoundDialog = m_CurSelDisplayDialog;
 	m_CurSelDisplayDialog->EnableSound(true);
 }
@@ -368,7 +367,7 @@ void DisplayControlDialog::StopSound()
 	}
 
 	DisplayDialog* m_CurOpenSoundDlg = m_SoundDialog.m_CurOpenSoundDialog;
-	m_JsdCCTV->SoundEnable(m_CurOpenSoundDlg->m_PlayHD, FALSE);
+	m_JsdCCTV->SoundEnable(m_CurOpenSoundDlg->PlayHD(), FALSE);
 	m_CurOpenSoundDlg->EnableSound(false);
 	m_SoundDialog.m_CurOpenSoundDialog = nullptr;
 }
@@ -392,6 +391,20 @@ void DisplayControlDialog::DefaultDisplayLayout()
 void DisplayControlDialog::SetCurSelDisplayDialog(DisplayDialog* CurSel)
 {
 	m_CurSelDisplayDialog = CurSel;
+	if (CurSel->IsOpenSound())
+	{
+		m_ParentDialog->m_SoundComboBox.SetCurSel(0);
+	}
+	else
+	{
+		m_ParentDialog->m_SoundComboBox.SetCurSel(1);
+	}
+
+	if (CurSel->DisplayState() != IS_BLANK)
+	{
+		m_ParentDialog->m_CameraTitleEdit.SetWindowText(CurSel->CamerType().name);
+		m_ParentDialog->m_CameraTypeEdit.SetWindowText(CurSel->CamerType().type);
+	}
 }
 
 

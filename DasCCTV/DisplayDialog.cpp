@@ -2,6 +2,7 @@
 //
 
 #include "pch.h"
+#include "resource.h"
 #include "DasCCTV.h"
 #include "afxdialogex.h"
 #include "MainDialog.h"
@@ -14,14 +15,16 @@
 
 IMPLEMENT_DYNAMIC(DisplayDialog, CDialog)
 
-DisplayDialog::DisplayDialog(DisplayControlDialog* ParentDialog, CWnd* pParent /*=nullptr*/)
-	: CDialog(IDD_DISPLAYDIALOG, pParent), m_ParentDialog(ParentDialog)
+DisplayDialog::DisplayDialog(CWnd* pParent /*=nullptr*/)
+	: CDialog(IDD_DISPLAYDIALOG, pParent)
 {
 	m_DisplayState = IS_BLANK;
 	m_IsOpenSound = false;
-	m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
 	m_PlayHD = nullptr;
 	m_StreamHD = nullptr;
+
+	m_ParentDialog = (DisplayControlDialog*)GetParent();
+	m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
 }
 
 
@@ -52,19 +55,13 @@ END_MESSAGE_MAP()
 // DisplayDialog 消息处理程序
 
 
-void DisplayDialog::SetDisplayState(DisplayState State)
+void DisplayDialog::SetDisplayState(int State)
 {
 	if (State < IS_LIVING || State > IS_SNATCHING)
 	{
 		return;
 	}
 	m_DisplayState = State;
-}
-
-
-DisplayState DisplayDialog::GetDisplayState() const
-{
-	return m_DisplayState;
 }
 
 
@@ -174,18 +171,6 @@ void DisplayDialog::EnableSound(bool Flag)
 void DisplayDialog::UpdateCurSelDialogState()
 {
 	m_ParentDialog->SetCurSelDisplayDialog(this);
-	MainDialog* mainDialog = m_ParentDialog->m_ParentDialog;
-
-	if (m_IsOpenSound)
-		mainDialog->m_SoundComboBox.SetCurSel(0);
-	else
-		mainDialog->m_SoundComboBox.SetCurSel(1);
-
-	if (m_DisplayState != IS_BLANK)
-	{
-		mainDialog->m_CameraTitleEdit.SetWindowText(m_Camera.name);
-		mainDialog->m_CameraTypeEdit.SetWindowText(m_Camera.type);
-	}
 }
 
 
@@ -203,18 +188,13 @@ void DisplayDialog::DrawBorder()
 {
 	if (!IsWindowVisible()) return;
 
-	CDC* pDC = GetDC();
-	ASSERT(pDC);
+	CPen* pOldPen = nullptr;
+	CPen* pPen = nullptr;
 
-	CRect DspDlgRect(0, 0, 0, 0);
-	GetClientRect(&DspDlgRect);
+	CRect rc(0, 0, 0, 0);
+	GetWindowRect(&rc);
 
-	CPen BorderPen(PS_SOLID, 4, RGB(128, 70, 210));
-	CPen* pOldPen = pDC->SelectObject(&BorderPen);
-	pDC->DrawEdge(&DspDlgRect, BDR_SUNKENINNER | BDR_RAISEDOUTER, BF_RECT);
-
-	pDC->SelectObject(pOldPen);
-	ReleaseDC(pDC);
+	GetParent()->GetDlgItem(IDC_STATIC_PLAYBG)->ScreenToClient(&rc);
 }
 
 
@@ -258,3 +238,4 @@ void DisplayDialog::DeleteBorder()
 	pDC->SelectStockObject(BLACK_BRUSH);
 
 }
+

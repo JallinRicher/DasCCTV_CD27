@@ -10,7 +10,7 @@ class DisplayControlDialog : public CDialog
 	DECLARE_DYNAMIC(DisplayControlDialog)
 
 public:
-	DisplayControlDialog(MainDialog* ParentDialog, CWnd* pParent = nullptr);   // 标准构造函数
+	DisplayControlDialog(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~DisplayControlDialog();
 
 	void FullScreen();
@@ -32,12 +32,16 @@ public:
 	void StopSound();
 	void SetDialogRect(int x, int y, int Width, int Height);
 
-	void SetCurSelDisplayDialog(DisplayDialog* CurSel);
 	void SetLayoutState(int layoutState);
 	void SetLastLayoutState(int layoutState);
 	int GetLastLayoutState() const;
 	int GetLayoutState() const;
+
+	void SetCurSelDisplayDialog(DisplayDialog* CurSel);
 	DisplayDialog* GetCurSelDisplayDialog() const;
+
+
+
 
 	virtual BOOL OnInitDialog();
 
@@ -55,13 +59,12 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
-	MainDialog* m_ParentDialog;
 	JSDCCTV* m_JsdCCTV;
 	DisplayDialog* m_CurSelDisplayDialog;
 
 private:
 	DisplayDialog* m_DisplayDialogs[MAX_DISPLAY_CNT];
-	OpenSoundDialog m_SoundDialog;
+	MainDialog* m_ParentDialog;
 
 	int m_LayoutState;
 	int m_LastLayoutState;
