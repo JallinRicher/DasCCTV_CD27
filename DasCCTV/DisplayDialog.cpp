@@ -215,17 +215,25 @@ void DisplayDialog::OnPaint()
 
 	if (m_DisplayState == IS_BLANK)
 	{
-		CRect DialogRect;
-		GetClientRect(&DialogRect);
+		CWnd* PlayBgCWnd = nullptr;
+		PlayBgCWnd = m_ParentDialog->GetDlgItem(IDC_STATIC_PLAYBG);
+
+		CRect PlayBgRect;
+		PlayBgCWnd->GetClientRect(&PlayBgRect);
+
+		CRect MyRect;
+		GetClientRect(&MyRect);
 
 		CDC DialogDC;
 		DialogDC.CreateCompatibleDC(&dc);
 
 		BITMAP NoVideoBitmap;
 		m_NoVideoBitmap.GetBitmap(&NoVideoBitmap);
+
+
 		
 		CBitmap* pOldBitmap = DialogDC.SelectObject(&m_NoVideoBitmap);
-		dc.StretchBlt(0, 0, DialogRect.Width(), DialogRect.Height(), &DialogDC, 
+		dc.StretchBlt(0, 0, PlayBgRect.Width(), PlayBgRect.Height(), &DialogDC,
 					  0, 0, NoVideoBitmap.bmWidth, NoVideoBitmap.bmHeight, SRCCOPY);
 
 		DialogDC.SelectObject(pOldBitmap);

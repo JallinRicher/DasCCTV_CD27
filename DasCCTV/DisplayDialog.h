@@ -42,16 +42,16 @@ public:
 public:
 	TypeCamera& CamerType()
 	{ return m_Camera; }
-
 	CWALK_PLAY_HD& PlayHD()
 	{ return m_PlayHD; }
-
 	CWALK_NET_HD& StreamHD()
 	{ return m_StreamHD; }
+	CWALKPLayPcmFrame& PcmFrame()
+	{ return m_PcmFrame; }
+
 
 	int& DisplayState()
 	{ return m_DisplayState; }
-
 
 
 // 对话框数据
@@ -67,14 +67,15 @@ protected:
 private:
 	DisplayControlDialog* m_ParentDialog;
 
+	bool m_IsOpenSound;
 	int m_DisplayState;
 	
 	CWALK_PLAY_HD m_PlayHD;
 	CWALK_NET_HD m_StreamHD;
+	CWALKPLayPcmFrame m_PcmFrame;
 
 	TypeCamera m_Camera;
 
 	CBitmap m_NoVideoBitmap;
 
-	bool m_IsOpenSound;
 };
