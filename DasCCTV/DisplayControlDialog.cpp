@@ -25,8 +25,8 @@ DisplayControlDialog::DisplayControlDialog(CWnd* pParent /*=nullptr*/)
 	m_LayoutState = INVALID_VALUE;
 	m_LastLayoutState = INVALID_VALUE;
 
-	m_ParentDialog = (MainDialog*)GetParent();
-	m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
+	m_JsdCCTV = nullptr;
+	m_ParentDialog = (MainDialog*)pParent;
 
 	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
 	{
@@ -64,7 +64,8 @@ BOOL DisplayControlDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// TODO:  在此添加额外的初始化
+	m_JsdCCTV = m_ParentDialog->m_JsdCCTV;
+
 	for (int i = 0; i < MAX_DISPLAY_CNT; ++i)
 	{
 		m_DisplayDialogs[i] = new DisplayDialog(this);

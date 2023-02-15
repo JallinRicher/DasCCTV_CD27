@@ -17,7 +17,6 @@ MainDialog::MainDialog(CWnd* pParent /*=nullptr*/)
 {
 	m_DisplayControl = nullptr;
 	m_IsLogin = false;
-	m_IsFirstLogin = true;
 	m_JsdCCTV = nullptr;
 
 	memset(m_AppWorkPath, 0, sizeof(m_AppWorkPath));
@@ -320,10 +319,12 @@ BOOL MainDialog::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
+	InitCCTV();
 	InitUIFrame();
 	InitFilePath();
 	ReadConfigFile();
-	InitCCTV();
+
+	Login();
 	
 	CString CCTVLogFile = m_LogFilePath;
 	CCTVLogFile.Append("\\DasCCTV_LOG.LOG");
@@ -573,6 +574,16 @@ bool MainDialog::Login()
 {
 	if (m_JsdCCTV->Login())
 	{
+		ShowStationList();
+
+		ShowAreaList();
+
+		ShowCameraList();
+
+		ShowDisplayModeList();
+
+		ShowSwitchList();
+
 		m_IsLogin = true;
 	}
 
@@ -795,61 +806,6 @@ void MainDialog::OnBnClickedButtonModifyswitchmode()
 void MainDialog::OnBnClickedButtonStartswitchmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
-}
-
-
-void MainDialog::OnTimer(UINT_PTR nIDEvent)
-{
-	KillTimer(1);
-	TestFlag++;
-
-	// 先屏蔽下面的代码块，测试完其他功能后释放出来
-	//if (!m_IsLogin && m_IsFirstLogin && TestFlag > 3)
-	//{
-	//	m_MainDialogProgress.ShowWindow(TRUE);
-	//	m_MainDialogProgress.SetPos(0);
-	//	SetProgressCtrlText(800, "登录 DCS 服务器...");
-	//	bool flag = Login();
-	//	if (flag == true)
-	//	{
-	//		SetProgressCtrlText(800, "登录成功");
-	//	}
-	//	else
-	//	{
-	//		SetProgressCtrlText(800, "登录失败");
-	//	}
-
-	//	m_MainDialogProgress.SetPos(30);
-	//	SetProgressCtrlText(800, "获取车站列表...");
-	//	ShowStationList();
-
-	//	m_MainDialogProgress.SetPos(50);
-	//	SetProgressCtrlText(800, "获取区域列表...");
-	//	ShowAreaList();
-
-	//	m_MainDialogProgress.SetPos(70);
-	//	SetProgressCtrlText(800, "获取摄像头列表...");
-	//	ShowCameraList();
-
-	//	m_MainDialogProgress.SetPos(80);
-	//	SetProgressCtrlText(800, "读取显示模式...");
-	//	ShowDisplayModeList();
-
-	//	m_MainDialogProgress.SetPos(90);
-	//	SetProgressCtrlText(800, "获取轮切列表...");
-	//	ShowSwitchList();
-
-	//	m_IsFirstLogin = false;
-
-	//	m_MainDialogProgress.SetPos(100);
-	//	SetProgressCtrlText(800, "完成");
-	//	SetProgressCtrlText(0, "");
-	//	m_MainDialogProgress.SetPos(0);
-	//	m_MainDialogProgress.ShowWindow(FALSE);
-	//}
-
-	SetTimer(1, 2000, nullptr);
-	CDialog::OnTimer(nIDEvent);
 }
 
 

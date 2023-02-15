@@ -36,7 +36,6 @@ public:
 	void SetProgressCtrlText(int HoldMiliseconds, const char* const _Format, ...);
 	void SetProgressPos(int Pos) { m_MainDialogProgress.SetPos(Pos); }
 
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnCbnSelchangeComboLayout();
 	afx_msg void OnCbnSelchangeComboStation();
 	afx_msg void OnCbnSelchangeComboArea();
@@ -108,7 +107,6 @@ public:
 
 private:
 	bool m_IsLogin;
-	bool m_IsFirstLogin;
 	unsigned int m_CurrentLayout;
 
 	TCHAR m_AppWorkPath[FILE_PATH_LEN];
@@ -126,7 +124,5 @@ private:
 	CDC m_BackgroundDC;
 
 	DspCtlDlgAttribute m_dspCtlDlgAttr;
-
-	int TestFlag{ 0 };
 
 };

@@ -23,7 +23,7 @@ DisplayDialog::DisplayDialog(CWnd* pParent /*=nullptr*/)
 	m_PlayHD = nullptr;
 	m_StreamHD = nullptr;
 
-	m_ParentDialog = (DisplayControlDialog*)GetParent();
+	m_ParentDialog = (DisplayControlDialog*)pParent;
 }
 
 
