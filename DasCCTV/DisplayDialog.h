@@ -66,7 +66,6 @@ protected:
 
 private:
 	DisplayControlDialog* m_ParentDialog;
-	JSDCCTV* m_JsdCCTV;
 
 	int m_DisplayState;
 	

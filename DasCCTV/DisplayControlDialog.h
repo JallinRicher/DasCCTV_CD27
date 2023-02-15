@@ -38,10 +38,7 @@ public:
 	int GetLayoutState() const;
 
 	void SetCurSelDisplayDialog(DisplayDialog* CurSel);
-	DisplayDialog* GetCurSelDisplayDialog() const;
-
-
-
+	DisplayDialog* GetCurSelDisplayDialog();
 
 	virtual BOOL OnInitDialog();
 
@@ -60,9 +57,10 @@ protected:
 
 public:
 	JSDCCTV* m_JsdCCTV;
-	DisplayDialog* m_CurSelDisplayDialog;
-
+	
 private:
+	DisplayDialog* m_CurSelDisplayDialog;
+	DisplayDialog* m_CurSoundDisplayDialog;
 	DisplayDialog* m_DisplayDialogs[MAX_DISPLAY_CNT];
 	MainDialog* m_ParentDialog;
 

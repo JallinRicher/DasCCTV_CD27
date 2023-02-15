@@ -18,7 +18,10 @@ DisplayControlDialog::DisplayControlDialog(CWnd* pParent /*=nullptr*/)
 	m_Y = 0;
 	m_Height = 0;
 	m_Width = 0;
+
 	m_CurSelDisplayDialog = nullptr;
+	m_CurSoundDisplayDialog = nullptr;
+
 	m_LayoutState = INVALID_VALUE;
 	m_LastLayoutState = INVALID_VALUE;
 
@@ -348,28 +351,27 @@ void DisplayControlDialog::StartSound()
 		return;
 	}
 
-	if (m_SoundDialog.m_CurOpenSoundDialog != nullptr)
+	if (m_CurSoundDisplayDialog != nullptr)
 	{
 		StopSound();
 	}
 
 	m_JsdCCTV->SoundEnable(m_CurSelDisplayDialog->PlayHD(), TRUE);
-	m_SoundDialog.m_CurOpenSoundDialog = m_CurSelDisplayDialog;
+	m_CurSoundDisplayDialog = m_CurSelDisplayDialog;
 	m_CurSelDisplayDialog->EnableSound(true);
 }
 
 
 void DisplayControlDialog::StopSound()
 {
-	if (m_SoundDialog.m_CurOpenSoundDialog == nullptr)
+	if (m_CurSoundDisplayDialog == nullptr)
 	{
 		return;
 	}
 
-	DisplayDialog* m_CurOpenSoundDlg = m_SoundDialog.m_CurOpenSoundDialog;
-	m_JsdCCTV->SoundEnable(m_CurOpenSoundDlg->PlayHD(), FALSE);
-	m_CurOpenSoundDlg->EnableSound(false);
-	m_SoundDialog.m_CurOpenSoundDialog = nullptr;
+	m_JsdCCTV->SoundEnable(m_CurSoundDisplayDialog->PlayHD(), FALSE);
+	m_CurSoundDisplayDialog->EnableSound(false);
+	m_CurSoundDisplayDialog = nullptr;
 }
 
 
@@ -408,7 +410,7 @@ void DisplayControlDialog::SetCurSelDisplayDialog(DisplayDialog* CurSel)
 }
 
 
-DisplayDialog* DisplayControlDialog::GetCurSelDisplayDialog() const
+DisplayDialog* DisplayControlDialog::GetCurSelDisplayDialog()
 {
 	return m_CurSelDisplayDialog;
 }
