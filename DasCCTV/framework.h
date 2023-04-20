@@ -40,3 +40,4 @@
 #include "CWALKSDKErrors.h"
 #include "common/common.h"
 #include "resource.h"
+#include "Global.h"

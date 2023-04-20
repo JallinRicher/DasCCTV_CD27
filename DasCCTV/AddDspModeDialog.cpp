@@ -67,29 +67,7 @@ void AddDspModeDialog::AddOneArea(const TypeArea& Area)
 
 void AddDspModeDialog::ShowCameraList()
 {
-	TypeCameraCallback stCameraCallback;
-	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, nullptr, ListObject_CallBack, (void*)&stCameraCallback);
-
-	m_CameraList.SetRedraw(FALSE);
-	int size = stCameraCallback.m_vecCameras.size();
-	for (int i = 0; i < size; ++i)
-	{
-		if (stCameraCallback.m_vecCameras[i].ptzEnable == "1")
-		{
-			int nRow = m_CameraList.InsertItem(i, stCameraCallback.m_vecCameras[i].name);
-			m_CameraList.SetItemText(nRow, 0, stCameraCallback.m_vecCameras[i].name);
-			m_CameraList.SetItemText(nRow, 1, _T("云台"));
-			m_CameraList.SetItemText(nRow, 2, stCameraCallback.m_vecCameras[i].rtspUrl);
-		}
-		else
-		{
-			int nRow = m_CameraList.InsertItem(i, stCameraCallback.m_vecCameras[i].name);
-			m_CameraList.SetItemText(nRow, 1, _T("非云台"));
-			m_CameraList.SetItemText(nRow, 2, stCameraCallback.m_vecCameras[i].rtspUrl);
-		}
-	}
-
-	m_CameraList.SetRedraw(TRUE);
+	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, nullptr, nullptr, nullptr);
 }
 
 

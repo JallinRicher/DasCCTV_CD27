@@ -517,15 +517,10 @@ void MainDialog::ShowAreaList()
 
 void MainDialog::ShowCameraList()
 {
-	TypeCameraCallback stCameraCallback;
-	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, nullptr, ListObject_CallBack, (void*)&stCameraCallback);
-
-	int size = stCameraCallback.m_vecCameras.size();
-	for (int i = 0; i < size; ++i)
-	{
-		m_CameraComboBox.AddOneCamera(stCameraCallback.m_vecCameras[i]);
-		InsertLog(LOGLEVEL::INFO, "Add one camera %s.", stCameraCallback.m_vecCameras[i].name);
-	}
+	CallbackObj obj;
+	obj.Count = 0;
+	obj.UserParam = &m_CameraComboBox;
+	m_JsdCCTV->ListObjects(CWALKNET_TYPE_CAMERA, nullptr, &obj.Count, CameraListObject, &obj);
 }
 
 

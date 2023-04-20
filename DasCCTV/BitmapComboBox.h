@@ -45,9 +45,13 @@ public:
     afx_msg void OnCbnDropdown();
 
 
+public:
+    std::map<int, CString> m_IndexToObjInfo;
+
+
+
 private:
     int m_ComboBoxType;
-
 
     std::vector<TypeStation> m_vecStations;
     std::vector<TypeArea> m_vecAreas;

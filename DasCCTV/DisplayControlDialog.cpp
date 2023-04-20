@@ -207,7 +207,7 @@ bool DisplayControlDialog::StartMonitorBasedCurSelDlg(const TCHAR* AvPath)
 	m_JsdCCTV->SoundEnable(m_CurSelDisplayDialog->PlayHD(), FALSE);				// 默认不播放声音
 	_realPlay.m_PlayHD = m_CurSelDisplayDialog->PlayHD();
 
-	flag = m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->StreamHD(), AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
+	flag = m_JsdCCTV->StartStream(&m_CurSelDisplayDialog->StreamHD(), AvPath, nullptr, nullptr, (void*)&_realPlay);
 	if (!flag)
 	{
 		m_ParentDialog->InsertLog(LOGLEVEL::FATAL, "In function [ %s ], Jsd start stream failed.\n", __FUNCTION__);
@@ -258,7 +258,7 @@ bool DisplayControlDialog::StartMonitor(const TCHAR* AvPath, int Index)
 	m_JsdCCTV->SoundEnable(m_DisplayDialogs[Index]->PlayHD(), FALSE);		// 默认不播放声音
 	_realPlay.m_PlayHD = m_DisplayDialogs[Index]->PlayHD();
 
-	flag = m_JsdCCTV->StartStream(&m_DisplayDialogs[Index]->StreamHD(), AvPath, StreamData_CallBack, nullptr, (void*)&_realPlay);
+	flag = m_JsdCCTV->StartStream(&m_DisplayDialogs[Index]->StreamHD(), AvPath, nullptr, nullptr, (void*)&_realPlay);
 	if (!flag)
 	{
 		m_ParentDialog->InsertLog(LOGLEVEL::FATAL, "In function [ %s ], Jsd start stream failed.\n", __FUNCTION__);

@@ -232,6 +232,7 @@
     <ClCompile Include="DasCCTVPropPage.cpp" />
     <ClCompile Include="DisplayControlDialog.cpp" />
     <ClCompile Include="DisplayDialog.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="GlobalDefines.cpp" />
     <ClCompile Include="JSDCCTV.cpp" />
     <ClCompile Include="MainDialog.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="DisplayControlDialog.h" />
     <ClInclude Include="DisplayDialog.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="GlobalDefines.h" />
     <ClInclude Include="JSDCCTV.h" />
     <ClInclude Include="MainDialog.h" />
