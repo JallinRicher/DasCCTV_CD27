@@ -68,33 +68,33 @@ void DisplayDialog::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	UpdateCurSelDialogState();
 
-	int LayoutState = m_ParentDialog->GetLayoutState();
-	int LastLayoutState = m_ParentDialog->GetLastLayoutState();
-	if (LayoutState != FULLSCREEN)
-	{
-		m_ParentDialog->FullScreen();
-		m_ParentDialog->SetLastLayoutState(LayoutState);
-	}
-	else
-	{
-		switch (LastLayoutState)
-		{
-		case FULLSCREEN:
-			m_ParentDialog->OneDisplayLayout();
-			break;
-		case FOUR_DIALOG:
-			m_ParentDialog->FourDisplayLayout();
-			break;
-		case NINE_DIALOG:
-			m_ParentDialog->NineDisplayLayout();
-			break;
-		case SIXTEEN_DIALOG:
-			m_ParentDialog->SixteenDisplayLayout();
-			break;
-		default:
-			break;
-		}
-	}
+	//int LayoutState = m_ParentDialog->GetLayoutState();
+	//int LastLayoutState = m_ParentDialog->GetLastLayoutState();
+	//if (LayoutState != FULLSCREEN)
+	//{
+	//	m_ParentDialog->FullScreen();
+	//	m_ParentDialog->SetLastLayoutState(LayoutState);
+	//}
+	//else
+	//{
+	//	switch (LastLayoutState)
+	//	{
+	//	case FULLSCREEN:
+	//		m_ParentDialog->OneDisplayLayout();
+	//		break;
+	//	case FOUR_DIALOG:
+	//		m_ParentDialog->FourDisplayLayout();
+	//		break;
+	//	case NINE_DIALOG:
+	//		m_ParentDialog->NineDisplayLayout();
+	//		break;
+	//	case SIXTEEN_DIALOG:
+	//		m_ParentDialog->SixteenDisplayLayout();
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
 
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
@@ -102,10 +102,10 @@ void DisplayDialog::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void DisplayDialog::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	DisplayDialog* CurSelDialog = m_ParentDialog->GetCurSelDisplayDialog();
-	if (CurSelDialog && CurSelDialog != this)
+	DisplayDialog* OldDialog = m_ParentDialog->GetCurSelDisplayDialog();
+	if (OldDialog && OldDialog != this)
 	{
-		CurSelDialog->DeleteBorder();
+		OldDialog->DeleteBorder();
 		DrawBorder();
 	}
 
@@ -125,14 +125,14 @@ void DisplayDialog::OnLButtonUp(UINT nFlags, CPoint point)
 
 void DisplayDialog::OnRButtonDown(UINT nFlags, CPoint point)
 {
-	DisplayDialog* CurSelDialog = m_ParentDialog->GetCurSelDisplayDialog();
-	if (CurSelDialog && CurSelDialog != this)
+	DisplayDialog* OldDialog = m_ParentDialog->GetCurSelDisplayDialog();
+	if (OldDialog && OldDialog != this)
 	{
-		CurSelDialog->DeleteBorder();
+		OldDialog->DeleteBorder();
 		DrawBorder();
 	}
-	UpdateCurSelDialogState();
 
+	UpdateCurSelDialogState();
 	CDialog::OnRButtonDown(nFlags, point);
 }
 
@@ -191,13 +191,20 @@ void DisplayDialog::DrawBorder()
 {
 	if (!IsWindowVisible()) return;
 
-	//CPen* pOldPen = nullptr;
-	//CPen* pPen = nullptr;
+	CPaintDC dc(this);
+	CRect MyRect;
+	GetClientRect(&MyRect);
 
-	//CRect rc(0, 0, 0, 0);
-	//GetWindowRect(&rc);
+	CRect rect;
+	rect.left = 50;
+	rect.top = 50;
+	rect.right = 200;
+	rect.bottom = 200;
 
-	//GetParent()->GetDlgItem(IDC_STATIC_PLAYBG)->ScreenToClient(&rc);
+	dc.Draw3dRect(&rect, RGB(212, 108, 96), RGB(152, 58, 63));
+
+	Invalidate();
+	UpdateWindow();
 }
 
 
@@ -207,38 +214,24 @@ void DisplayDialog::OnPaint()
 	// TODO: 在此处添加消息处理程序代码
 	// 不为绘图消息调用 CDialog::OnPaint()
 
-	DisplayDialog* CurSelDialog = m_ParentDialog->GetCurSelDisplayDialog();
-	if (CurSelDialog == this)
-	{
-		DrawBorder();
-	}
+	//if (m_DisplayState == IS_BLANK)
+	//{
+	//	CRect MyRect;
+	//	GetClientRect(&MyRect);
 
-	if (m_DisplayState == IS_BLANK)
-	{
-		CWnd* PlayBgCWnd = nullptr;
-		PlayBgCWnd = m_ParentDialog->GetDlgItem(IDC_STATIC_PLAYBG);
+	//	CDC DialogDC;
+	//	DialogDC.CreateCompatibleDC(&dc);
 
-		CRect PlayBgRect;
-		PlayBgCWnd->GetClientRect(&PlayBgRect);
+	//	BITMAP NoVideoBitmap;
+	//	m_NoVideoBitmap.GetBitmap(&NoVideoBitmap);
 
-		CRect MyRect;
-		GetClientRect(&MyRect);
+	//	CBitmap* pOldBitmap = DialogDC.SelectObject(&m_NoVideoBitmap);
+	//	dc.StretchBlt(0, 0, MyRect.Width(), MyRect.Height(), &DialogDC,
+	//				  0, 0, NoVideoBitmap.bmWidth, NoVideoBitmap.bmHeight, SRCCOPY);
 
-		CDC DialogDC;
-		DialogDC.CreateCompatibleDC(&dc);
-
-		BITMAP NoVideoBitmap;
-		m_NoVideoBitmap.GetBitmap(&NoVideoBitmap);
-
-
-		
-		CBitmap* pOldBitmap = DialogDC.SelectObject(&m_NoVideoBitmap);
-		dc.StretchBlt(0, 0, PlayBgRect.Width(), PlayBgRect.Height(), &DialogDC,
-					  0, 0, NoVideoBitmap.bmWidth, NoVideoBitmap.bmHeight, SRCCOPY);
-
-		DialogDC.SelectObject(pOldBitmap);
-		DialogDC.DeleteDC();
-	}
+	//	DialogDC.SelectObject(pOldBitmap);
+	//	DialogDC.DeleteDC();
+	//}
 }
 
 

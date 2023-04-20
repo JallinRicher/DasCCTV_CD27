@@ -48,6 +48,7 @@ DisplayControlDialog::~DisplayControlDialog()
 	m_CurSelDisplayDialog = nullptr;
 }
 
+
 void DisplayControlDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
@@ -59,7 +60,6 @@ END_MESSAGE_MAP()
 
 
 // DisplayControlDialog 消息处理程序
-
 BOOL DisplayControlDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();

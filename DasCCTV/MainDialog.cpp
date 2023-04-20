@@ -30,6 +30,7 @@ MainDialog::~MainDialog()
 {
 	if (m_JsdCCTV)
 	{
+		m_JsdCCTV->ReleaseSDK();
 		delete m_JsdCCTV;
 		m_JsdCCTV = nullptr;
 	}
@@ -457,6 +458,7 @@ void MainDialog::ShowStationList()
 			_station.name = (TCHAR*)ValueBuf;
 
 			vecStations.push_back(_station);
+			InsertLog(LOGLEVEL::INFO, "Add station %s.", ValueBuf);
 			break;
 		}
 	}
@@ -499,6 +501,7 @@ void MainDialog::ShowAreaList()
 			_area.name = (TCHAR*)ValueBuf;
 
 			vecAreas.push_back(_area);
+			InsertLog(LOGLEVEL::INFO, "Add area %s.", ValueBuf);
 		}
 	}
 
@@ -521,6 +524,7 @@ void MainDialog::ShowCameraList()
 	for (int i = 0; i < size; ++i)
 	{
 		m_CameraComboBox.AddOneCamera(stCameraCallback.m_vecCameras[i]);
+		InsertLog(LOGLEVEL::INFO, "Add one camera %s.", stCameraCallback.m_vecCameras[i].name);
 	}
 }
 
@@ -559,6 +563,7 @@ void MainDialog::ShowDisplayModeList()
 		_displayMode->CameraNumber = CameraNum;
 
 		m_DisplayComboBox.AddOneDisplayMode((*_displayMode));
+		InsertLog(LOGLEVEL::INFO, "Add one display mode %s.", _displayMode->ModeName);
 		delete _displayMode;
 	}
 }
@@ -574,6 +579,7 @@ bool MainDialog::Login()
 {
 	if (m_JsdCCTV->Login())
 	{
+		InsertLog(LOGLEVEL::INFO, "JsdCCTV login success.");
 		ShowStationList();
 
 		ShowAreaList();
@@ -586,7 +592,10 @@ bool MainDialog::Login()
 
 		m_IsLogin = true;
 	}
-
+	else
+	{
+		InsertLog(LOGLEVEL::WARN, "JsdCCTV login failed.");
+	}
 	return m_IsLogin;
 }
 
